@@ -2,11 +2,11 @@
 export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createBrowserClient } from "@supabase/ssr";
+import { getSupabase } from "@/lib/supabase/client";
 import Link from "next/link";
 export default function NewCargoPage() {
   const router = useRouter();
-  const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+  const supabase = getSupabase();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState({ origin_city:"تهران", dest_city:"مشهد", cargo_type:"general", cargo_description:"", weight_tons:"", vehicle_type_needed:"truck_large", pickup_date:"", price_suggestion:"" });

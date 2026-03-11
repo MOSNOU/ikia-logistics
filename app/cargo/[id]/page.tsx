@@ -2,12 +2,12 @@
 export const dynamic = "force-dynamic";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { createBrowserClient } from "@supabase/ssr";
+import { getSupabase } from "@/lib/supabase/client";
 import Link from "next/link";
 export default function CargoDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const supabase = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+  const supabase = getSupabase();
   const [cargo, setCargo] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [bookingPrice, setBookingPrice] = useState("");

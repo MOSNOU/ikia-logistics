@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { LogoNav } from "@/components/Logo";
+import { NotificationBell } from "@/components/Notifications";
 
 export function Navbar({ role, name, onSignOut }: { role?: string; name?: string; onSignOut?: () => void }) {
   const roleLabels: Record<string,string> = { admin: "ادمین", shipper: "بارفرست", carrier: "حمل‌کننده" };
@@ -11,6 +12,7 @@ export function Navbar({ role, name, onSignOut }: { role?: string; name?: string
       <Link href="/" style={{textDecoration:"none"}}><LogoNav onDark={isAdmin} /></Link>
       {role && (
         <div style={{display:"flex",gap:"10px",alignItems:"center"}}>
+          <NotificationBell />
           {name && (
             <div style={{display:"flex",alignItems:"center",gap:"6px"}}>
               <div style={{width:"30px",height:"30px",borderRadius:"50%",background:`linear-gradient(135deg,${roleColors[role]||"#1e3a5f"},#2E75B6)`,display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontSize:"13px",fontWeight:900}}>{name[0]||"؟"}</div>

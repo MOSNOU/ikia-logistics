@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getSupabase } from "@/lib/supabase/client";
 import Link from "next/link";
-import { LogoSphere, LogoText } from "@/components/Logo";
+import { LogoSphere, LogoText, LogoNav } from "@/components/Logo";
 export default function LoginPage() {
   const [mode, setMode] = useState<"login"|"signup">("login");
   const [email, setEmail] = useState("");
@@ -40,75 +40,69 @@ export default function LoginPage() {
     } catch { setError("خطای اتصال"); } finally { setLoading(false); }
   };
   return (
-    <div style={{minHeight:"100vh",display:"flex",fontFamily:"Vazirmatn,sans-serif",direction:"rtl"}}>
-      <div className="hide-mobile" style={{flex:1,background:"linear-gradient(160deg,#0f172a 0%,#1e3a5f 35%,#1a5276 60%,#1b4f72 100%)",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",padding:"40px",color:"white",position:"relative",overflow:"hidden"}}>
-        <div style={{position:"absolute",top:0,left:0,right:0,bottom:0,background:"radial-gradient(ellipse at 50% 40%, rgba(6,182,212,0.15) 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(245,158,11,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(16,185,129,0.08) 0%, transparent 50%)",pointerEvents:"none"}} />
+    <div className="login-split" style={{minHeight:"100vh",display:"flex",fontFamily:"Vazirmatn,sans-serif",direction:"rtl"}}>
+      <div className="login-left" style={{flex:1,background:"linear-gradient(160deg,#0f172a 0%,#1e3a5f 35%,#1a5276 60%,#1b4f72 100%)",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",padding:"40px",color:"white",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:0,right:0,bottom:0,background:"radial-gradient(ellipse at 50% 40%, rgba(6,182,212,0.15) 0%, transparent 60%)",pointerEvents:"none"}} />
         <Link href="/" style={{textDecoration:"none",color:"white",display:"flex",flexDirection:"column",alignItems:"center",gap:"20px",position:"relative",zIndex:1}} className="animate-fade-up">
-          <div className="animate-float"><LogoSphere size={200} /></div>
+          <div className="animate-float"><LogoSphere size={180} /></div>
           <LogoText size="medium" onDark={true} />
-          <div style={{marginTop:"16px",textAlign:"center"}}>
-            <p style={{fontWeight:900,fontSize:"18px",textShadow:"0 2px 10px rgba(0,0,0,0.3)"}}>پلتفرم هوشمند حمل‌ونقل بار</p>
-            <p style={{fontWeight:700,opacity:0.7,fontSize:"14px",marginTop:"6px"}}>مسیر تهران ↔ مشهد</p>
-          </div>
-          <div style={{display:"flex",gap:"20px",marginTop:"24px"}}>
+          <p style={{fontWeight:900,fontSize:"16px",marginTop:"8px"}}>پلتفرم هوشمند حمل‌ونقل بار</p>
+          <div style={{display:"flex",gap:"16px",marginTop:"20px"}}>
             {[{n:"۹۰۰+",l:"کیلومتر"},{n:"۳۰٪",l:"صرفه‌جویی"},{n:"۲۴h",l:"تسویه"}].map((s,i)=>(
-              <div key={i} style={{textAlign:"center",background:"rgba(255,255,255,0.08)",backdropFilter:"blur(10px)",padding:"12px 16px",borderRadius:"12px",border:"1px solid rgba(255,255,255,0.12)"}}>
-                <div style={{fontSize:"20px",fontWeight:900}}>{s.n}</div>
-                <div style={{fontSize:"11px",opacity:0.7,fontWeight:700}}>{s.l}</div>
+              <div key={i} style={{textAlign:"center",background:"rgba(255,255,255,0.08)",backdropFilter:"blur(10px)",padding:"10px 14px",borderRadius:"10px",border:"1px solid rgba(255,255,255,0.12)"}}>
+                <div style={{fontSize:"18px",fontWeight:900}}>{s.n}</div>
+                <div style={{fontSize:"10px",opacity:0.7,fontWeight:700}}>{s.l}</div>
               </div>
             ))}
           </div>
         </Link>
       </div>
-      <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",padding:"32px",background:"#f4f6f9",minHeight:"100vh"}}>
-        <div className="animate-fade" style={{maxWidth:"440px",width:"100%"}}>
-          <div style={{display:"flex",gap:"0",marginBottom:"28px",background:"#e5e7eb",borderRadius:"14px",padding:"4px"}}>
-            <button onClick={()=>{setMode("login");setError("");setSuccess("")}} style={{flex:1,padding:"14px",borderRadius:"12px",fontSize:"15px",fontWeight:900,border:"none",background:mode==="login"?"white":"transparent",color:mode==="login"?"#1e3a5f":"#999",boxShadow:mode==="login"?"0 2px 10px rgba(0,0,0,0.08)":"none",transition:"all 0.2s"}}>ورود</button>
-            <button onClick={()=>{setMode("signup");setError("");setSuccess("")}} style={{flex:1,padding:"14px",borderRadius:"12px",fontSize:"15px",fontWeight:900,border:"none",background:mode==="signup"?"white":"transparent",color:mode==="signup"?"#1e3a5f":"#999",boxShadow:mode==="signup"?"0 2px 10px rgba(0,0,0,0.08)":"none",transition:"all 0.2s"}}>ثبت‌نام</button>
+      <div className="login-right" style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"32px",background:"#f4f6f9",minHeight:"100vh"}}>
+        <div className="show-mobile" style={{display:"none",marginBottom:"24px",textAlign:"center"}}>
+          <Link href="/" style={{textDecoration:"none"}}><LogoNav /></Link>
+        </div>
+        <div className="animate-fade" style={{maxWidth:"420px",width:"100%"}}>
+          <div className="login-tabs" style={{display:"flex",gap:"0",marginBottom:"24px",background:"#e5e7eb",borderRadius:"14px",padding:"4px"}}>
+            <button onClick={()=>{setMode("login");setError("");setSuccess("")}} style={{flex:1,padding:"12px",borderRadius:"12px",fontSize:"15px",fontWeight:900,border:"none",background:mode==="login"?"white":"transparent",color:mode==="login"?"#1e3a5f":"#999",boxShadow:mode==="login"?"0 2px 10px rgba(0,0,0,0.08)":"none",transition:"all 0.2s"}}>ورود</button>
+            <button onClick={()=>{setMode("signup");setError("");setSuccess("")}} style={{flex:1,padding:"12px",borderRadius:"12px",fontSize:"15px",fontWeight:900,border:"none",background:mode==="signup"?"white":"transparent",color:mode==="signup"?"#1e3a5f":"#999",boxShadow:mode==="signup"?"0 2px 10px rgba(0,0,0,0.08)":"none",transition:"all 0.2s"}}>ثبت‌نام</button>
           </div>
           {mode === "login" ? (
             <>
-              <h2 style={{fontSize:"24px",fontWeight:900,color:"#1e3a5f",marginBottom:"6px"}}>ورود به حساب</h2>
-              <p style={{color:"#666",marginBottom:"28px",fontSize:"14px",fontWeight:700}}>ایمیل و رمز عبور خود را وارد کنید</p>
+              <h2 style={{fontSize:"22px",fontWeight:900,color:"#1e3a5f",marginBottom:"6px"}}>ورود به حساب</h2>
+              <p style={{color:"#666",marginBottom:"24px",fontSize:"14px",fontWeight:700}}>ایمیل و رمز عبور خود را وارد کنید</p>
               <form onSubmit={handleLogin}>
-                <div style={{marginBottom:"20px"}}><label style={{display:"block",marginBottom:"6px",fontSize:"13px",fontWeight:900,color:"#444"}}>ایمیل</label><input type="email" dir="ltr" value={email} onChange={e=>setEmail(e.target.value)} placeholder="name@company.com" className="input-field" autoFocus /></div>
-                <div style={{marginBottom:"20px"}}><label style={{display:"block",marginBottom:"6px",fontSize:"13px",fontWeight:900,color:"#444"}}>رمز عبور</label><input type="password" dir="ltr" value={password} onChange={e=>setPassword(e.target.value)} placeholder="••••••••" className="input-field" /></div>
-                {error && <div className="animate-scale" style={{background:"#fef2f2",color:"#dc2626",padding:"12px 16px",borderRadius:"10px",marginBottom:"18px",fontSize:"14px",fontWeight:700,border:"1px solid #fecaca",display:"flex",alignItems:"center",gap:"8px"}}><span>⚠️</span>{error}</div>}
-                {success && <div className="animate-scale" style={{background:"#ecfdf5",color:"#059669",padding:"12px 16px",borderRadius:"10px",marginBottom:"18px",fontSize:"14px",fontWeight:700,border:"1px solid #a7f3d0",display:"flex",alignItems:"center",gap:"8px"}}><span>✅</span>{success}</div>}
-                <button type="submit" disabled={loading} style={{width:"100%",padding:"16px",background:"linear-gradient(135deg,#0f172a,#1e3a5f)",color:"white",border:"none",borderRadius:"12px",fontSize:"16px",fontWeight:900,fontFamily:"inherit",cursor:"pointer",boxShadow:"0 4px 15px rgba(15,23,42,0.3)",transition:"transform 0.15s"}}>{loading?"در حال ورود...":"ورود به حساب"}</button>
+                <div style={{marginBottom:"16px"}}><label style={{display:"block",marginBottom:"6px",fontSize:"13px",fontWeight:900,color:"#444"}}>ایمیل</label><input type="email" dir="ltr" value={email} onChange={e=>setEmail(e.target.value)} placeholder="name@company.com" className="input-field" autoFocus /></div>
+                <div style={{marginBottom:"16px"}}><label style={{display:"block",marginBottom:"6px",fontSize:"13px",fontWeight:900,color:"#444"}}>رمز عبور</label><input type="password" dir="ltr" value={password} onChange={e=>setPassword(e.target.value)} placeholder="••••••••" className="input-field" /></div>
+                {error && <div className="animate-scale" style={{background:"#fef2f2",color:"#dc2626",padding:"12px",borderRadius:"10px",marginBottom:"14px",fontSize:"14px",fontWeight:700,border:"1px solid #fecaca"}}><span>⚠️ </span>{error}</div>}
+                {success && <div className="animate-scale" style={{background:"#ecfdf5",color:"#059669",padding:"12px",borderRadius:"10px",marginBottom:"14px",fontSize:"14px",fontWeight:700,border:"1px solid #a7f3d0"}}><span>✅ </span>{success}</div>}
+                <button type="submit" disabled={loading} style={{width:"100%",padding:"14px",background:"linear-gradient(135deg,#0f172a,#1e3a5f)",color:"white",border:"none",borderRadius:"12px",fontSize:"16px",fontWeight:900,fontFamily:"inherit",boxShadow:"0 4px 15px rgba(15,23,42,0.3)"}}>{loading?"در حال ورود...":"ورود به حساب"}</button>
               </form>
             </>
           ) : (
             <>
-              <h2 style={{fontSize:"24px",fontWeight:900,color:"#1e3a5f",marginBottom:"6px"}}>ثبت‌نام</h2>
-              <p style={{color:"#666",marginBottom:"28px",fontSize:"14px",fontWeight:700}}>حساب جدید بسازید و شروع کنید</p>
+              <h2 style={{fontSize:"22px",fontWeight:900,color:"#1e3a5f",marginBottom:"6px"}}>ثبت‌نام</h2>
+              <p style={{color:"#666",marginBottom:"24px",fontSize:"14px",fontWeight:700}}>حساب جدید بسازید</p>
               <form onSubmit={handleSignup}>
-                <div style={{marginBottom:"18px"}}><label style={{display:"block",marginBottom:"6px",fontSize:"13px",fontWeight:900,color:"#444"}}>نام و نام خانوادگی</label><input type="text" value={fullName} onChange={e=>setFullName(e.target.value)} placeholder="مثلاً: علی احمدی" className="input-field" autoFocus /></div>
-                <div style={{marginBottom:"18px"}}><label style={{display:"block",marginBottom:"6px",fontSize:"13px",fontWeight:900,color:"#444"}}>ایمیل</label><input type="email" dir="ltr" value={email} onChange={e=>setEmail(e.target.value)} placeholder="name@company.com" className="input-field" /></div>
-                <div style={{marginBottom:"18px"}}><label style={{display:"block",marginBottom:"6px",fontSize:"13px",fontWeight:900,color:"#444"}}>رمز عبور</label><input type="password" dir="ltr" value={password} onChange={e=>setPassword(e.target.value)} placeholder="حداقل ۶ کاراکتر" className="input-field" /></div>
-                <div style={{marginBottom:"20px"}}><label style={{display:"block",marginBottom:"8px",fontSize:"13px",fontWeight:900,color:"#444"}}>نقش شما</label>
-                  <div style={{display:"flex",gap:"10px"}}>
-                    <button type="button" onClick={()=>setRole("shipper")} style={{flex:1,padding:"16px 12px",borderRadius:"12px",border: role==="shipper" ? "2px solid #1e3a5f" : "2px solid #e0e0e0",background: role==="shipper" ? "#eff6ff" : "white",fontSize:"14px",fontWeight:900,color: role==="shipper" ? "#1e3a5f" : "#888",transition:"all 0.2s",cursor:"pointer"}}>
-                      <div style={{fontSize:"24px",marginBottom:"4px"}}>📦</div>بارفرست
-                      <div style={{fontSize:"11px",fontWeight:500,color:"#999",marginTop:"2px"}}>بار دارم</div>
-                    </button>
-                    <button type="button" onClick={()=>setRole("carrier")} style={{flex:1,padding:"16px 12px",borderRadius:"12px",border: role==="carrier" ? "2px solid #0ea5e9" : "2px solid #e0e0e0",background: role==="carrier" ? "#ecfeff" : "white",fontSize:"14px",fontWeight:900,color: role==="carrier" ? "#0e7490" : "#888",transition:"all 0.2s",cursor:"pointer"}}>
-                      <div style={{fontSize:"24px",marginBottom:"4px"}}>🚛</div>حمل‌کننده
-                      <div style={{fontSize:"11px",fontWeight:500,color:"#999",marginTop:"2px"}}>ناوگان دارم</div>
-                    </button>
+                <div style={{marginBottom:"14px"}}><label style={{display:"block",marginBottom:"6px",fontSize:"13px",fontWeight:900,color:"#444"}}>نام و نام خانوادگی</label><input type="text" value={fullName} onChange={e=>setFullName(e.target.value)} placeholder="مثلاً: علی احمدی" className="input-field" autoFocus /></div>
+                <div style={{marginBottom:"14px"}}><label style={{display:"block",marginBottom:"6px",fontSize:"13px",fontWeight:900,color:"#444"}}>ایمیل</label><input type="email" dir="ltr" value={email} onChange={e=>setEmail(e.target.value)} placeholder="name@company.com" className="input-field" /></div>
+                <div style={{marginBottom:"14px"}}><label style={{display:"block",marginBottom:"6px",fontSize:"13px",fontWeight:900,color:"#444"}}>رمز عبور</label><input type="password" dir="ltr" value={password} onChange={e=>setPassword(e.target.value)} placeholder="حداقل ۶ کاراکتر" className="input-field" /></div>
+                <div style={{marginBottom:"16px"}}><label style={{display:"block",marginBottom:"8px",fontSize:"13px",fontWeight:900,color:"#444"}}>نقش شما</label>
+                  <div className="role-buttons" style={{display:"flex",gap:"10px"}}>
+                    <button type="button" onClick={()=>setRole("shipper")} style={{flex:1,padding:"14px 10px",borderRadius:"12px",border:role==="shipper"?"2px solid #1e3a5f":"2px solid #e0e0e0",background:role==="shipper"?"#eff6ff":"white",fontSize:"14px",fontWeight:900,color:role==="shipper"?"#1e3a5f":"#888",cursor:"pointer"}}><div style={{fontSize:"22px",marginBottom:"2px"}}>📦</div>بارفرست</button>
+                    <button type="button" onClick={()=>setRole("carrier")} style={{flex:1,padding:"14px 10px",borderRadius:"12px",border:role==="carrier"?"2px solid #0ea5e9":"2px solid #e0e0e0",background:role==="carrier"?"#ecfeff":"white",fontSize:"14px",fontWeight:900,color:role==="carrier"?"#0e7490":"#888",cursor:"pointer"}}><div style={{fontSize:"22px",marginBottom:"2px"}}>🚛</div>حمل‌کننده</button>
                   </div>
                 </div>
-                {error && <div className="animate-scale" style={{background:"#fef2f2",color:"#dc2626",padding:"12px",borderRadius:"10px",marginBottom:"16px",fontSize:"14px",fontWeight:700,border:"1px solid #fecaca"}}><span>⚠️ </span>{error}</div>}
-                <button type="submit" disabled={loading} style={{width:"100%",padding:"16px",background:"linear-gradient(135deg,#0f172a,#1e3a5f)",color:"white",border:"none",borderRadius:"12px",fontSize:"16px",fontWeight:900,fontFamily:"inherit",cursor:"pointer",boxShadow:"0 4px 15px rgba(15,23,42,0.3)"}}>{loading?"در حال ثبت‌نام...":"ثبت‌نام"}</button>
+                {error && <div className="animate-scale" style={{background:"#fef2f2",color:"#dc2626",padding:"12px",borderRadius:"10px",marginBottom:"14px",fontSize:"14px",fontWeight:700,border:"1px solid #fecaca"}}><span>⚠️ </span>{error}</div>}
+                <button type="submit" disabled={loading} style={{width:"100%",padding:"14px",background:"linear-gradient(135deg,#0f172a,#1e3a5f)",color:"white",border:"none",borderRadius:"12px",fontSize:"16px",fontWeight:900,fontFamily:"inherit",boxShadow:"0 4px 15px rgba(15,23,42,0.3)"}}>{loading?"در حال ثبت‌نام...":"ثبت‌نام"}</button>
               </form>
             </>
           )}
-          <div style={{marginTop:"24px",padding:"16px 20px",background:"white",borderRadius:"14px",border:"1px solid #eee",fontSize:"12px",color:"#888",boxShadow:"0 2px 8px rgba(0,0,0,0.04)"}}>
-            <p style={{fontWeight:900,color:"#555",marginBottom:"10px",fontSize:"13px"}}>🔑 اکانت‌های تست:</p>
-            {[{r:"📊 ادمین",e:"admin@ikia.ir"},{r:"📦 بارفرست",e:"shipper@test.com"},{r:"🚛 حمل‌کننده",e:"carrier@test.com"}].map((a,i)=>(
-              <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"7px 0",borderBottom:i<2?"1px solid #f5f5f5":"none",fontWeight:700}}><span>{a.r}</span><code dir="ltr" style={{background:"#f0f4ff",padding:"2px 8px",borderRadius:"6px",fontSize:"11px",color:"#1e3a5f",fontWeight:900}}>{a.e}</code></div>
+          <div style={{marginTop:"20px",padding:"14px",background:"white",borderRadius:"12px",border:"1px solid #eee",fontSize:"11px",color:"#999"}}>
+            <p style={{fontWeight:900,color:"#666",marginBottom:"8px",fontSize:"12px"}}>🔑 تست:</p>
+            {[{r:"📊",e:"admin@ikia.ir"},{r:"📦",e:"shipper@test.com"},{r:"🚛",e:"carrier@test.com"}].map((a,i)=>(
+              <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",fontWeight:700}}><span>{a.r}</span><code dir="ltr" style={{background:"#f0f4ff",padding:"1px 6px",borderRadius:"4px",fontSize:"10px",color:"#1e3a5f",fontWeight:900}}>{a.e}</code></div>
             ))}
-            <div style={{marginTop:"8px",textAlign:"center",fontSize:"11px",color:"#bbb",fontWeight:700}}>رمز همه: <code style={{background:"#f0f4ff",padding:"2px 8px",borderRadius:"4px",color:"#1e3a5f",fontWeight:900}}>Test1234!</code></div>
+            <div style={{textAlign:"center",fontSize:"10px",color:"#ccc",marginTop:"4px"}}>رمز: Test1234!</div>
           </div>
         </div>
       </div>

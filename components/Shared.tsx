@@ -15,7 +15,7 @@ export function Navbar({ role, name, onSignOut }: { role?: string; name?: string
           <NotificationBell />
           {name && (
             <div style={{display:"flex",alignItems:"center",gap:"6px"}}>
-              <div style={{width:"30px",height:"30px",borderRadius:"50%",background:`linear-gradient(135deg,${roleColors[role]||"#1e3a5f"},#2E75B6)`,display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontSize:"13px",fontWeight:900}}>{name[0]||"؟"}</div>
+              <a href="/profile" style={{textDecoration:"none"}}><div style={{width:"30px",height:"30px",borderRadius:"50%",background:`linear-gradient(135deg,${roleColors[role]||"#1e3a5f"},#2E75B6)`,display:"flex",alignItems:"center",justifyContent:"center",color:"white",fontSize:"13px",fontWeight:900}}>{name[0]||"؟"}</div></a>
               <div className="hide-mobile"><div style={{fontSize:"12px",fontWeight:900,color:isAdmin?"white":"#333"}}>{name}</div><div style={{fontSize:"10px",color:isAdmin?"rgba(255,255,255,0.6)":"#999"}}>{roleLabels[role]}</div></div>
             </div>
           )}

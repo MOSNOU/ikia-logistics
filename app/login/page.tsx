@@ -17,7 +17,7 @@ export default function LoginPage() {
       const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
       if (authError) { setError("ایمیل یا رمز عبور اشتباه است"); setLoading(false); return; }
       const { data: profile } = await supabase.from("profiles").select("role").eq("id", data.user.id).single();
-      if (profile?.role === "carrier") router.push("/carrier"); else router.push("/shipper");
+      if (profile?.role === "admin") router.push("/admin"); else if (profile?.role === "carrier") router.push("/carrier"); else router.push("/shipper");
     } catch { setError("خطای اتصال"); } finally { setLoading(false); }
   };
   const S = {width:"100%",padding:"14px 16px",border:"1px solid #e0e0e0",borderRadius:"10px",fontSize:"15px",outline:"none",transition:"border 0.2s"};

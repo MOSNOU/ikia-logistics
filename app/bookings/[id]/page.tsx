@@ -11,15 +11,22 @@ export default function BookingDetailPage() {
   const [cargo, setCargo] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isCarrier, setIsCarrier] = useState(false);
+  const [hasReview, setHasReview] = useState(false);
+  const [userId, setUserId] = useState("");
   useEffect(() => {
     const f = async () => {
       const { data: { user } } = await supabase.auth.getUser();
+      if (user) setUserId(user.id);
       const { data: b } = await supabase.from("bookings").select("*").eq("id", params.id).single();
       setBooking(b);
       if (b) {
         setIsCarrier(b.carrier_id === user?.id);
         const { data: c } = await supabase.from("cargo_posts").select("*").eq("id", b.cargo_post_id).single();
         setCargo(c);
+        if (user) {
+          const { data: r } = await supabase.from("reviews").select("id").eq("booking_id", params.id).eq("reviewer_id", user.id);
+          setHasReview((r || []).length > 0);
+        }
       }
       setLoading(false);
     }; f();
@@ -65,22 +72,45 @@ export default function BookingDetailPage() {
             ))}
           </div>
         </div>
-        {isCarrier && (
-          <div style={{background:"white",padding:"24px",borderRadius:"16px",border:"1px solid #eee",boxShadow:"0 2px 10px rgba(0,0,0,0.05)"}}>
-            {booking.status==="confirmed" && <button onClick={()=>updateStatus("in_transit")} style={{width:"100%",padding:"16px",background:"linear-gradient(135deg,#7c3aed,#8b5cf6)",color:"white",border:"none",borderRadius:"12px",fontSize:"16px",fontWeight:"bold",fontFamily:"inherit",cursor:"pointer",boxShadow:"0 4px 12px rgba(124,58,237,0.3)"}}>🚛 بارگیری انجام شد — در مسیرم</button>}
-            {booking.status==="in_transit" && <button onClick={()=>updateStatus("delivered")} style={{width:"100%",padding:"16px",background:"linear-gradient(135deg,#059669,#10b981)",color:"white",border:"none",borderRadius:"12px",fontSize:"16px",fontWeight:"bold",fontFamily:"inherit",cursor:"pointer",boxShadow:"0 4px 12px rgba(5,150,105,0.3)"}}>📦 تحویل دادم</button>}
-            {booking.status==="delivered" && <div style={{textAlign:"center",padding:"16px",color:"#059669",fontSize:"16px",fontWeight:"bold",background:"#ecfdf5",borderRadius:"12px"}}>✅ تحویل ثبت شد — منتظر تأیید بارفرست</div>}
-            {booking.status==="pending" && <div style={{textAlign:"center",padding:"16px",color:"#f59e0b",background:"#fffbeb",borderRadius:"12px"}}>⏳ منتظر تأیید بارفرست...</div>}
+        {isCarrier && booking.status==="confirmed" && (
+          <div style={{background:"white",padding:"24px",borderRadius:"16px",border:"1px solid #eee",boxShadow:"0 2px 10px rgba(0,0,0,0.05)",marginBottom:"20px"}}>
+            <button onClick={()=>updateStatus("in_transit")} style={{width:"100%",padding:"16px",background:"linear-gradient(135deg,#7c3aed,#8b5cf6)",color:"white",border:"none",borderRadius:"12px",fontSize:"16px",fontWeight:"bold",fontFamily:"inherit",cursor:"pointer",boxShadow:"0 4px 12px rgba(124,58,237,0.3)"}}>🚛 بارگیری انجام شد — در مسیرم</button>
+          </div>
+        )}
+        {isCarrier && booking.status==="in_transit" && (
+          <div style={{background:"white",padding:"24px",borderRadius:"16px",border:"1px solid #eee",boxShadow:"0 2px 10px rgba(0,0,0,0.05)",marginBottom:"20px"}}>
+            <button onClick={()=>updateStatus("delivered")} style={{width:"100%",padding:"16px",background:"linear-gradient(135deg,#059669,#10b981)",color:"white",border:"none",borderRadius:"12px",fontSize:"16px",fontWeight:"bold",fontFamily:"inherit",cursor:"pointer",boxShadow:"0 4px 12px rgba(5,150,105,0.3)"}}>📦 تحویل دادم</button>
+          </div>
+        )}
+        {isCarrier && booking.status==="delivered" && (
+          <div style={{background:"#ecfdf5",padding:"24px",borderRadius:"16px",textAlign:"center",marginBottom:"20px"}}>
+            <div style={{fontSize:"16px",fontWeight:"bold",color:"#059669"}}>✅ تحویل ثبت شد — منتظر تأیید بارفرست</div>
+          </div>
+        )}
+        {isCarrier && booking.status==="pending" && (
+          <div style={{background:"#fffbeb",padding:"24px",borderRadius:"16px",textAlign:"center",marginBottom:"20px"}}>
+            <div style={{color:"#f59e0b",fontWeight:"bold"}}>⏳ منتظر تأیید بارفرست...</div>
           </div>
         )}
         {!isCarrier && booking.status==="delivered" && (
-          <div style={{background:"white",padding:"24px",borderRadius:"16px",border:"2px solid #10b981",boxShadow:"0 2px 10px rgba(0,0,0,0.05)"}}>
+          <div style={{background:"white",padding:"24px",borderRadius:"16px",border:"2px solid #10b981",boxShadow:"0 2px 10px rgba(0,0,0,0.05)",marginBottom:"20px"}}>
             <h2 style={{fontSize:"17px",fontWeight:"bold",color:"#059669",marginBottom:"16px"}}>📦 حمل‌کننده تحویل داده</h2>
             <button onClick={()=>updateStatus("completed")} style={{width:"100%",padding:"16px",background:"linear-gradient(135deg,#059669,#10b981)",color:"white",border:"none",borderRadius:"12px",fontSize:"16px",fontWeight:"bold",fontFamily:"inherit",cursor:"pointer",boxShadow:"0 4px 12px rgba(5,150,105,0.3)"}}>✅ تأیید تحویل — تکمیل شد</button>
           </div>
         )}
-        {!isCarrier && booking.status==="completed" && (
-          <div style={{background:"#ecfdf5",padding:"24px",borderRadius:"16px",textAlign:"center"}}><div style={{fontSize:"48px",marginBottom:"8px"}}>🎉</div><h3 style={{color:"#059669",fontSize:"18px"}}>تکمیل شد!</h3></div>
+        {booking.status==="completed" && (
+          <div style={{background:"white",padding:"28px",borderRadius:"16px",border:"1px solid #eee",boxShadow:"0 2px 10px rgba(0,0,0,0.05)",textAlign:"center"}}>
+            <div style={{fontSize:"48px",marginBottom:"12px"}}>🎉</div>
+            <h3 style={{color:"#059669",fontSize:"20px",marginBottom:"16px"}}>تحویل تکمیل شد!</h3>
+            {hasReview ? (
+              <div style={{background:"#ecfdf5",padding:"16px",borderRadius:"12px",color:"#059669",fontWeight:"bold"}}>✅ نظر شما ثبت شده — ممنون!</div>
+            ) : (
+              <div>
+                <p style={{color:"#888",fontSize:"14px",marginBottom:"20px"}}>نظرت درباره این تجربه چیه؟ به بهبود خدمات کمک کن!</p>
+                <Link href={"/bookings/"+params.id+"/review"} style={{display:"inline-block",background:"linear-gradient(135deg,#f59e0b,#fbbf24)",color:"white",padding:"14px 32px",borderRadius:"12px",fontWeight:"bold",textDecoration:"none",fontSize:"16px",boxShadow:"0 4px 12px rgba(245,158,11,0.3)"}}>⭐ ثبت نظر و امتیاز</Link>
+              </div>
+            )}
+          </div>
         )}
       </main>
     </div>

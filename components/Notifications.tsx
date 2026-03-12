@@ -53,7 +53,7 @@ export function NotificationBell() {
       <button onClick={() => setOpen(!open)} style={{ background: "none", border: "none", fontSize: "20px", position: "relative", padding: "6px", cursor: "pointer" }}>
         🔔
         {unreadCount > 0 && (
-          <span style={{ position: "absolute", top: "0", right: "0", background: "#ef4444", color: "white", fontSize: "10px", fontWeight: 900, width: "18px", height: "18px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid white", animation: "pulse 2s infinite" }}>
+          <span style={{ position: "absolute", top: "0", right: "0", background: "#ef4444", color: "white", fontSize: "10px", fontWeight: 900, width: "18px", height: "18px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid var(--bg2)", animation: "pulse 2s infinite" }}>
             {unreadCount > 9 ? "۹+" : unreadCount}
           </span>
         )}
@@ -62,27 +62,27 @@ export function NotificationBell() {
       {open && (
         <>
           <div onClick={() => setOpen(false)} style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, zIndex: 98 }} />
-          <div className="animate-scale" style={{ position: "absolute", top: "44px", left: "0", width: "340px", maxHeight: "440px", overflowY: "auto", background: "white", borderRadius: "16px", boxShadow: "0 8px 30px rgba(0,0,0,0.15)", border: "1px solid #eee", zIndex: 99, direction: "rtl" }}>
-            <div style={{ padding: "14px 18px", borderBottom: "1px solid #f0f0f0", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "white", borderRadius: "16px 16px 0 0", zIndex: 1 }}>
-              <span style={{ fontSize: "15px", fontWeight: 900, color: "#1e3a5f" }}>🔔 اعلان‌ها</span>
+          <div className="animate-scale" style={{ position: "absolute", top: "44px", left: "0", width: "340px", maxHeight: "440px", overflowY: "auto", background: "var(--bg2)", borderRadius: "16px", boxShadow: "0 8px 30px rgba(0,0,0,0.2)", border: "1px solid var(--border)", zIndex: 99, direction: "rtl" }}>
+            <div style={{ padding: "14px 18px", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "var(--bg2)", borderRadius: "16px 16px 0 0", zIndex: 1 }}>
+              <span style={{ fontSize: "15px", fontWeight: 900, color: "var(--text)" }}>🔔 اعلان‌ها</span>
               {unreadCount > 0 && (
-                <button onClick={markAllRead} style={{ background: "none", border: "none", color: "#0ea5e9", fontSize: "12px", fontWeight: 900, cursor: "pointer" }}>خواندم همه</button>
+                <button onClick={markAllRead} style={{ background: "none", border: "none", color: "var(--accent)", fontSize: "12px", fontWeight: 900, cursor: "pointer" }}>خواندم همه</button>
               )}
             </div>
             {notifications.length === 0 ? (
-              <div style={{ padding: "40px 20px", textAlign: "center", color: "#999" }}>
+              <div style={{ padding: "40px 20px", textAlign: "center", color: "var(--text3)" }}>
                 <div style={{ fontSize: "32px", marginBottom: "8px" }}>🔕</div>
                 <p style={{ fontWeight: 700, fontSize: "13px" }}>اعلانی نداری</p>
               </div>
             ) : (
               notifications.map(n => (
                 <Link href={n.link || "#"} key={n.id} onClick={() => { markRead(n.id); setOpen(false); }}>
-                  <div style={{ padding: "14px 18px", borderBottom: "1px solid #f8f8f8", background: n.is_read ? "white" : "#f0f8ff", cursor: "pointer", transition: "background 0.2s", display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                  <div style={{ padding: "14px 18px", borderBottom: "1px solid var(--border)", background: n.is_read ? "var(--bg2)" : "var(--bg3)", cursor: "pointer", transition: "background 0.2s", display: "flex", gap: "12px", alignItems: "flex-start" }}>
                     <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: n.is_read ? "transparent" : typeColors[n.type] || "#3b82f6", marginTop: "6px", flexShrink: 0 }} />
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: "13px", fontWeight: 900, color: "#1e3a5f", marginBottom: "3px" }}>{n.title}</div>
-                      <div style={{ fontSize: "12px", color: "#666", fontWeight: 700, lineHeight: "1.6" }}>{n.message}</div>
-                      <div style={{ fontSize: "11px", color: "#bbb", marginTop: "4px", fontWeight: 700 }}>{timeAgo(n.created_at)}</div>
+                      <div style={{ fontSize: "13px", fontWeight: 900, color: "var(--text)", marginBottom: "3px" }}>{n.title}</div>
+                      <div style={{ fontSize: "12px", color: "var(--text2)", fontWeight: 700, lineHeight: "1.6" }}>{n.message}</div>
+                      <div style={{ fontSize: "11px", color: "var(--text3)", marginTop: "4px", fontWeight: 700 }}>{timeAgo(n.created_at)}</div>
                     </div>
                   </div>
                 </Link>

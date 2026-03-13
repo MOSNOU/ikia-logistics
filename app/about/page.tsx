@@ -4,11 +4,11 @@ import { LogoSphere, LogoText, LogoNav } from "@/components/Logo";
 import { Footer } from "@/components/Shared";
 export default function AboutPage() {
   return (
-    <div style={{minHeight:"100vh",fontFamily:"Vazirmatn,sans-serif",direction:"rtl",color:"#333"}}>
-      <nav className="nav-responsive animate-slide-down" style={{padding:"14px 24px",background:"rgba(255,255,255,0.95)",backdropFilter:"blur(10px)",borderBottom:"1px solid #eee",display:"flex",justifyContent:"space-between",alignItems:"center",position:"sticky",top:0,zIndex:50,boxShadow:"0 1px 3px rgba(0,0,0,0.05)"}}>
+    <div style={{minHeight:"100vh",fontFamily:"Vazirmatn,sans-serif",direction:"rtl",color:"var(--text2)",background:"var(--bg)"}}>
+      <nav className="nav-responsive animate-slide-down" style={{padding:"14px 24px",background:"var(--bg2)",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center",position:"sticky",top:0,zIndex:50,boxShadow:"0 1px 3px var(--shadow)"}}>
         <Link href="/" style={{textDecoration:"none"}}><LogoNav /></Link>
         <div style={{display:"flex",gap:"8px"}}>
-          <Link href="/contact" style={{padding:"10px 18px",borderRadius:"10px",fontSize:"13px",fontWeight:900,color:"#1e3a5f",border:"2px solid #e0e0e0"}}>تماس با ما</Link>
+          <Link href="/contact" className="btn-outline" style={{padding:"10px 18px",fontSize:"13px"}}>تماس با ما</Link>
           <Link href="/login" className="btn-primary" style={{padding:"10px 18px",fontSize:"13px"}}>ورود</Link>
         </div>
       </nav>
@@ -17,34 +17,34 @@ export default function AboutPage() {
         <div style={{position:"absolute",top:0,left:0,right:0,bottom:0,background:"radial-gradient(ellipse at 50% 30%, rgba(6,182,212,0.15) 0%, transparent 60%)",pointerEvents:"none"}} />
         <div className="animate-fade-up" style={{position:"relative",zIndex:1}}>
           <LogoSphere size={120} />
-          <h1 style={{fontSize:"32px",fontWeight:900,marginTop:"20px",marginBottom:"10px"}}>درباره <span style={{color:"#B22234"}}>i</span>KIA Logistics</h1>
-          <p style={{fontSize:"16px",fontWeight:700,opacity:0.8,maxWidth:"600px",margin:"0 auto"}}>ما یک پلتفرم هوشمند لجستیک هستیم که بارفرست‌ها و حمل‌کنندگان رو در مسیر تهران-مشهد به هم وصل می‌کنیم</p>
+          <h1 style={{fontSize:"30px",fontWeight:900,marginTop:"20px",marginBottom:"10px"}}>درباره <span style={{color:"#B22234"}}>i</span>KIA Logistics</h1>
+          <p style={{fontSize:"15px",fontWeight:700,opacity:0.8,maxWidth:"600px",margin:"0 auto"}}>پلتفرم هوشمند لجستیک — ارتباط بارفرست‌ها و حمل‌کنندگان در مسیر تهران-مشهد</p>
         </div>
       </section>
 
       <section className="section-padding" style={{padding:"60px 24px",maxWidth:"900px",margin:"0 auto"}}>
-        <h2 className="text-responsive" style={{textAlign:"center",fontSize:"26px",color:"#1e3a5f",marginBottom:"40px",fontWeight:900}}>داستان ما</h2>
-        <div className="animate-fade" style={{background:"white",padding:"32px",borderRadius:"20px",border:"1px solid #eee",boxShadow:"0 4px 20px rgba(0,0,0,0.06)",lineHeight:"2.2",fontSize:"15px",color:"#444",fontWeight:500}}>
-          <p style={{marginBottom:"16px"}}>صنعت حمل‌ونقل جاده‌ای ایران با چالش‌های بزرگی مواجهه: <strong style={{color:"#1e3a5f",fontWeight:900}}>هزینه‌های بالای واسطه‌گری، خالی‌برگشت کامیون‌ها، و عدم شفافیت</strong> در قیمت‌گذاری و ردیابی بار.</p>
-          <p style={{marginBottom:"16px"}}><strong style={{color:"#B22234",fontWeight:900}}>iKIA Logistics</strong> با هدف حل این مشکلات پایه‌گذاری شد. ما معتقدیم فناوری می‌تونه حمل‌ونقل بار رو <strong style={{color:"#0ea5e9",fontWeight:900}}>ساده‌تر، ارزان‌تر و شفاف‌تر</strong> کنه.</p>
-          <p>پلتفرم ما با تمرکز بر مسیر پرتردد <strong style={{color:"#1e3a5f",fontWeight:900}}>تهران ↔ مشهد</strong> (بیش از ۹۰۰ کیلومتر) شروع به کار کرده و هدف ما پوشش تمام مسیرهای اصلی ایران هست.</p>
+        <h2 className="text-responsive" style={{textAlign:"center",fontSize:"26px",color:"var(--text)",marginBottom:"36px",fontWeight:900}}>داستان ما</h2>
+        <div className="card animate-fade" style={{padding:"28px",lineHeight:"2.2",fontSize:"15px",color:"var(--text2)"}}>
+          <p style={{marginBottom:"16px"}}>صنعت حمل‌ونقل جاده‌ای ایران با چالش‌های بزرگی مواجهه: <strong style={{color:"var(--text)",fontWeight:900}}>هزینه‌های بالای واسطه‌گری، خالی‌برگشت کامیون‌ها، و عدم شفافیت</strong> در قیمت‌گذاری.</p>
+          <p style={{marginBottom:"16px"}}><strong style={{color:"#B22234",fontWeight:900}}>iKIA Logistics</strong> با هدف حل این مشکلات پایه‌گذاری شد. فناوری می‌تونه حمل‌ونقل بار رو <strong style={{color:"var(--accent)",fontWeight:900}}>ساده‌تر، ارزان‌تر و شفاف‌تر</strong> کنه.</p>
+          <p>تمرکز ما روی مسیر پرتردد <strong style={{color:"var(--text)",fontWeight:900}}>تهران ↔ مشهد</strong> (بیش از ۹۰۰ کیلومتر) هست و هدف ما پوشش تمام مسیرهای اصلی ایرانه.</p>
         </div>
       </section>
 
       <section className="section-padding" style={{padding:"40px 24px 60px",maxWidth:"900px",margin:"0 auto"}}>
-        <h2 className="text-responsive" style={{textAlign:"center",fontSize:"26px",color:"#1e3a5f",marginBottom:"40px",fontWeight:900}}>مزایای ما</h2>
-        <div className="grid-responsive-1" style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"20px"}}>
+        <h2 className="text-responsive" style={{textAlign:"center",fontSize:"26px",color:"var(--text)",marginBottom:"36px",fontWeight:900}}>مزایای ما</h2>
+        <div className="grid-responsive-1" style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"16px"}}>
           {[
-            {icon:"💰",title:"حذف واسطه",desc:"ارتباط مستقیم بارفرست و حمل‌کننده بدون دلال و واسطه",color:"#f59e0b",bg:"#fffbeb"},
-            {icon:"🔄",title:"کاهش خالی‌برگشت",desc:"حمل‌کنندگان می‌تونن بار برگشت پیدا کنن و درآمد بیشتری داشته باشن",color:"#06b6d4",bg:"#ecfeff"},
-            {icon:"📍",title:"شفافیت کامل",desc:"پیگیری لحظه‌ای وضعیت بار، قیمت‌گذاری شفاف و سیستم امتیازدهی",color:"#10b981",bg:"#ecfdf5"},
-            {icon:"⚡",title:"سرعت بالا",desc:"ثبت بار در ۲ دقیقه، دریافت پیشنهاد فوری و تسویه ۲۴ ساعته",color:"#8b5cf6",bg:"#f5f3ff"},
-            {icon:"🛡️",title:"امنیت و اعتماد",desc:"سیستم امتیازدهی و نظرات برای ایجاد اعتماد بین طرفین",color:"#3b82f6",bg:"#eff6ff"},
-            {icon:"📱",title:"دسترسی آسان",desc:"استفاده از پلتفرم با موبایل و دسکتاپ — هر جا و هر زمان",color:"#ec4899",bg:"#fdf2f8"},
+            {icon:"💰",title:"حذف واسطه",desc:"ارتباط مستقیم بارفرست و حمل‌کننده بدون دلال"},
+            {icon:"🔄",title:"کاهش خالی‌برگشت",desc:"حمل‌کنندگان بار برگشت پیدا می‌کنن و درآمد بیشتری دارن"},
+            {icon:"📍",title:"شفافیت کامل",desc:"پیگیری لحظه‌ای وضعیت بار و قیمت‌گذاری شفاف"},
+            {icon:"⚡",title:"سرعت بالا",desc:"ثبت بار در ۲ دقیقه، پیشنهاد فوری و تسویه ۲۴ ساعته"},
+            {icon:"🛡️",title:"امنیت و اعتماد",desc:"سیستم امتیازدهی و نظرات برای اعتماد بین طرفین"},
+            {icon:"📱",title:"دسترسی آسان",desc:"استفاده با موبایل و دسکتاپ — هر جا و هر زمان"},
           ].map((f,i)=>(
-            <div key={i} className="card-hover animate-fade-up" style={{background:"white",padding:"24px",borderRadius:"16px",border:"1px solid #eee",boxShadow:"0 2px 10px rgba(0,0,0,0.05)",display:"flex",gap:"16px",alignItems:"flex-start",animationDelay:`${i*80}ms`}}>
-              <div style={{width:"48px",height:"48px",borderRadius:"12px",background:f.bg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"24px",flexShrink:0,border:`2px solid ${f.color}22`}}>{f.icon}</div>
-              <div><h3 style={{fontSize:"16px",fontWeight:900,color:"#1e3a5f",marginBottom:"6px"}}>{f.title}</h3><p style={{color:"#666",fontSize:"13px",lineHeight:"1.8",fontWeight:500}}>{f.desc}</p></div>
+            <div key={i} className="card animate-fade-up" style={{padding:"22px",display:"flex",gap:"14px",alignItems:"flex-start",animationDelay:`${i*80}ms`}}>
+              <div style={{width:"44px",height:"44px",borderRadius:"12px",background:"var(--bg3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"22px",flexShrink:0}}>{f.icon}</div>
+              <div><h3 style={{fontSize:"15px",fontWeight:900,color:"var(--text)",marginBottom:"6px"}}>{f.title}</h3><p style={{color:"var(--text3)",fontSize:"13px",lineHeight:"1.8",fontWeight:500}}>{f.desc}</p></div>
             </div>
           ))}
         </div>
@@ -52,15 +52,15 @@ export default function AboutPage() {
 
       <section style={{background:"linear-gradient(135deg,#0f172a,#1e3a5f)",color:"white",padding:"52px 24px",textAlign:"center"}}>
         <h2 style={{fontSize:"24px",fontWeight:900,marginBottom:"32px"}}>چشم‌انداز ما</h2>
-        <div className="grid-responsive-1" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"24px",maxWidth:"800px",margin:"0 auto"}}>
+        <div className="grid-responsive-1" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"20px",maxWidth:"800px",margin:"0 auto"}}>
           {[
             {year:"۱۴۰۴",title:"مسیر تهران-مشهد",desc:"راه‌اندازی MVP و جذب اولین کاربران",icon:"🚀"},
-            {year:"۱۴۰۵",title:"مسیرهای اصلی ایران",desc:"گسترش به ۱۰ مسیر پرتردد کشور",icon:"🗺️"},
-            {year:"۱۴۰۶",title:"پلتفرم ملی لجستیک",desc:"پوشش کامل حمل‌ونقل جاده‌ای ایران",icon:"🇮🇷"},
+            {year:"۱۴۰۵",title:"مسیرهای اصلی ایران",desc:"گسترش به ۱۰ مسیر پرتردد",icon:"🗺️"},
+            {year:"۱۴۰۶",title:"پلتفرم ملی لجستیک",desc:"پوشش کامل حمل‌ونقل جاده‌ای",icon:"🇮🇷"},
           ].map((s,i)=>(
-            <div key={i} className="animate-fade" style={{background:"rgba(255,255,255,0.08)",backdropFilter:"blur(10px)",padding:"24px",borderRadius:"16px",border:"1px solid rgba(255,255,255,0.12)",animationDelay:`${i*150}ms`}}>
+            <div key={i} className="animate-fade glass" style={{padding:"24px",borderRadius:"16px",animationDelay:`${i*150}ms`}}>
               <div style={{fontSize:"28px",marginBottom:"10px"}}>{s.icon}</div>
-              <div style={{fontSize:"13px",color:"#06b6d4",fontWeight:900,marginBottom:"4px"}}>{s.year}</div>
+              <div style={{fontSize:"13px",color:"#22d3ee",fontWeight:900,marginBottom:"4px"}}>{s.year}</div>
               <h3 style={{fontSize:"16px",fontWeight:900,marginBottom:"6px"}}>{s.title}</h3>
               <p style={{fontSize:"13px",opacity:0.7,fontWeight:700}}>{s.desc}</p>
             </div>
@@ -68,12 +68,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="section-padding" style={{padding:"60px 24px",textAlign:"center",background:"linear-gradient(135deg,#ecfeff,#eff6ff,#ecfdf5)"}}>
-        <h2 style={{fontSize:"24px",color:"#1e3a5f",marginBottom:"12px",fontWeight:900}}>آماده‌ای با ما همراه بشی؟</h2>
-        <p style={{color:"#555",marginBottom:"24px",fontWeight:700,fontSize:"14px"}}>همین الان ثبت‌نام کن و شروع کن</p>
+      <section className="section-padding" style={{padding:"60px 24px",textAlign:"center",background:"var(--bg3)"}}>
+        <h2 style={{fontSize:"24px",color:"var(--text)",marginBottom:"12px",fontWeight:900}}>آماده‌ای با ما همراه بشی؟</h2>
+        <p style={{color:"var(--text3)",marginBottom:"24px",fontWeight:700,fontSize:"14px"}}>همین الان ثبت‌نام کن و شروع کن</p>
         <div style={{display:"flex",gap:"12px",justifyContent:"center",flexWrap:"wrap"}}>
           <Link href="/login" className="btn-primary" style={{display:"inline-block",padding:"16px 40px",fontSize:"16px"}}>شروع کن — رایگان</Link>
-          <Link href="/contact" style={{display:"inline-block",padding:"16px 40px",fontSize:"16px",background:"white",color:"#1e3a5f",borderRadius:"10px",fontWeight:900,border:"2px solid #1e3a5f"}}>تماس با ما</Link>
+          <Link href="/contact" className="btn-outline" style={{display:"inline-block",padding:"16px 40px",fontSize:"16px"}}>تماس با ما</Link>
         </div>
       </section>
       <Footer />

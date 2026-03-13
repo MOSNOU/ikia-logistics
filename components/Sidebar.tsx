@@ -49,7 +49,7 @@ export function DashboardLayout({ children, role, name, onSignOut }: { children:
       <div className={`sidebar-overlay ${sidebarOpen?"open":""}`} onClick={()=>setSidebarOpen(false)} />
       <aside className={`sidebar ${sidebarOpen?"open":""}`} style={{background:dark?"#1e293b":"#ffffff",borderLeftColor:"var(--border)"}}>
         <div style={{padding:"16px 20px 16px",borderBottom:"1px solid var(--border)"}}>
-          <Link href="/" style={{textDecoration:"none"}}><LogoNav onDark={dark} /></Link>
+          <LogoNav onDark={dark} />
         </div>
         <div style={{padding:"16px 12px"}}>
           <div style={{display:"flex",alignItems:"center",gap:"10px",padding:"12px",marginBottom:"12px",background:dark?"#334155":"#f0f4ff",borderRadius:"12px"}}>
@@ -70,11 +70,6 @@ export function DashboardLayout({ children, role, name, onSignOut }: { children:
           <button onClick={toggleDark} style={{width:"100%",display:"flex",alignItems:"center",gap:"10px",padding:"12px 14px",borderRadius:"10px",fontSize:"14px",fontWeight:700,color:"var(--text2)",background:dark?"#334155":"#f0f4ff",border:"none",marginBottom:"8px",cursor:"pointer"}}>
             <span style={{fontSize:"18px"}}>{dark?"☀️":"🌙"}</span>{dark?"حالت روز":"حالت شب"}
           </button>
-          <Link href="/about" onClick={()=>setSidebarOpen(false)}>
-            <div style={{display:"flex",alignItems:"center",gap:"10px",padding:"12px 14px",borderRadius:"10px",fontSize:"14px",fontWeight:700,color:"var(--text3)"}}>
-              <span style={{fontSize:"18px"}}>ℹ️</span>درباره ما
-            </div>
-          </Link>
           <button onClick={onSignOut} style={{width:"100%",display:"flex",alignItems:"center",gap:"10px",padding:"12px 14px",borderRadius:"10px",fontSize:"14px",fontWeight:900,color:"var(--danger)",background:"none",border:"none",cursor:"pointer"}}>
             <span style={{fontSize:"18px"}}>🚪</span>خروج
           </button>

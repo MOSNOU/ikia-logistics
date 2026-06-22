@@ -1,0 +1,39 @@
+erDiagram
+
+    COMMODITY_CATEGORY ||--o{ COMMODITY_FAMILY : contains
+    COMMODITY_FAMILY ||--o{ COMMODITY_GROUP : contains
+    COMMODITY_GROUP ||--o{ COMMODITY : contains
+
+    COMMODITY ||--o{ COMMODITY_GRADE : has
+    COMMODITY_GRADE ||--o{ COMMODITY_SPECIFICATION : has
+    COMMODITY_SPECIFICATION ||--o{ COMMODITY_PROPERTY : includes
+    COMMODITY_ATTRIBUTE ||--o{ COMMODITY_PROPERTY : defines
+
+    COMMODITY ||--o{ COMMODITY_PACKAGING : supports
+    COMMODITY ||--o{ COMMODITY_UNIT : measured_in
+
+    COMMODITY ||--o{ COMMODITY_HS_CODE : mapped_to
+    COMMODITY ||--o{ COMMODITY_UN_CODE : dangerous_goods_code
+    COMMODITY ||--o{ COMMODITY_CAS_NUMBER : chemical_identifier
+    COMMODITY ||--o{ COMMODITY_ALIAS : known_as
+
+    COMMODITY ||--o{ COMMODITY_DOCUMENT : has
+    COMMODITY_DOCUMENT ||--o| COMMODITY_MSDS : may_be
+    COMMODITY_DOCUMENT ||--o| COMMODITY_TDS : may_be
+    COMMODITY ||--o{ COMMODITY_CERTIFICATE : certified_by
+    COMMODITY ||--o{ COMMODITY_IMAGE : visual_asset
+
+    COMMODITY ||--o{ COMMODITY_MARKET_DATA : has
+    COMMODITY ||--o{ COMMODITY_PRICE_INDEX : priced_by
+
+    SUPPLIER ||--o{ SUPPLIER_CAPABILITY : has
+    COMMODITY ||--o{ SUPPLIER_CAPABILITY : supplied_by
+
+    OFFER ||--o{ OFFER_ITEM : contains
+    COMMODITY ||--o{ OFFER_ITEM : offered_as
+
+    RFQ ||--o{ RFQ_ITEM : contains
+    COMMODITY ||--o{ RFQ_ITEM : requested_as
+
+    CONTRACT ||--o{ CONTRACT_ITEM : contains
+    COMMODITY ||--o{ CONTRACT_ITEM : contracted_as

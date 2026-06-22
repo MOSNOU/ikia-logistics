@@ -1,0 +1,43 @@
+flowchart TB
+
+    STRATEGY[Strategic Foundation]
+
+    BA[Business Architecture]
+
+    AA[Application Architecture]
+
+    DA[Data Architecture]
+
+    SA[Solution Architecture]
+
+    WP[Work Packages]
+
+    W1[Wave 1 Foundation]
+    W2[Wave 2 Marketplace]
+    W3[Wave 3 Logistics]
+    W4[Wave 4 AI]
+    W5[Wave 5 Integrations]
+    W6[Wave 6 Production]
+
+    PROD[Production Go-Live]
+
+    STRATEGY --> BA
+    BA --> AA
+    AA --> DA
+    DA --> SA
+
+    SA --> WP
+
+    WP --> W1
+    WP --> W2
+    WP --> W3
+    WP --> W4
+    WP --> W5
+    WP --> W6
+
+    W1 --> PROD
+    W2 --> PROD
+    W3 --> PROD
+    W4 --> PROD
+    W5 --> PROD
+    W6 --> PROD

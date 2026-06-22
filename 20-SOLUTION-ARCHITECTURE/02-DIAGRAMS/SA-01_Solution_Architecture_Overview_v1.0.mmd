@@ -1,0 +1,39 @@
+flowchart TB
+
+    EXP[Experience Layer]
+
+    API[API Gateway]
+
+    DOM[Domain Services]
+
+    WF[Workflow Layer]
+
+    AI[AI Layer]
+
+    KNOW[Knowledge Layer]
+
+    DATA[Data Layer]
+
+    ANALYTICS[Analytics Layer]
+
+    INT[Integration Layer]
+
+    EXT[External Systems]
+
+    EXP --> API
+    API --> DOM
+
+    DOM --> WF
+    DOM --> AI
+    DOM --> KNOW
+    DOM --> DATA
+
+    WF --> DATA
+
+    AI --> KNOW
+    AI --> DATA
+
+    DATA --> ANALYTICS
+
+    DOM --> INT
+    INT --> EXT

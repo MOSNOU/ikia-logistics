@@ -1,0 +1,26 @@
+flowchart LR
+
+    LOCAL[Local]
+    DEV[Development]
+    TEST[Testing]
+    UAT[UAT]
+    STAGE[Staging]
+    PROD[Production]
+
+    LOCAL --> DEV
+    DEV --> TEST
+    TEST --> UAT
+    UAT --> STAGE
+    STAGE --> PROD
+
+    DEV_DB[(Supabase Dev)]
+    TEST_DB[(Supabase Test)]
+    UAT_DB[(Supabase UAT)]
+    STAGE_DB[(Supabase Staging)]
+    PROD_DB[(Supabase Production)]
+
+    DEV --> DEV_DB
+    TEST --> TEST_DB
+    UAT --> UAT_DB
+    STAGE --> STAGE_DB
+    PROD --> PROD_DB

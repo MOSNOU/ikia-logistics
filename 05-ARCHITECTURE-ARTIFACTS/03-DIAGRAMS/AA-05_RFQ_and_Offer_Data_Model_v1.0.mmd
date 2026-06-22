@@ -1,0 +1,51 @@
+erDiagram
+
+    BUYER ||--o{ RFQ : creates
+    RFQ ||--o{ RFQ_ITEM : contains
+    RFQ ||--o{ RFQ_REQUIREMENT : has
+    RFQ ||--o{ RFQ_ATTACHMENT : includes
+    RFQ ||--o{ RFQ_RESPONSE : receives
+
+    RFQ_ITEM }o--|| COMMODITY : requests
+    RFQ_ITEM }o--|| COMMODITY_SPECIFICATION : requires
+
+    SUPPLIER ||--o{ RFQ_RESPONSE : submits
+    SUPPLIER ||--o{ OFFER : publishes
+
+    OFFER ||--o{ OFFER_ITEM : contains
+    OFFER ||--o{ OFFER_ATTACHMENT : includes
+    OFFER ||--o{ OFFER_VALIDITY : has
+
+    OFFER_ITEM }o--|| COMMODITY : offers
+    OFFER_ITEM ||--o{ OFFER_PRICE : priced_by
+
+    RFQ ||--o{ MATCHING_RESULT : matched_against
+    OFFER ||--o{ MATCHING_RESULT : matched_to
+    SUPPLIER ||--o{ MATCHING_RESULT : evaluated_as
+
+    RFQ_RESPONSE ||--o{ COMMERCIAL_NEGOTIATION : enters
+    OFFER ||--o{ COMMERCIAL_NEGOTIATION : may_enter
+
+    COMMERCIAL_NEGOTIATION ||--o{ NEGOTIATION_ROUND : has
+    NEGOTIATION_ROUND ||--o{ NEGOTIATION_MESSAGE : contains
+
+    RFQ ||--o{ AWARD_EVALUATION : evaluated_by
+    RFQ ||--o| AWARD_DECISION : results_in
+    AWARD_DECISION }o--|| SUPPLIER : awards_to
+    AWARD_DECISION }o--|| OFFER : awards_offer
+
+    RFQ ||--o{ COMMERCIAL_TERM : has
+    RFQ ||--o{ PAYMENT_TERM : has
+    RFQ ||--o{ DELIVERY_TERM : has
+
+    OFFER ||--o{ COMMERCIAL_TERM : has
+    OFFER ||--o{ PAYMENT_TERM : has
+    OFFER ||--o{ DELIVERY_TERM : has
+
+    RFQ ||--o{ RFQ_WORKFLOW : controlled_by
+    OFFER ||--o{ OFFER_WORKFLOW : controlled_by
+
+    RFQ ||--o{ RFQ_AUDIT : audited_by
+    OFFER ||--o{ OFFER_AUDIT : audited_by
+
+    AWARD_DECISION ||--o| CONTRACT : generates

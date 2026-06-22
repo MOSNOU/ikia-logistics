@@ -1,0 +1,46 @@
+erDiagram
+
+    CONTRACT ||--o{ LOGISTICS_ORDER : creates
+    RFQ ||--o{ LOGISTICS_ORDER : may_create
+    OFFER ||--o{ LOGISTICS_ORDER : may_create
+
+    LOGISTICS_ORDER ||--o{ SHIPMENT : generates
+    SHIPMENT ||--o{ SHIPMENT_ITEM : contains
+    SHIPMENT ||--o{ SHIPMENT_LEG : consists_of
+    SHIPMENT ||--o{ SHIPMENT_MILESTONE : has
+    SHIPMENT ||--o{ SHIPMENT_TRACKING_EVENT : tracked_by
+    SHIPMENT ||--o| PROOF_OF_DELIVERY : produces
+
+    CARRIER ||--o{ SHIPMENT : operates
+    CARRIER ||--o{ CARRIER_CAPABILITY : has
+    CARRIER ||--o{ CARRIER_CONTRACT : governed_by
+    CARRIER ||--o{ VEHICLE : owns
+    CARRIER ||--o{ DRIVER : employs
+
+    VEHICLE }o--|| VEHICLE_TYPE : typed_as
+    VEHICLE ||--o{ TRACKING_DEVICE : equipped_with
+
+    SHIPMENT }o--|| ROUTE : uses
+    ROUTE ||--o{ ROUTE_SEGMENT : contains
+    ROUTE }o--|| CORRIDOR : may_belong_to
+
+    ROUTE_SEGMENT }o--o| PORT : may_pass
+    ROUTE_SEGMENT }o--o| BORDER_CROSSING : may_cross
+    ROUTE_SEGMENT }o--o| TERMINAL : may_use
+    ROUTE_SEGMENT }o--o| WAREHOUSE : may_use
+
+    SHIPMENT ||--o{ ETA_RECORD : predicts
+    SHIPMENT ||--o{ DELAY_EVENT : may_have
+    SHIPMENT ||--o{ SHIPMENT_EXCEPTION : may_have
+
+    SHIPMENT ||--o{ LOGISTICS_DOCUMENT : has
+    SHIPMENT ||--o{ CUSTOMS_DOCUMENT : has
+    SHIPMENT ||--o{ INSPECTION_RECORD : inspected_by
+    SHIPMENT ||--o{ LOGISTICS_COMPLIANCE : checked_by
+
+    SHIPMENT ||--o{ FREIGHT_RATE : priced_by
+    SHIPMENT ||--o{ LOGISTICS_COST : costs
+    CORRIDOR ||--o{ LOGISTICS_RISK : exposed_to
+    ROUTE ||--o{ LOGISTICS_RISK : exposed_to
+    CARRIER ||--o{ LOGISTICS_RISK : exposed_to
+    SHIPMENT ||--o{ LOGISTICS_RISK : exposed_to

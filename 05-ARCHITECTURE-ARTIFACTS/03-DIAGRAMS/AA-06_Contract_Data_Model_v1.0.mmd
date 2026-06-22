@@ -1,0 +1,45 @@
+erDiagram
+
+    AWARD_DECISION ||--o| CONTRACT : generates
+    RFQ ||--o| CONTRACT : may_generate
+    OFFER ||--o| CONTRACT : may_generate
+
+    CONTRACT ||--o{ CONTRACT_VERSION : has
+    CONTRACT_TEMPLATE ||--o{ CONTRACT_VERSION : used_for
+    CONTRACT_VERSION ||--o{ CONTRACT_CLAUSE : contains
+
+    CONTRACT ||--o{ CONTRACT_PARTY : has
+    CONTRACT_PARTY }o--|| CONTRACT_ROLE : assigned_role
+
+    CONTRACT ||--o{ CONTRACT_ITEM : contains
+    CONTRACT_ITEM }o--|| COMMODITY : references
+
+    CONTRACT ||--o{ CONTRACT_TERM : has
+    CONTRACT ||--o{ CONTRACT_PRICING : priced_by
+
+    CONTRACT ||--o{ CONTRACT_OBLIGATION : creates
+    CONTRACT ||--o{ CONTRACT_MILESTONE : has
+    CONTRACT ||--o{ CONTRACT_COMMITMENT : includes
+
+    CONTRACT ||--o{ CONTRACT_APPROVAL : approved_by
+    CONTRACT ||--o{ CONTRACT_WORKFLOW : controlled_by
+
+    CONTRACT ||--o{ CONTRACT_SIGNATURE : signed_by
+    CONTRACT_SIGNATURE ||--o| DIGITAL_SIGNATURE : evidenced_by
+
+    CONTRACT ||--o{ CONTRACT_AMENDMENT : amended_by
+    CONTRACT ||--o{ CONTRACT_SNAPSHOT : snapshotted_as
+
+    CONTRACT ||--o{ CONTRACT_DOCUMENT : has
+    CONTRACT_DOCUMENT ||--o{ CONTRACT_ATTACHMENT : includes
+
+    CONTRACT ||--o{ CONTRACT_AUDIT : audited_by
+    CONTRACT ||--o{ CONTRACT_RISK : assessed_by
+    CONTRACT ||--o{ CONTRACT_COMPLIANCE : checked_by
+
+    CONTRACT ||--o{ ESCROW_CASE : may_have
+    CONTRACT ||--o{ INVOICE : generates
+    INVOICE ||--o{ PAYMENT : paid_by
+    PAYMENT ||--o{ SETTLEMENT : settles
+
+    CONTRACT ||--o{ CONTRACT_KNOWLEDGE_NODE : represented_as

@@ -1,0 +1,33 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Claude / local settings
+.claude/settings.local.json
+
+# Supabase local temp
+supabase/.temp/
+supabase/.branches/
+
+# Node / Next
+node_modules/
+.next/
+out/
+dist/
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Word temporary lock files
+~$*.docx
+**/~$*.docx
+
+# Local archives / backups
+*.tar.gz
+*.zip

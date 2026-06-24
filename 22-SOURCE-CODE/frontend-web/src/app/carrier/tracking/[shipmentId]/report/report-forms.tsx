@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field } from "@/components/forms/field";
@@ -54,39 +54,43 @@ function SessionForms({
   return (
     <Card>
       <CardContent className="p-4 space-y-4">
-        <div className="text-sm font-medium">مدیریت نشست تله‌متری</div>
+        <div>
+          <div className="text-sm font-medium">شروع و پایان نشست تله‌متری</div>
+          <p className="text-xs text-muted-foreground mt-1">
+            وضعیت فعلی نشست:{" "}
+            {sessionActive ? (
+              <span className="text-emerald-700">فعال</span>
+            ) : (
+              <span>غیرفعال</span>
+            )}
+          </p>
+        </div>
 
         {!sessionActive ? (
-          <form action={startAction} className="flex flex-wrap items-end gap-3">
+          <form action={startAction} className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
             <input type="hidden" name="dispatchId" value={dispatchId} />
             <input type="hidden" name="shipmentId" value={shipmentId} />
             <Field htmlFor="startNotes" label="یادداشت شروع (اختیاری)">
               <Input id="startNotes" name="notes" />
             </Field>
-            <Button type="submit" disabled={startPending}>
+            <Button type="submit" disabled={startPending} className="w-full sm:w-auto">
               {startPending ? "..." : "شروع ردیابی"}
             </Button>
             <FeedbackInline state={startState} />
           </form>
         ) : (
-          <p className="text-xs text-muted-foreground">
-            نشست تله‌متری در حال حاضر فعال است. برای شروع نشست جدید، ابتدا نشست فعلی را پایان دهید.
-          </p>
-        )}
-
-        {sessionActive ? (
-          <form action={endAction} className="flex flex-wrap items-end gap-3">
+          <form action={endAction} className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
             <input type="hidden" name="dispatchId" value={dispatchId} />
             <input type="hidden" name="shipmentId" value={shipmentId} />
             <Field htmlFor="endNotes" label="یادداشت پایان (اختیاری)">
               <Input id="endNotes" name="notes" />
             </Field>
-            <Button type="submit" variant="outline" disabled={endPending}>
+            <Button type="submit" variant="outline" disabled={endPending} className="w-full sm:w-auto">
               {endPending ? "..." : "پایان ردیابی"}
             </Button>
             <FeedbackInline state={endState} />
           </form>
-        ) : null}
+        )}
       </CardContent>
     </Card>
   );
@@ -103,40 +107,17 @@ function PositionReportForm({
     TelematicsActionState | null,
     FormData
   >(reportPosition, null);
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
-  const [geoStatus, setGeoStatus] = useState<string | null>(null);
-  const [geoBusy, setGeoBusy] = useState(false);
-
-  function fillFromBrowser() {
-    if (typeof navigator === "undefined" || !navigator.geolocation) {
-      setGeoStatus("مرورگر از تعیین موقعیت پشتیبانی نمی‌کند.");
-      return;
-    }
-    setGeoBusy(true);
-    setGeoStatus(null);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setLatitude(String(pos.coords.latitude));
-        setLongitude(String(pos.coords.longitude));
-        setGeoStatus(
-          `موقعیت دستگاه با دقت ${Math.round(pos.coords.accuracy)} متر بارگذاری شد.`,
-        );
-        setGeoBusy(false);
-      },
-      (err) => {
-        setGeoStatus(`خطا در تعیین موقعیت: ${err.message}`);
-        setGeoBusy(false);
-      },
-      { enableHighAccuracy: false, timeout: 8_000, maximumAge: 30_000 },
-    );
-  }
 
   return (
     <Card>
       <CardContent className="p-4 space-y-4">
-        <div className="text-sm font-medium">ثبت موقعیت دستی</div>
-        <form action={action} className="grid gap-3 md:grid-cols-2">
+        <div>
+          <div className="text-sm font-medium">ورود دستی موقعیت</div>
+          <p className="text-xs text-muted-foreground mt-1">
+            برای زمانی که دسترسی به GPS دستگاه ممکن نیست — مختصات و فراداده‌ها را مستقیم وارد کنید.
+          </p>
+        </div>
+        <form action={action} className="grid gap-3 sm:grid-cols-2">
           <input type="hidden" name="dispatchId" value={dispatchId} />
           <input type="hidden" name="shipmentId" value={shipmentId} />
           <Field htmlFor="latitude" label="عرض جغرافیایی">
@@ -145,8 +126,6 @@ function PositionReportForm({
               name="latitude"
               dir="ltr"
               inputMode="decimal"
-              value={latitude}
-              onChange={(e) => setLatitude(e.target.value)}
               required
             />
           </Field>
@@ -156,8 +135,6 @@ function PositionReportForm({
               name="longitude"
               dir="ltr"
               inputMode="decimal"
-              value={longitude}
-              onChange={(e) => setLongitude(e.target.value)}
               required
             />
           </Field>
@@ -204,27 +181,13 @@ function PositionReportForm({
               defaultValue="carrier_app"
             />
           </Field>
-          <div className="md:col-span-2 flex flex-wrap items-center gap-3">
-            <Button type="submit" disabled={pending}>
-              {pending ? "..." : "ثبت موقعیت فعلی"}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={fillFromBrowser}
-              disabled={geoBusy}
-            >
-              {geoBusy ? "..." : "استفاده از موقعیت مرورگر"}
+          <div className="sm:col-span-2 flex flex-wrap items-center gap-3">
+            <Button type="submit" disabled={pending} className="w-full sm:w-auto">
+              {pending ? "..." : "ثبت موقعیت دستی"}
             </Button>
             <FeedbackInline state={state} />
-            {geoStatus ? (
-              <span className="text-xs text-muted-foreground">{geoStatus}</span>
-            ) : null}
           </div>
         </form>
-        <p className="text-xs text-muted-foreground">
-          دکمه «استفاده از موقعیت مرورگر» تنها با کلیک شما اجرا می‌شود و هیچ ردیابی پس‌زمینه‌ای انجام نمی‌شود.
-        </p>
       </CardContent>
     </Card>
   );
@@ -245,8 +208,13 @@ function EventReportForm({
   return (
     <Card>
       <CardContent className="p-4 space-y-4">
-        <div className="text-sm font-medium">ثبت رویداد تله‌متری</div>
-        <form action={action} className="grid gap-3 md:grid-cols-2">
+        <div>
+          <div className="text-sm font-medium">گزارش رویداد تله‌متری</div>
+          <p className="text-xs text-muted-foreground mt-1">
+            برای ثبت قطع/بازگشت سیگنال یا ناهنجاری موقعیت. شروع/پایان نشست از طریق دکمه‌های اختصاصی بالا ثبت می‌شود.
+          </p>
+        </div>
+        <form action={action} className="grid gap-3 sm:grid-cols-2">
           <input type="hidden" name="dispatchId" value={dispatchId} />
           <input type="hidden" name="shipmentId" value={shipmentId} />
           <Field htmlFor="eventType" label="نوع رویداد">
@@ -270,30 +238,47 @@ function EventReportForm({
           <Field htmlFor="reason" label="توضیح (اختیاری)">
             <Input id="reason" name="reason" />
           </Field>
-          <div className="md:col-span-2 flex flex-wrap items-center gap-3">
-            <Button type="submit" variant="outline" disabled={pending}>
+          <div className="sm:col-span-2 flex flex-wrap items-center gap-3">
+            <Button type="submit" variant="outline" disabled={pending} className="w-full sm:w-auto">
               {pending ? "..." : "ثبت رویداد"}
             </Button>
             <FeedbackInline state={state} />
           </div>
         </form>
-        <p className="text-xs text-muted-foreground">
-          رویدادهای شروع/پایان نشست فقط از طریق دکمه‌های اختصاصی بالا ثبت می‌شوند و در این فهرست در دسترس نیستند.
-        </p>
       </CardContent>
     </Card>
   );
 }
 
+// Each surface is exported individually so the carrier reporting page can
+// interleave the CC-49 live-capture panel between groups without bundling
+// every form in one render order. ReportForms is kept as a convenience
+// composite for any future caller that wants all four surfaces stacked.
+
+export function SessionControls(props: Props) {
+  return <SessionForms {...props} />;
+}
+
+export function ManualPositionForm(props: {
+  shipmentId: string;
+  dispatchId: string;
+}) {
+  return <PositionReportForm {...props} />;
+}
+
+export function EventReport(props: { shipmentId: string; dispatchId: string }) {
+  return <EventReportForm {...props} />;
+}
+
 export function ReportForms(props: Props) {
   return (
     <div className="space-y-4">
-      <SessionForms {...props} />
-      <PositionReportForm
+      <SessionControls {...props} />
+      <ManualPositionForm
         shipmentId={props.shipmentId}
         dispatchId={props.dispatchId}
       />
-      <EventReportForm
+      <EventReport
         shipmentId={props.shipmentId}
         dispatchId={props.dispatchId}
       />

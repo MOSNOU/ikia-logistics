@@ -17,7 +17,7 @@ export async function approveUser(
   const tenantId = String(formData.get("tenantId") ?? "");
   const organizationId = String(formData.get("organizationId") ?? "");
   const roleCode = String(formData.get("roleCode") ?? "");
-  const fullName = (formData.get("fullName") as string | null) || null;
+  const fullName = (formData.get("fullName") as string | null) || undefined;
   const locale = ((formData.get("locale") as string | null) || "fa") as Locale;
 
   if (!userId || !tenantId || !organizationId || !roleCode) {

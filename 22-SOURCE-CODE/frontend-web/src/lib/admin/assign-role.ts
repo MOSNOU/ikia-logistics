@@ -19,7 +19,7 @@ export async function assignRole(
   const roleCode = String(formData.get("roleCode") ?? "");
   const scopeType = (String(formData.get("scopeType") ?? "organization") as RoleScope);
   const scopeIdRaw = String(formData.get("scopeId") ?? "").trim();
-  const scopeId = scopeIdRaw === "" ? null : scopeIdRaw;
+  const scopeId = scopeIdRaw === "" ? undefined : scopeIdRaw;
 
   if (!userId || !roleCode || !SCOPE_TYPES.includes(scopeType)) {
     return { error: "فیلدهای ضروری معتبر نیستند" };

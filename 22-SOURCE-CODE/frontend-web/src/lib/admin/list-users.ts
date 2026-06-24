@@ -24,7 +24,7 @@ export async function listAdminUsers({
     .rpc("admin_list_users", {
       p_limit: pageSize,
       p_offset: page * pageSize,
-      p_status_filter: status,
+      p_status_filter: status ?? undefined,
     });
 
   if (error) {

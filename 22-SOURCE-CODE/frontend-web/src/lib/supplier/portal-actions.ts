@@ -27,15 +27,15 @@ export async function upsertMyProfile(
   const { error } = await supabase
     .schema("supplier")
     .rpc("portal_upsert_my_profile", {
-      p_display_name: (formData.get("displayName") as string | null) || null,
-      p_description: (formData.get("description") as string | null) || null,
-      p_website: (formData.get("website") as string | null) || null,
-      p_contact_email: (formData.get("contactEmail") as string | null) || null,
-      p_contact_phone: (formData.get("contactPhone") as string | null) || null,
-      p_country_code: (formData.get("countryCode") as string | null) || null,
+      p_display_name: (formData.get("displayName") as string | null) || undefined,
+      p_description: (formData.get("description") as string | null) || undefined,
+      p_website: (formData.get("website") as string | null) || undefined,
+      p_contact_email: (formData.get("contactEmail") as string | null) || undefined,
+      p_contact_phone: (formData.get("contactPhone") as string | null) || undefined,
+      p_country_code: (formData.get("countryCode") as string | null) || undefined,
       p_established_year: formData.get("establishedYear")
         ? Number(formData.get("establishedYear"))
-        : null,
+        : undefined,
     });
 
   if (error) {
@@ -111,10 +111,10 @@ export async function addMyDocument(
 ): Promise<PortalActionState> {
   const documentType = String(formData.get("documentType") ?? "") as DocumentType;
   const title = String(formData.get("title") ?? "").trim();
-  const description = (formData.get("description") as string | null) || null;
-  const externalReference = (formData.get("externalReference") as string | null) || null;
-  const issuedAt = (formData.get("issuedAt") as string | null) || null;
-  const expiresAt = (formData.get("expiresAt") as string | null) || null;
+  const description = (formData.get("description") as string | null) || undefined;
+  const externalReference = (formData.get("externalReference") as string | null) || undefined;
+  const issuedAt = (formData.get("issuedAt") as string | null) || undefined;
+  const expiresAt = (formData.get("expiresAt") as string | null) || undefined;
 
   if (!DOC_TYPES.includes(documentType) || !title) {
     return { error: "ورودی نامعتبر" };

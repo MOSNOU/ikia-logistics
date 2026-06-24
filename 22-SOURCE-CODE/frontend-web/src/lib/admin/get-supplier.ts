@@ -21,7 +21,11 @@ export async function getAdminSupplier(supplierId: string): Promise<AdminSupplie
     console.error("admin_get_supplier", error);
     return { supplier: null, categoryLinks: [], documents: [] };
   }
-  const supplier = ((data ?? []) as AdminSupplierDetailRow[])[0] ?? null;
+  // The RPC returns a flat row shape; we then enrich `supplier` with
+  // documents/categories from the two queries below. The unknown-cast is
+  // intentional and tracked here so future RPC changes are picked up by
+  // the schema-drift tripwire (082_cc21_schema_drift_guard.sql).
+  const supplier = ((data ?? []) as unknown as AdminSupplierDetailRow[])[0] ?? null;
   if (!supplier) {
     return { supplier: null, categoryLinks: [], documents: [] };
   }

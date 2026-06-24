@@ -24,7 +24,7 @@ export async function listAdminAuditEvents({
     .rpc("admin_list_audit_events", {
       p_limit: pageSize,
       p_offset: page * pageSize,
-      p_since: since,
+      p_since: since ?? undefined,
     });
 
   if (error) {

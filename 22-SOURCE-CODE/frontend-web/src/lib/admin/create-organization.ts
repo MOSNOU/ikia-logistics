@@ -31,9 +31,9 @@ export async function createOrganization(
   const type = String(formData.get("type") ?? "") as OrganizationType;
   const status = (String(formData.get("status") ?? "pending") as OrganizationStatus);
   const countryCode = String(formData.get("countryCode") ?? "IR").slice(0, 2).toUpperCase();
-  const legalName = (formData.get("legalName") as string | null) || null;
-  const registrationNumber = (formData.get("registrationNumber") as string | null) || null;
-  const taxId = (formData.get("taxId") as string | null) || null;
+  const legalName = (formData.get("legalName") as string | null) || undefined;
+  const registrationNumber = (formData.get("registrationNumber") as string | null) || undefined;
+  const taxId = (formData.get("taxId") as string | null) || undefined;
 
   if (!tenantId || !code || !nameFa || !nameEn || !TYPES.includes(type) || !STATUSES.includes(status)) {
     return { error: "فیلدهای ضروری معتبر نیستند" };

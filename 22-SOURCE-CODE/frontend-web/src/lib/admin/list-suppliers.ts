@@ -30,8 +30,8 @@ export async function listAdminSuppliers({
     .rpc("admin_list_suppliers", {
       p_limit: pageSize,
       p_offset: page * pageSize,
-      p_status_filter: status,
-      p_verification_filter: verification,
+      p_status_filter: status ?? undefined,
+      p_verification_filter: verification ?? undefined,
     });
 
   if (error) {

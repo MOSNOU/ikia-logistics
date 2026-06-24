@@ -1,0 +1,74 @@
+graph TD
+
+    ORG[Organization]
+    SUP[Supplier]
+    CUS[Customer]
+    COM[Commodity]
+    GRD[CommodityGrade]
+    OFF[Offer]
+    RFQ[RFQ]
+    CON[Contract]
+    SHP[Shipment]
+    CAR[Carrier]
+    RTE[Route]
+    COR[Corridor]
+    PRT[Port]
+    BRD[Border]
+    WHS[Warehouse]
+    DOC[Document]
+    CERT[Certificate]
+    TRUST[TrustProfile]
+    COMP[ComplianceCase]
+    MKT[MarketSignal]
+    KNOW[KnowledgeAsset]
+
+    ORG -->|OPERATES_AS| SUP
+    ORG -->|OPERATES_AS| CUS
+
+    SUP -->|SUPPLIES| COM
+    COM -->|HAS_GRADE| GRD
+
+    SUP -->|PUBLISHES| OFF
+    OFF -->|OFFERS| COM
+
+    CUS -->|CREATES| RFQ
+    RFQ -->|REQUESTS| COM
+
+    SUP -->|RESPONDS_TO| RFQ
+    RFQ -->|RESULTS_IN| CON
+
+    CON -->|HAS_PARTY| ORG
+    CON -->|REFERENCES| DOC
+    CON -->|CREATES| SHP
+
+    SHP -->|CARRIED_BY| CAR
+    SHP -->|USES| RTE
+
+    RTE -->|BELONGS_TO| COR
+    RTE -->|PASSES_THROUGH| PRT
+    RTE -->|CROSSES| BRD
+
+    SHP -->|STORED_AT| WHS
+
+    ORG -->|HAS_TRUST_PROFILE| TRUST
+    ORG -->|HAS_COMPLIANCE_CASE| COMP
+
+    COM -->|AFFECTED_BY| MKT
+
+    KNOW -->|DESCRIBES| COM
+    KNOW -->|REFERENCES| DOC
+
+    SUP -->|HAS_CERTIFICATE| CERT
+    CERT -->|EVIDENCED_BY| DOC
+
+    COR -->|USED_BY| SHP
+    COR -->|AFFECTED_BY| MKT
+
+    COMP -->|REFERENCES| DOC
+    COMP -->|CHECKS| CON
+    COMP -->|CHECKS| SHP
+
+    TRUST -->|SCORES| SUP
+
+    DOC -->|DESCRIBES| COM
+    DOC -->|SUPPORTS| CON

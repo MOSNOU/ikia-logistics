@@ -1,0 +1,46 @@
+flowchart LR
+
+    PORTAL[iKIA Portals]
+
+    APIGW[API Gateway]
+
+    HUB[Integration Hub]
+
+    TRANS[Transformation Layer]
+
+    EVENTBUS[Event Bus]
+
+    QUEUE[Message Queues]
+
+    DLQ[Dead Letter Queue]
+
+    GOV[Government Systems]
+
+    BANK[Banking & PSP Systems]
+
+    LOG[Logistics Systems]
+
+    ERP[ERP / CRM Systems]
+
+    IOT[IoT & GPS Providers]
+
+    MON[Monitoring & Observability]
+
+    PORTAL --> APIGW
+    APIGW --> HUB
+
+    HUB --> TRANS
+    HUB --> EVENTBUS
+
+    EVENTBUS --> QUEUE
+    QUEUE --> GOV
+    QUEUE --> BANK
+    QUEUE --> LOG
+    QUEUE --> ERP
+    QUEUE --> IOT
+
+    QUEUE --> DLQ
+
+    HUB --> MON
+    EVENTBUS --> MON
+    QUEUE --> MON

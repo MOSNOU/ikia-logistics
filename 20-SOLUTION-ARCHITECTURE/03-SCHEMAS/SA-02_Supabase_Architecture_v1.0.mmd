@@ -1,0 +1,41 @@
+flowchart TB
+
+    USER[Users]
+
+    AUTH[Supabase Auth]
+
+    API[API Gateway]
+
+    RLS[RLS Policies]
+
+    DB[(PostgreSQL)]
+
+    STORAGE[(Storage Buckets)]
+
+    REALTIME[Realtime Engine]
+
+    EDGE[Edge Functions]
+
+    VECTOR[(pgvector)]
+
+    KG[Knowledge Graph]
+
+    AUDIT[(Audit Schema)]
+
+    EXT[External Systems]
+
+    USER --> AUTH
+    AUTH --> API
+
+    API --> RLS
+    RLS --> DB
+
+    DB --> STORAGE
+    DB --> REALTIME
+    DB --> EDGE
+    DB --> VECTOR
+    DB --> AUDIT
+
+    EDGE --> EXT
+
+    VECTOR --> KG

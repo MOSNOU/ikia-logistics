@@ -1,0 +1,31 @@
+erDiagram
+
+    ORGANIZATION ||--o{ BRANCH : has
+    ORGANIZATION ||--o{ CONTACT : has
+
+    CUSTOMER ||--|| ORGANIZATION : based_on
+    CUSTOMER ||--o{ CUSTOMER_PROFILE : has
+
+    SUPPLIER ||--|| ORGANIZATION : based_on
+    SUPPLIER ||--o{ SUPPLIER_CAPABILITY : has
+    SUPPLIER ||--o{ SUPPLIER_CERTIFICATE : has
+    SUPPLIER ||--o{ TRUST_PROFILE : has
+
+    COMMODITY_CATEGORY ||--o{ COMMODITY_FAMILY : contains
+    COMMODITY_FAMILY ||--o{ COMMODITY_GROUP : contains
+    COMMODITY_GROUP ||--o{ COMMODITY : contains
+    COMMODITY ||--o{ COMMODITY_SPECIFICATION : has
+    COMMODITY ||--o{ PRODUCT_CODE : assigned
+
+    CARRIER ||--o{ CARRIER_CAPABILITY : has
+
+    COUNTRY ||--o{ PROVINCE : contains
+    PROVINCE ||--o{ CITY : contains
+    CITY ||--o{ PORT : contains
+    CITY ||--o{ WAREHOUSE : contains
+
+    USER }o--o{ ROLE : assigned
+    ROLE }o--o{ PERMISSION : grants
+
+    CURRENCY ||--o{ INCOTERM : references
+    TRUST_LEVEL ||--o{ RISK_LEVEL : related

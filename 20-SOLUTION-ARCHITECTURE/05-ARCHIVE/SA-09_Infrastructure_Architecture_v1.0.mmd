@@ -1,0 +1,52 @@
+flowchart TB
+
+    USER[Users]
+
+    DNS[DNS]
+
+    CDN[Global CDN]
+
+    WAF[WAF]
+
+    VERCEL[Vercel Edge Network]
+
+    API[API Gateway]
+
+    APP[Domain Services]
+
+    AI[AI Platform]
+
+    DB[(Supabase PostgreSQL)]
+
+    VECTOR[(pgvector)]
+
+    STORAGE[(Object Storage)]
+
+    INT[Integration Hub]
+
+    EXT[External Systems]
+
+    MON[Monitoring & Observability]
+
+    USER --> DNS
+    DNS --> CDN
+    CDN --> WAF
+    WAF --> VERCEL
+
+    VERCEL --> API
+    API --> APP
+
+    APP --> DB
+    APP --> STORAGE
+    APP --> AI
+
+    AI --> VECTOR
+    VECTOR --> DB
+
+    APP --> INT
+    INT --> EXT
+
+    API --> MON
+    APP --> MON
+    DB --> MON
+    AI --> MON

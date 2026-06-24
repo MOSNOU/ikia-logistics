@@ -1,0 +1,94 @@
+# iKIA Logistics — Supabase project configuration
+# Created by CC-04. Other values (project_id, db.port, studio.port, ...) are
+# typically added by `supabase init`; this file only sets values that CC-04 needs.
+# Merge by hand if `supabase init` produces a different baseline.
+
+project_id = "ikia-logistics"
+
+[api]
+enabled = true
+# PostgREST exposes these schemas. `audit` is intentionally omitted —
+# no client-side reads of audit.* are allowed.
+# Updated in CC-20: expanded from 4 schemas to 14 to cover all accepted
+# business-domain foundations (CC-07 through CC-19). `audit` remains omitted
+# per CC-20 Q3=NO. `app_storage` is exposed; the native Supabase `storage`
+# schema is owned by supabase_storage_admin and managed by the Storage Service.
+# CC-22 Q2=Yes: `kyc` added for KYC/KYB admin & portal RPCs.
+# CC-23 Q2=Yes: `pricing` added for price-list / quotation / FX RPCs.
+# CC-39 Q1=marketplace: `marketplace` added for carrier directory / capacity
+# listings / activity ledger RPCs. Required so CC-40 (frontend wiring) can
+# call buyer_list_carriers, supplier_publish_capacity, admin_list_activity, etc.
+schemas = [
+  "public", "identity", "organization",
+  "supplier", "commodity",
+  "rfq", "offer", "evaluation",
+  "contract", "shipment",
+  "app_storage",
+  "finance", "settlement", "dispute",
+  "notify",
+  "kyc",
+  "pricing",
+  "marketplace",
+  # CC-43 added dispatch for operational-readiness RPCs.
+  "dispatch",
+  # CC-45 added telematics for GPS position stream + telemetry event ledger RPCs.
+  "telematics"
+]
+extra_search_path = [
+  "public", "identity", "organization",
+  "supplier", "commodity",
+  "rfq", "offer", "evaluation",
+  "contract", "shipment",
+  "app_storage",
+  "finance", "settlement", "dispute",
+  "notify",
+  "kyc",
+  "pricing",
+  "marketplace",
+  "dispatch",
+  "telematics"
+]
+max_rows = 1000
+
+[db]
+# Supabase CLI defaults; change if your local Postgres uses different ports.
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[studio]
+enabled = true
+port = 54323
+
+[inbucket]
+enabled = true
+port = 54324
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+
+# Edge runtime (Deno) is not used by CC-03/CC-04. Disabled to avoid health-check
+# failure during local dev. Re-enable when introducing edge functions.
+[edge_runtime]
+enabled = false
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000/login"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false
+
+# CC-04: Custom Access Token Hook — stamps tenant_id, organization_id,
+# user_roles into the JWT claims. Function defined in migration 0012.
+[auth.hook.custom_access_token]
+enabled = true
+uri = "pg-functions://postgres/identity/custom_access_token_hook"

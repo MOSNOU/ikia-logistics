@@ -1,0 +1,32 @@
+erDiagram
+
+    ORGANIZATION ||--o| SUPPLIER : may_be
+    SUPPLIER ||--|| SUPPLIER_PROFILE : has
+
+    SUPPLIER ||--o{ SUPPLIER_CAPABILITY : has
+    SUPPLIER ||--o{ SUPPLIER_COMMODITY : supplies
+    COMMODITY ||--o{ SUPPLIER_COMMODITY : supplied_by
+
+    SUPPLIER ||--o{ SUPPLIER_CERTIFICATE : has
+    SUPPLIER ||--o{ SUPPLIER_LICENSE : has
+    SUPPLIER ||--o{ SUPPLIER_COMPLIANCE_RECORD : checked_by
+
+    SUPPLIER ||--o| SUPPLIER_TRUST_PROFILE : has
+    SUPPLIER_TRUST_PROFILE ||--o{ SUPPLIER_TRUST_SCORE : records
+
+    SUPPLIER ||--o{ SUPPLIER_PERFORMANCE : measured_by
+    SUPPLIER ||--o{ SUPPLIER_LOCATION : operates_at
+    SUPPLIER ||--o{ SUPPLIER_CONTACT : contacted_via
+    SUPPLIER ||--o{ SUPPLIER_BANK_ACCOUNT : paid_to
+
+    SUPPLIER ||--o{ SUPPLIER_DOCUMENT : has
+    SUPPLIER ||--o{ SUPPLIER_INSURANCE : covered_by
+    SUPPLIER ||--o{ SUPPLIER_AUDIT : audited_by
+    SUPPLIER ||--o{ SUPPLIER_RISK_ASSESSMENT : assessed_by
+    SUPPLIER ||--o{ SUPPLIER_RATING : rated_by
+    SUPPLIER ||--o{ SUPPLIER_RELATIONSHIP : participates_in
+    SUPPLIER ||--o{ SUPPLIER_APPROVAL : approved_through
+
+    SUPPLIER ||--o{ OFFER : publishes
+    SUPPLIER ||--o{ RFQ_RESPONSE : responds_to
+    SUPPLIER ||--o{ CONTRACT_PARTY : contracts_as

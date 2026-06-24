@@ -1,0 +1,48 @@
+flowchart TB
+
+    USER[User]
+
+    AUTH[Supabase Auth]
+
+    MFA[MFA]
+
+    JWT[JWT Claims]
+
+    API[API Gateway]
+
+    RBAC[RBAC Engine]
+
+    RLS[RLS Policies]
+
+    DB[(PostgreSQL)]
+
+    STORAGE[(Secure Storage Buckets)]
+
+    EDGE[Edge Functions]
+
+    AUDIT[(Audit Logs)]
+
+    MON[Security Monitoring]
+
+    EXT[External Systems]
+
+    USER --> AUTH
+    AUTH --> MFA
+    MFA --> JWT
+
+    JWT --> API
+    API --> RBAC
+    RBAC --> RLS
+
+    RLS --> DB
+    RLS --> STORAGE
+
+    API --> EDGE
+    EDGE --> EXT
+
+    DB --> AUDIT
+    STORAGE --> AUDIT
+    EDGE --> AUDIT
+    API --> AUDIT
+
+    AUDIT --> MON

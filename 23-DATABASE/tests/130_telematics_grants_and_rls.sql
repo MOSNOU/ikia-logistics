@@ -6,7 +6,8 @@
 --   3. 0 direct INSERT/UPDATE/DELETE grants on telematics tables
 --   4. every telematics audience RPC is SECURITY DEFINER
 --   5. every telematics audience RPC has search_path = ''
---   6. all 7 carrier RPCs have EXECUTE granted to authenticated
+--   6. all 8 carrier RPCs have EXECUTE granted to authenticated
+--      (CC-45 set of 7 + the CC-53 batch session-status read RPC)
 --   7. all 2 buyer RPCs have EXECUTE granted to authenticated
 --   8. all 3 admin RPCs have EXECUTE granted to authenticated
 --   9. SELECT granted to authenticated on both telematics tables
@@ -59,10 +60,11 @@ select is(
         'carrier_start_telemetry_session', 'carrier_end_telemetry_session',
         'carrier_report_position', 'carrier_report_positions_batch',
         'carrier_report_telemetry_event', 'carrier_list_my_positions',
-        'carrier_get_telemetry_snapshot'
+        'carrier_get_telemetry_snapshot',
+        'carrier_list_my_telemetry_session_statuses'
       )
       and has_function_privilege('authenticated', p.oid, 'EXECUTE')),
-  7, 'all 7 carrier telematics RPCs have EXECUTE granted to authenticated');
+  8, 'all 8 carrier telematics RPCs have EXECUTE granted to authenticated');
 
 select is(
   (select count(*)::int from pg_proc p join pg_namespace n on n.oid = p.pronamespace

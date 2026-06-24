@@ -8,9 +8,9 @@ import { LeafletStyles } from "./leaflet-styles";
 import type { TelematicsActiveSession } from "@/types/database";
 
 const liveIcon = L.icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconUrl: "/leaflet/marker-icon.png",
+  iconRetinaUrl: "/leaflet/marker-icon-2x.png",
+  shadowUrl: "/leaflet/marker-shadow.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
@@ -36,6 +36,13 @@ export function LiveOpsMap({ sessions, staleAfterMinutes = 30 }: Props) {
     () => sessions.filter((s) => s.latitude != null && s.longitude != null),
     [sessions],
   );
+  const staleCount = useMemo(
+    () =>
+      located.filter(
+        (s) => s.age_minutes != null && s.age_minutes > staleAfterMinutes,
+      ).length,
+    [located, staleAfterMinutes],
+  );
   const first = located[0];
   const center: [number, number] = first
     ? [Number(first.latitude), Number(first.longitude)]
@@ -45,6 +52,24 @@ export function LiveOpsMap({ sessions, staleAfterMinutes = 30 }: Props) {
   return (
     <div className="space-y-2">
       <LeafletStyles />
+      {sessions.length > 0 && located.length === 0 ? (
+        <div
+          role="status"
+          className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900"
+        >
+          {sessions.length.toLocaleString("fa-IR")} نشست فعال وجود دارد ولی هیچ‌کدام
+          مختصات معتبر گزارش نکرده‌اند. نشست‌ها در فهرست اعزام‌ها قابل پیگیری‌اند.
+        </div>
+      ) : null}
+      {staleCount > 0 ? (
+        <div
+          role="status"
+          className="rounded-md border border-amber-200 bg-amber-50/60 px-3 py-1.5 text-xs leading-5 text-amber-900"
+        >
+          {staleCount.toLocaleString("fa-IR")} نشست با داده قدیمی (آخرین گزارش بیش از{" "}
+          {staleAfterMinutes.toLocaleString("fa-IR")} دقیقه پیش).
+        </div>
+      ) : null}
       <div className="h-[520px] overflow-hidden rounded-md border" dir="ltr">
         <MapContainer
           center={center}

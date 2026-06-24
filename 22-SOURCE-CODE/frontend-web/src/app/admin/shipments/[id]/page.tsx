@@ -46,6 +46,9 @@ export default async function AdminShipmentDetailPage({ params }: PageProps) {
           <Link href={`/admin/shipments/${shipment.id}/tracking`}>ردیابی محموله</Link>
         </Button>
         <Button asChild variant="outline" size="sm">
+          <Link href={`/admin/tracking/${shipment.id}/map`}>نقشه ردیابی</Link>
+        </Button>
+        <Button asChild variant="outline" size="sm">
           <Link href="/admin/shipments">بازگشت به فهرست</Link>
         </Button>
       </div>

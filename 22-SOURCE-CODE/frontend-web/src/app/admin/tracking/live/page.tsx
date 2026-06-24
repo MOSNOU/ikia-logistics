@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { LiveOpsMapMount } from "@/components/tracking/live-ops-map-mount";
 import { listActiveSessions } from "@/lib/telematics/loaders";
 
 export default async function AdminLiveTrackingPage() {
   const sessions = await listActiveSessions({ limit: 200 });
+  const locatedCount = sessions.filter(
+    (s) => s.latitude != null && s.longitude != null,
+  ).length;
 
   return (
     <div className="space-y-6">
@@ -20,7 +24,23 @@ export default async function AdminLiveTrackingPage() {
         </Button>
       </div>
 
-      <LiveOpsMapMount sessions={sessions} />
+      {sessions.length === 0 ? (
+        <Card>
+          <CardContent className="p-4 text-sm text-muted-foreground">
+            در حال حاضر هیچ نشست تله‌متری فعالی وجود ندارد. پس از شروع نشست از
+            دستگاه حمل‌کننده، اعزام در این نقشه ظاهر می‌شود.
+          </CardContent>
+        </Card>
+      ) : locatedCount === 0 ? (
+        <Card>
+          <CardContent className="p-4 text-sm text-muted-foreground">
+            {sessions.length.toLocaleString("fa-IR")} نشست فعال وجود دارد، اما
+            هیچ‌کدام هنوز مختصاتی روی نقشه گزارش نکرده‌اند.
+          </CardContent>
+        </Card>
+      ) : (
+        <LiveOpsMapMount sessions={sessions} />
+      )}
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { DispatchSummaryCard } from "@/components/dispatch/dispatch-summary-card
 import { DispatchEventTimeline } from "@/components/dispatch/dispatch-event-timeline";
 import { DispatchActionButtons } from "@/components/dispatch/dispatch-action-buttons";
 import { getDispatch } from "@/lib/dispatch/dispatches";
+import { resolveShipmentForDispatch } from "@/lib/telematics/resolve-shipment";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -12,7 +13,10 @@ interface PageProps {
 
 export default async function AdminDispatchDetailPage({ params }: PageProps) {
   const { id } = await params;
-  const detail = await getDispatch(id, "admin");
+  const [detail, shipmentId] = await Promise.all([
+    getDispatch(id, "admin"),
+    resolveShipmentForDispatch(id),
+  ]);
   if (!detail) notFound();
 
   return (
@@ -24,9 +28,16 @@ export default async function AdminDispatchDetailPage({ params }: PageProps) {
             نمای فقط-خواندنی. اقدام ادمین فقط لغو در حالت‌های غیر-نهایی است.
           </p>
         </div>
-        <Button asChild variant="outline" size="sm">
-          <Link href="/admin/dispatches">بازگشت</Link>
-        </Button>
+        <div className="flex gap-2">
+          {shipmentId ? (
+            <Button asChild variant="outline" size="sm">
+              <Link href={`/admin/tracking/${shipmentId}/map`}>نقشه ردیابی</Link>
+            </Button>
+          ) : null}
+          <Button asChild variant="outline" size="sm">
+            <Link href="/admin/dispatches">بازگشت</Link>
+          </Button>
+        </div>
       </div>
 
       <DispatchSummaryCard detail={detail} />

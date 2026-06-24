@@ -5,6 +5,7 @@ import { DispatchSummaryCard } from "@/components/dispatch/dispatch-summary-card
 import { DispatchEventTimeline } from "@/components/dispatch/dispatch-event-timeline";
 import { DispatchActionButtons } from "@/components/dispatch/dispatch-action-buttons";
 import { getDispatch } from "@/lib/dispatch/dispatches";
+import { resolveShipmentForDispatch } from "@/lib/telematics/resolve-shipment";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -12,7 +13,10 @@ interface PageProps {
 
 export default async function CarrierDispatchDetailPage({ params }: PageProps) {
   const { id } = await params;
-  const detail = await getDispatch(id, "carrier");
+  const [detail, shipmentId] = await Promise.all([
+    getDispatch(id, "carrier"),
+    resolveShipmentForDispatch(id),
+  ]);
   if (!detail) notFound();
 
   return (
@@ -24,9 +28,16 @@ export default async function CarrierDispatchDetailPage({ params }: PageProps) {
             نمای حمل‌کننده. مشخصات خودرو/راننده، اعلام آمادگی و آزادسازی از همین صفحه.
           </p>
         </div>
-        <Button asChild variant="outline" size="sm">
-          <Link href="/carrier/dispatches">بازگشت</Link>
-        </Button>
+        <div className="flex gap-2">
+          {shipmentId ? (
+            <Button asChild variant="outline" size="sm">
+              <Link href={`/carrier/tracking/${shipmentId}/map`}>نقشه ردیابی</Link>
+            </Button>
+          ) : null}
+          <Button asChild variant="outline" size="sm">
+            <Link href="/carrier/dispatches">بازگشت</Link>
+          </Button>
+        </div>
       </div>
 
       <DispatchSummaryCard detail={detail} />

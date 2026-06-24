@@ -73,6 +73,11 @@ export default async function CarrierTelemetryReportPage({ params }: PageProps) 
             <Link href={`/carrier/driver/trips/${shipmentId}`}>کنسول راننده</Link>
           </Button>
           <Button asChild variant="outline" size="sm">
+            <Link href={`/carrier/driver/trips/${shipmentId}#timeline`}>
+              خط زمانی سفر
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="sm">
             <Link href={`/carrier/tracking/${shipmentId}/map`}>نقشه</Link>
           </Button>
           <Button asChild variant="outline" size="sm">

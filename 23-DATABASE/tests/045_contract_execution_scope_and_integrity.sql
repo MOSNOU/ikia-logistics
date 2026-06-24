@@ -228,12 +228,14 @@ select throws_ok(
 );
 reset role;
 
--- 6. No forbidden side-effect schemas exist.
+-- 6. CC-13 does not introduce payment/invoice/accounting/negotiation schemas.
+-- (`shipment` lands in CC-14, `settlement` in CC-17, `pricing` in CC-23 — all
+-- removed from this list.)
 select is(
   (select count(*)::int from information_schema.schemata
-    where schema_name in ('payment','shipment','settlement','escrow','invoice','accounting','negotiation','pricing')),
+    where schema_name in ('payment','invoice','accounting','negotiation')),
   0,
-  'no shipment/payment/settlement/escrow/invoice/accounting/negotiation/pricing schemas were created'
+  'no payment/invoice/accounting/negotiation schemas were created (pricing legitimately lands in CC-23)'
 );
 
 select * from finish();

@@ -201,15 +201,15 @@ select throws_ok(
 );
 reset role;
 
--- 5. No formal contract / signature / payment / shipment record was created.
--- We verify cross-domain by asserting that no new schemas were introduced beyond
--- the eight known foundations (identity, organization, audit, supplier, commodity,
--- rfq, offer, evaluation) plus the new contract schema.
+-- 5. CC-12's `ready_for_contract` does not introduce any payment /
+-- signature / invoice / negotiation / execution schema. (The `shipment` schema
+-- legitimately lands in CC-14 and `settlement` in CC-17 — both removed from
+-- this exclusion list.)
 select is(
   (select count(*)::int from information_schema.schemata
-    where schema_name in ('payment','shipment','settlement','escrow','signature','invoice','negotiation','execution')),
+    where schema_name in ('payment','signature','invoice','negotiation','execution')),
   0,
-  'ready_for_contract does NOT create any payment/shipment/settlement/escrow/signature/invoice/negotiation/execution schema'
+  'ready_for_contract does NOT create any payment/signature/invoice/negotiation/execution schema'
 );
 
 select * from finish();

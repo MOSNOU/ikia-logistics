@@ -32,6 +32,11 @@ export default async function CarrierDispatchDetailPage({ params }: PageProps) {
           {shipmentId ? (
             <>
               <Button asChild size="sm">
+                <Link href={`/carrier/driver/trips/${shipmentId}`}>
+                  کنسول راننده
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
                 <Link href={`/carrier/tracking/${shipmentId}/report`}>
                   گزارش تله‌متری
                 </Link>

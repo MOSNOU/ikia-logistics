@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CC-06 / CC-07 / CC-24 / CC-25 / CC-26 / CC-27 / CC-28 / CC-29 / CC-30 / CC-31 / CC-32 / CC-33 / CC-34 / CC-36 / CC-37 / CC-38 / CC-41 / CC-42 / CC-43 / CC-44 / CC-46 / CC-47 / CC-48 — Route-guard verification.
+# CC-06 / CC-07 / CC-24 / CC-25 / CC-26 / CC-27 / CC-28 / CC-29 / CC-30 / CC-31 / CC-32 / CC-33 / CC-34 / CC-36 / CC-37 / CC-38 / CC-41 / CC-42 / CC-43 / CC-44 / CC-46 / CC-47 / CC-48 / CC-50 — Route-guard verification.
 #
 # CC-47 adds no new routes — it self-hosts Leaflet assets, wires navigation
 # links into existing guarded layouts, and polishes empty/stale states.
@@ -10,6 +10,17 @@
 # inheriting the existing /carrier guarded layout. Verified below alongside
 # the CC-46 carrier tracking-map route. No buyer or admin telemetry-write
 # routes are introduced (admin remains read-only for telemetry).
+#
+# CC-49 adds no new routes — it polishes /carrier/tracking/[shipmentId]/report
+# with a live-capture panel and mobile-first section layout. No verification
+# changes required.
+#
+# CC-50 adds the carrier driver console:
+#   /carrier/driver/trips
+#   /carrier/driver/trips/[shipmentId]
+# Both inherit the existing /carrier guarded layout. No nested layout.tsx
+# is allowed under /carrier/driver. No buyer or admin driver routes are
+# introduced.
 #
 # Proves at build time, without spinning up a browser, that:
 #   ADMIN PORTAL:
@@ -667,6 +678,27 @@ for path in "tracking/[shipmentId]/report"; do
     ok "/carrier/$path has no nested layout.tsx (CC-48 boundary preserved)"
   fi
 done
+
+# CC-50 driver console (mobile-first trip list + per-trip detail).
+# Both routes inherit the existing /carrier guarded layout — no nested
+# layout.tsx is permitted beneath /carrier/driver.
+for path in "driver/trips" "driver/trips/[shipmentId]"; do
+  if [[ -f "$CARRIER_DIR/$path/page.tsx" ]]; then
+    ok "/carrier/$path/page.tsx exists"
+  else
+    fail "/carrier/$path/page.tsx missing"
+  fi
+done
+if [[ -f "$CARRIER_DIR/driver/layout.tsx" ]]; then
+  fail "/carrier/driver/layout.tsx exists — CC-50 must not introduce a nested layout"
+else
+  ok "/carrier/driver has no nested layout.tsx (CC-50 boundary preserved)"
+fi
+if [[ -f "$CARRIER_DIR/driver/trips/layout.tsx" ]]; then
+  fail "/carrier/driver/trips/layout.tsx exists — CC-50 must not introduce a nested layout"
+else
+  ok "/carrier/driver/trips has no nested layout.tsx (CC-50 boundary preserved)"
+fi
 
 echo ""
 echo "--- Inbox portal (CC-26) ---"

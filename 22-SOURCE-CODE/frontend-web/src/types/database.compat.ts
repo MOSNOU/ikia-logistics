@@ -1838,3 +1838,28 @@ export interface TelematicsActiveSession {
   longitude: number | null;
   age_minutes: number | null;
 }
+
+// --- CC-53: Carrier batch telemetry session status row ------------------
+// One row per carrier-visible dispatch returned by
+// telematics.carrier_list_my_telemetry_session_statuses. Replaces per-trip
+// snapshot fan-out from the CC-50 driver trips list.
+export type TelematicsStalenessStatus = "missing" | "fresh" | "stale";
+
+export interface TelematicsCarrierSessionStatus {
+  dispatch_id: string;
+  shipment_id: string | null;
+  session_active: boolean;
+  latest_session_id: string | null;
+  latest_session_started_at: string | null;
+  latest_session_ended_at: string | null;
+  last_position_at: string | null;
+  last_latitude: number | null;
+  last_longitude: number | null;
+  last_accuracy_meters: number | null;
+  last_source: string | null;
+  last_event_type: string | null;
+  last_event_at: string | null;
+  position_count: number;
+  event_count: number;
+  staleness_status: TelematicsStalenessStatus;
+}

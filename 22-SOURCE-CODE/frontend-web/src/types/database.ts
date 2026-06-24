@@ -377,152 +377,6 @@ export type Database = {
       [_ in never]: never
     }
   }
-  audit: {
-    Tables: {
-      audit_access: {
-        Row: {
-          access_type: Database["audit"]["Enums"]["access_type"]
-          accessed_at: string
-          actor_user_id: string | null
-          denial_reason: string | null
-          id: string
-          organization_id: string | null
-          request_id: string | null
-          resource_id: string | null
-          resource_type: string | null
-          tenant_id: string | null
-        }
-        Insert: {
-          access_type: Database["audit"]["Enums"]["access_type"]
-          accessed_at?: string
-          actor_user_id?: string | null
-          denial_reason?: string | null
-          id?: string
-          organization_id?: string | null
-          request_id?: string | null
-          resource_id?: string | null
-          resource_type?: string | null
-          tenant_id?: string | null
-        }
-        Update: {
-          access_type?: Database["audit"]["Enums"]["access_type"]
-          accessed_at?: string
-          actor_user_id?: string | null
-          denial_reason?: string | null
-          id?: string
-          organization_id?: string | null
-          request_id?: string | null
-          resource_id?: string | null
-          resource_type?: string | null
-          tenant_id?: string | null
-        }
-        Relationships: []
-      }
-      audit_entity: {
-        Row: {
-          action: Database["audit"]["Enums"]["audit_action"]
-          actor_user_id: string | null
-          after_state: Json | null
-          before_state: Json | null
-          changed_at: string
-          changed_columns: string[] | null
-          entity_id: string
-          entity_schema: string
-          entity_table: string
-          id: string
-          organization_id: string | null
-          tenant_id: string | null
-        }
-        Insert: {
-          action: Database["audit"]["Enums"]["audit_action"]
-          actor_user_id?: string | null
-          after_state?: Json | null
-          before_state?: Json | null
-          changed_at?: string
-          changed_columns?: string[] | null
-          entity_id: string
-          entity_schema: string
-          entity_table: string
-          id?: string
-          organization_id?: string | null
-          tenant_id?: string | null
-        }
-        Update: {
-          action?: Database["audit"]["Enums"]["audit_action"]
-          actor_user_id?: string | null
-          after_state?: Json | null
-          before_state?: Json | null
-          changed_at?: string
-          changed_columns?: string[] | null
-          entity_id?: string
-          entity_schema?: string
-          entity_table?: string
-          id?: string
-          organization_id?: string | null
-          tenant_id?: string | null
-        }
-        Relationships: []
-      }
-      audit_event: {
-        Row: {
-          action_code: string
-          actor_user_id: string | null
-          id: string
-          ip_address: unknown
-          occurred_at: string
-          organization_id: string | null
-          payload: Json | null
-          request_id: string | null
-          resource_id: string | null
-          resource_type: string | null
-          tenant_id: string | null
-          user_agent: string | null
-        }
-        Insert: {
-          action_code: string
-          actor_user_id?: string | null
-          id?: string
-          ip_address?: unknown
-          occurred_at?: string
-          organization_id?: string | null
-          payload?: Json | null
-          request_id?: string | null
-          resource_id?: string | null
-          resource_type?: string | null
-          tenant_id?: string | null
-          user_agent?: string | null
-        }
-        Update: {
-          action_code?: string
-          actor_user_id?: string | null
-          id?: string
-          ip_address?: unknown
-          occurred_at?: string
-          organization_id?: string | null
-          payload?: Json | null
-          request_id?: string | null
-          resource_id?: string | null
-          resource_type?: string | null
-          tenant_id?: string | null
-          user_agent?: string | null
-        }
-        Relationships: []
-      }
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      [_ in never]: never
-    }
-    Enums: {
-      access_type: "read" | "write" | "export" | "denied"
-      audit_action: "insert" | "update" | "delete"
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   commodity: {
     Tables: {
       categories: {
@@ -12366,6 +12220,32 @@ export type Database = {
           speed_kmh: number
         }[]
       }
+      carrier_list_my_telemetry_session_statuses: {
+        Args: {
+          p_dispatch_ids?: string[]
+          p_freshness_interval?: string
+          p_limit?: number
+          p_offset?: number
+        }
+        Returns: {
+          dispatch_id: string
+          event_count: number
+          last_accuracy_meters: number
+          last_event_at: string
+          last_event_type: string
+          last_latitude: number
+          last_longitude: number
+          last_position_at: string
+          last_source: string
+          latest_session_ended_at: string
+          latest_session_id: string
+          latest_session_started_at: string
+          position_count: number
+          session_active: boolean
+          shipment_id: string
+          staleness_status: string
+        }[]
+      }
       carrier_report_position: {
         Args: {
           p_accuracy_meters?: number
@@ -12553,12 +12433,6 @@ export const Constants = {
       file_status: ["pending", "uploaded", "processed", "archived"],
       file_type: ["pdf", "image", "doc", "xlsx", "txt", "other"],
       file_version_status: ["pending", "uploaded", "archived", "superseded"],
-    },
-  },
-  audit: {
-    Enums: {
-      access_type: ["read", "write", "export", "denied"],
-      audit_action: ["insert", "update", "delete"],
     },
   },
   commodity: {
@@ -13077,7 +12951,6 @@ export const Constants = {
     },
   },
 } as const
-
 
 
 // CC-21: backward-compat aliases moved to a sidecar so future

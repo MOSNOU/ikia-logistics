@@ -55,6 +55,15 @@ export function LiveCapturePanel({ shipmentId, dispatchId }: Props) {
     }
   }, [state?.ok, state?.ts]);
 
+  // Explicit driver action — clears the captured fix (and resets the panel
+  // back to idle) when the driver decides to abandon a failed submission.
+  // We do NOT clear on submit failure; CC-52 keeps the fix in component
+  // state until success or this explicit discard.
+  function discard() {
+    setFix(null);
+    setStatus("idle");
+  }
+
   function capture() {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
       setStatus("geolocation-error");
@@ -135,6 +144,20 @@ export function LiveCapturePanel({ shipmentId, dispatchId }: Props) {
               </div>
             </div>
 
+            {state?.error ? (
+              <div
+                role="alert"
+                className="rounded-md border border-amber-300 bg-amber-50 p-3 text-xs leading-6 text-amber-900"
+              >
+                <div className="font-medium">ارسال موقعیت ناموفق بود</div>
+                <div>{state.error}</div>
+                <div className="mt-1 text-amber-700">
+                  داده تا زمانی که این صفحه باز است نگه داشته می‌شود؛ می‌توانید تلاش دوباره
+                  کنید یا داده را حذف کنید. هیچ تلاش خودکاری انجام نخواهد شد.
+                </div>
+              </div>
+            ) : null}
+
             <form action={action} className="flex flex-col gap-2 sm:flex-row sm:items-center">
               <input type="hidden" name="dispatchId" value={dispatchId} />
               <input type="hidden" name="shipmentId" value={shipmentId} />
@@ -148,20 +171,33 @@ export function LiveCapturePanel({ shipmentId, dispatchId }: Props) {
               <input type="hidden" name="reportedAt" value={fix.reportedAt} />
               <input type="hidden" name="source" value="carrier_app_live" />
               <Button type="submit" disabled={pending} className="w-full sm:w-auto">
-                {pending ? "..." : "ارسال این موقعیت"}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={capture}
-                disabled={pending}
-                className="w-full sm:w-auto"
-              >
-                دریافت مجدد
+                {pending
+                  ? "..."
+                  : state?.error
+                    ? "تلاش دوباره برای ارسال"
+                    : "ارسال این موقعیت"}
               </Button>
               {state?.error ? (
-                <span className="text-xs text-amber-700">{state.error}</span>
-              ) : null}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={discard}
+                  disabled={pending}
+                  className="w-full sm:w-auto"
+                >
+                  حذف این موقعیت
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={capture}
+                  disabled={pending}
+                  className="w-full sm:w-auto"
+                >
+                  دریافت مجدد
+                </Button>
+              )}
             </form>
           </div>
         ) : null}

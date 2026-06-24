@@ -97,6 +97,7 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
             <li>موقعیت فقط با کلیک شما ارسال می‌شود.</li>
             <li>ردیابی پس‌زمینه در این نسخه فعال نیست.</li>
             <li>هیچ ارسال خودکار یا دوره‌ای انجام نمی‌شود.</li>
+            <li>اگر ارسال ناموفق بود، داده فقط تا زمانی که این صفحه باز است نگه داشته می‌شود.</li>
           </ul>
         </CardContent>
       </Card>

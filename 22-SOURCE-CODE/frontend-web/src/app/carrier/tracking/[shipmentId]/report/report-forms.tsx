@@ -37,6 +37,35 @@ function FeedbackInline({ state }: { state: TelematicsActionState | null }) {
   return null;
 }
 
+// CC-52 — Prominent retry banner for failed Server Action submissions on the
+// two uncontrolled forms (ManualPositionForm + EventReportForm). The inputs
+// themselves are uncontrolled HTML controls; React 19 + useActionState do not
+// reset uncontrolled inputs after the action returns, so the driver's typed
+// values stay in the form on failure and the same submit re-fires the action
+// without re-typing. The banner makes this contract explicit in Persian.
+function RetryNotice({
+  state,
+  failureFa,
+}: {
+  state: TelematicsActionState | null;
+  failureFa: string;
+}) {
+  if (!state?.error) return null;
+  return (
+    <div
+      role="alert"
+      className="rounded-md border border-amber-300 bg-amber-50 p-3 text-xs leading-6 text-amber-900"
+    >
+      <div className="font-medium">{failureFa}</div>
+      <div>{state.error}</div>
+      <div className="mt-1 text-amber-700">
+        مقادیر وارد شده در فرم باقی می‌مانند. می‌توانید پس از بررسی، با کلیک
+        روی همان دکمه، تلاش دوباره کنید. هیچ تلاش خودکاری انجام نخواهد شد.
+      </div>
+    </div>
+  );
+}
+
 function SessionForms({
   shipmentId,
   dispatchId,
@@ -181,11 +210,20 @@ function PositionReportForm({
               defaultValue="carrier_app"
             />
           </Field>
-          <div className="sm:col-span-2 flex flex-wrap items-center gap-3">
-            <Button type="submit" disabled={pending} className="w-full sm:w-auto">
-              {pending ? "..." : "ثبت موقعیت دستی"}
-            </Button>
-            <FeedbackInline state={state} />
+          <div className="sm:col-span-2 space-y-3">
+            <RetryNotice state={state} failureFa="ثبت موقعیت دستی ناموفق بود" />
+            <div className="flex flex-wrap items-center gap-3">
+              <Button type="submit" disabled={pending} className="w-full sm:w-auto">
+                {pending
+                  ? "..."
+                  : state?.error
+                    ? "تلاش دوباره برای ارسال"
+                    : "ثبت موقعیت دستی"}
+              </Button>
+              {state?.ok ? (
+                <span className="text-xs text-emerald-600">انجام شد.</span>
+              ) : null}
+            </div>
           </div>
         </form>
       </CardContent>
@@ -238,11 +276,25 @@ function EventReportForm({
           <Field htmlFor="reason" label="توضیح (اختیاری)">
             <Input id="reason" name="reason" />
           </Field>
-          <div className="sm:col-span-2 flex flex-wrap items-center gap-3">
-            <Button type="submit" variant="outline" disabled={pending} className="w-full sm:w-auto">
-              {pending ? "..." : "ثبت رویداد"}
-            </Button>
-            <FeedbackInline state={state} />
+          <div className="sm:col-span-2 space-y-3">
+            <RetryNotice state={state} failureFa="ثبت رویداد ناموفق بود" />
+            <div className="flex flex-wrap items-center gap-3">
+              <Button
+                type="submit"
+                variant="outline"
+                disabled={pending}
+                className="w-full sm:w-auto"
+              >
+                {pending
+                  ? "..."
+                  : state?.error
+                    ? "تلاش دوباره برای ارسال"
+                    : "ثبت رویداد"}
+              </Button>
+              {state?.ok ? (
+                <span className="text-xs text-emerald-600">انجام شد.</span>
+              ) : null}
+            </div>
           </div>
         </form>
       </CardContent>

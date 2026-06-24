@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DispatchStatusBadge } from "@/components/dispatch/dispatch-status-badge";
@@ -9,14 +10,26 @@ export default async function DriverTripsListPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-2xl font-semibold">کنسول راننده — سفرها</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          فهرست اعزام‌های فعال شما. روی هر سفر برای مشاهده جزئیات و ابزار ردیابی ضربه بزنید.
-        </p>
-      </div>
+      {/* CC-54 hero — premium elevated card with shipment count chip. */}
+      <Card className="border-border-soft shadow-elevated">
+        <CardContent className="p-5 space-y-2">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h1 className="text-2xl font-semibold tracking-tight">
+              کنسول راننده — سفرها
+            </h1>
+            <Badge variant="info">
+              {trips.length.toLocaleString("fa-IR")} سفر
+            </Badge>
+          </div>
+          <p className="text-sm leading-7 text-muted-foreground">
+            فهرست اعزام‌های فعال شما. روی هر سفر برای مشاهده جزئیات و ابزار ردیابی
+            ضربه بزنید.
+          </p>
+        </CardContent>
+      </Card>
 
-      <Card>
+      {/* CC-54 secondary surface — muted banner for the safety contract. */}
+      <Card className="bg-surface-muted border-border-soft shadow-none">
         <CardContent className="p-3 text-xs leading-6 text-muted-foreground">
           <ul className="list-disc pr-5 space-y-0.5">
             <li>موقعیت فقط با کلیک شما ارسال می‌شود.</li>
@@ -37,7 +50,7 @@ export default async function DriverTripsListPage() {
         <ul className="space-y-3">
           {trips.map((t) => (
             <li key={t.dispatchId}>
-              <Card>
+              <Card className="border-border-soft shadow-card">
                 <CardContent className="p-4 space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <DispatchStatusBadge status={t.status} />

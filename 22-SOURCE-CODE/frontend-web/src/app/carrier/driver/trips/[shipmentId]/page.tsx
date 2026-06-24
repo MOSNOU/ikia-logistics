@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DispatchSummaryCard } from "@/components/dispatch/dispatch-summary-card";
@@ -66,32 +67,37 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">سفر راننده</h1>
-          <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-            {detail ? <DispatchStatusBadge status={detail.dispatch.status} /> : null}
-            <span>
-              نشست تله‌متری:{" "}
-              {sessionActive ? (
-                <span className="text-emerald-700">فعال</span>
-              ) : (
-                <span>غیرفعال</span>
-              )}
-            </span>
+      {/* CC-54 hero — premium elevated header with status chips. */}
+      <Card className="border-border-soft shadow-elevated">
+        <CardContent className="p-5 space-y-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div className="space-y-2">
+              <h1 className="text-2xl font-semibold tracking-tight">سفر راننده</h1>
+              <div className="flex flex-wrap items-center gap-2 text-xs">
+                {detail ? (
+                  <DispatchStatusBadge status={detail.dispatch.status} />
+                ) : null}
+                {sessionActive ? (
+                  <Badge variant="info">نشست تله‌متری: فعال</Badge>
+                ) : (
+                  <Badge variant="muted">نشست تله‌متری: غیرفعال</Badge>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="outline" size="sm" className="w-full sm:w-auto">
+                <Link href={`/carrier/tracking/${shipmentId}/map`}>نقشه</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm" className="w-full sm:w-auto">
+                <Link href="/carrier/driver/trips">فهرست سفرها</Link>
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button asChild variant="outline" size="sm" className="w-full sm:w-auto">
-            <Link href={`/carrier/tracking/${shipmentId}/map`}>نقشه</Link>
-          </Button>
-          <Button asChild variant="outline" size="sm" className="w-full sm:w-auto">
-            <Link href="/carrier/driver/trips">فهرست سفرها</Link>
-          </Button>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
-      <Card>
+      {/* CC-54 secondary surface — muted banner for the safety contract. */}
+      <Card className="bg-surface-muted border-border-soft shadow-none">
         <CardContent className="p-3 text-xs leading-6 text-muted-foreground">
           <ul className="list-disc pr-5 space-y-0.5">
             <li>موقعیت فقط با کلیک شما ارسال می‌شود.</li>

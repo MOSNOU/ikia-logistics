@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -54,41 +55,52 @@ export default async function CarrierTelemetryReportPage({ params }: PageProps) 
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">گزارش تله‌متری حمل‌کننده</h1>
-          <p className="text-sm text-muted-foreground">
-            اعزام: <span className="font-mono text-xs">{resolved.dispatchId}</span>
-            {" · "}
-            وضعیت نشست:{" "}
-            {sessionActive ? (
-              <span className="text-emerald-700">فعال</span>
-            ) : (
-              <span className="text-muted-foreground">غیرفعال</span>
-            )}
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button asChild size="sm">
-            <Link href={`/carrier/driver/trips/${shipmentId}`}>کنسول راننده</Link>
-          </Button>
-          <Button asChild variant="outline" size="sm">
-            <Link href={`/carrier/driver/trips/${shipmentId}#timeline`}>
-              خط زمانی سفر
-            </Link>
-          </Button>
-          <Button asChild variant="outline" size="sm">
-            <Link href={`/carrier/tracking/${shipmentId}/map`}>نقشه</Link>
-          </Button>
-          <Button asChild variant="outline" size="sm">
-            <Link href={`/carrier/dispatches/${resolved.dispatchId}`}>
-              بازگشت به اعزام
-            </Link>
-          </Button>
-        </div>
-      </div>
+      {/* CC-54 hero — premium elevated header with session chip + actions. */}
+      <Card className="border-border-soft shadow-elevated">
+        <CardContent className="p-5 space-y-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div className="space-y-2">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                گزارش تله‌متری حمل‌کننده
+              </h1>
+              <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                <span>
+                  اعزام:{" "}
+                  <span className="font-mono text-foreground">
+                    {resolved.dispatchId}
+                  </span>
+                </span>
+                {sessionActive ? (
+                  <Badge variant="info">نشست: فعال</Badge>
+                ) : (
+                  <Badge variant="muted">نشست: غیرفعال</Badge>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild size="sm">
+                <Link href={`/carrier/driver/trips/${shipmentId}`}>کنسول راننده</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link href={`/carrier/driver/trips/${shipmentId}#timeline`}>
+                  خط زمانی سفر
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link href={`/carrier/tracking/${shipmentId}/map`}>نقشه</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link href={`/carrier/dispatches/${resolved.dispatchId}`}>
+                  بازگشت به اعزام
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-      <Card>
+      {/* CC-54 secondary surface — muted banner for the safety contract. */}
+      <Card className="bg-surface-muted border-border-soft shadow-none">
         <CardContent className="p-4 text-xs leading-6 text-muted-foreground">
           <div className="font-medium text-foreground mb-1">قرارداد حریم خصوصی</div>
           <ul className="list-disc pr-5 space-y-0.5">

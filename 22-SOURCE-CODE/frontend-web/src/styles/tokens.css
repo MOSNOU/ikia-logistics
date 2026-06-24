@@ -9,3 +9,31 @@
   --color-warning: oklch(0.78 0.18 80);
   --color-info: oklch(0.65 0.15 240);
 }
+
+/* CC-54 — Persian-first surface, depth, and accent tokens.
+   Additive only; nothing above is replaced. Safe to revert by deleting
+   this @theme block. Used by the polished demo surfaces (driver trips,
+   trip detail, telemetry report) and available for future portal pages. */
+@theme {
+  /* Surface depth — two-tier card hierarchy. */
+  --color-surface: oklch(1 0 0);
+  --color-surface-muted: oklch(0.985 0.005 250);
+  --color-surface-strong: oklch(0.98 0.005 250);
+
+  /* Softer border for premium card outlines. */
+  --color-border-soft: oklch(0.94 0 0);
+
+  /* Tracking / live-ops accent — map polylines, live chips. */
+  --color-tracking: oklch(0.55 0.18 250);
+  --color-tracking-soft: oklch(0.95 0.04 250);
+
+  /* Driver console accent — primary actions on /carrier/driver/* . */
+  --color-driver: oklch(0.55 0.18 240);
+  --color-driver-soft: oklch(0.94 0.05 240);
+
+  /* Premium shadow tokens — two-tier depth. */
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.04), 0 1px 1px 0 rgb(0 0 0 / 0.02);
+  --shadow-elevated:
+    0 4px 12px -2px rgb(0 0 0 / 0.06),
+    0 2px 4px -2px rgb(0 0 0 / 0.04);
+}

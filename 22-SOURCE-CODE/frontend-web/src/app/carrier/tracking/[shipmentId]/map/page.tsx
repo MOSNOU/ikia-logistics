@@ -60,11 +60,18 @@ export default async function CarrierTrackingMapPage({ params }: PageProps) {
         </div>
         <div className="flex gap-2">
           {resolved ? (
-            <Button asChild size="sm">
-              <Link href={`/carrier/tracking/${shipmentId}/report`}>
-                گزارش تله‌متری
-              </Link>
-            </Button>
+            <>
+              <Button asChild size="sm">
+                <Link href={`/carrier/driver/trips/${shipmentId}`}>
+                  کنسول راننده
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link href={`/carrier/tracking/${shipmentId}/report`}>
+                  گزارش تله‌متری
+                </Link>
+              </Button>
+            </>
           ) : null}
           <Button asChild variant="outline" size="sm">
             <Link href={`/carrier/dispatches${resolved ? "/" + resolved.dispatchId : ""}`}>

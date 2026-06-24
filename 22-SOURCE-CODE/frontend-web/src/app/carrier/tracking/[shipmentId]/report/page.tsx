@@ -69,6 +69,9 @@ export default async function CarrierTelemetryReportPage({ params }: PageProps) 
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Button asChild size="sm">
+            <Link href={`/carrier/driver/trips/${shipmentId}`}>کنسول راننده</Link>
+          </Button>
           <Button asChild variant="outline" size="sm">
             <Link href={`/carrier/tracking/${shipmentId}/map`}>نقشه</Link>
           </Button>

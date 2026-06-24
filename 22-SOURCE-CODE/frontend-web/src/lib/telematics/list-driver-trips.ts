@@ -1,18 +1,29 @@
 import { createClient } from "@/lib/supabase/server";
-import type { DispatchListRow, DispatchStatus } from "@/types/database";
+import type {
+  DispatchListRow,
+  DispatchStatus,
+  TelematicsCarrierSessionStatus,
+  TelematicsStalenessStatus,
+} from "@/types/database";
 
-// CC-50 — Carrier-facing Driver Console trip list.
+// CC-50 / CC-55 — Carrier-facing Driver Console trip list.
 //
 // Strategy:
 //   1. Pull the carrier's dispatches via the existing CC-43 RPC
 //      dispatch.carrier_list_my_dispatches.
 //   2. Batch-resolve each dispatch's shipment_id + lane summary from
 //      marketplace.booking_requests + marketplace.capacity_listings.
+//   3. CC-55: in parallel with the booking fetch, call the CC-53 batch RPC
+//      telematics.carrier_list_my_telemetry_session_statuses with the same
+//      dispatch ids — one RPC call regardless of trip count. No per-trip
+//      carrier_get_telemetry_snapshot fan-out. If the batch RPC errors,
+//      the loader still returns the dispatch rows; telemetry fields stay
+//      undefined and the UI renders «نامشخص».
 //
-// Everything is RLS-driven — no SECURITY DEFINER and no new RPC contract.
-// If a booking is invisible to the carrier (e.g. soft-deleted, foreign org),
-// the dispatch still shows but its shipmentId / routeSummary remain null;
-// the UI gates the "trip detail" link on shipmentId being set.
+// Everything is RLS-driven — no SECURITY DEFINER bypass and no new RPC
+// contract. If a booking is invisible to the carrier (e.g. soft-deleted,
+// foreign org), the dispatch still shows but its shipmentId / routeSummary
+// remain null; the UI gates the "trip detail" link on shipmentId being set.
 
 export interface DriverTrip {
   dispatchId: string;
@@ -24,6 +35,21 @@ export interface DriverTrip {
   plannedPickupAt: string | null;
   routeSummary: string | null;
   transportMode: string | null;
+  // CC-55 telemetry session status (optional — present only when the
+  // CC-53 batch RPC succeeds for this dispatch).
+  sessionActive?: boolean;
+  latestSessionStartedAt?: string | null;
+  latestSessionEndedAt?: string | null;
+  lastPositionAt?: string | null;
+  lastLatitude?: number | null;
+  lastLongitude?: number | null;
+  lastAccuracyMeters?: number | null;
+  lastSource?: string | null;
+  lastEventType?: string | null;
+  lastEventAt?: string | null;
+  positionCount?: number;
+  eventCount?: number;
+  stalenessStatus?: TelematicsStalenessStatus;
 }
 
 export interface ListDriverTripsParams {
@@ -54,6 +80,7 @@ export async function listDriverTrips({
   const dispatches = ((dispatchesData ?? []) as unknown as DispatchListRow[]) ?? [];
   if (dispatches.length === 0) return [];
 
+  const dispatchIds = dispatches.map((d) => d.id);
   const bookingIds = Array.from(
     new Set(dispatches.map((d) => d.booking_request_id).filter(Boolean)),
   );
@@ -63,27 +90,55 @@ export async function listDriverTrips({
     capacityListingId: string | null;
   }
   const bookingById = new Map<string, BookingEnrichment>();
+  const telemetryById = new Map<string, TelematicsCarrierSessionStatus>();
 
-  if (bookingIds.length > 0) {
-    const { data: bookings, error: bookingErr } = await supabase
-      .schema("marketplace")
-      .from("booking_requests")
-      .select("id, shipment_id, capacity_listing_id")
-      .in("id", bookingIds)
-      .is("deleted_at", null);
-    if (bookingErr) {
-      console.error("driver_trips.booking_requests", bookingErr);
-    } else if (bookings) {
-      for (const b of bookings as Array<{
-        id: string;
-        shipment_id: string | null;
-        capacity_listing_id: string | null;
-      }>) {
-        bookingById.set(b.id, {
-          shipmentId: b.shipment_id ?? null,
-          capacityListingId: b.capacity_listing_id ?? null,
-        });
-      }
+  // CC-55: run the booking fetch and the telemetry batch RPC in parallel —
+  // both depend only on inputs we already have (booking ids / dispatch ids).
+  // Each promise is independently fault-tolerant: a failure of either does
+  // not block the other or the rest of the list rendering.
+  const [bookingResult, telemetryResult] = await Promise.all([
+    bookingIds.length > 0
+      ? supabase
+          .schema("marketplace")
+          .from("booking_requests")
+          .select("id, shipment_id, capacity_listing_id")
+          .in("id", bookingIds)
+          .is("deleted_at", null)
+      : Promise.resolve({ data: null, error: null }),
+    supabase
+      .schema("telematics")
+      .rpc("carrier_list_my_telemetry_session_statuses", {
+        p_dispatch_ids: dispatchIds,
+        p_limit: dispatchIds.length,
+        p_offset: 0,
+      }),
+  ]);
+
+  if (bookingResult.error) {
+    console.error("driver_trips.booking_requests", bookingResult.error);
+  } else if (bookingResult.data) {
+    for (const b of bookingResult.data as Array<{
+      id: string;
+      shipment_id: string | null;
+      capacity_listing_id: string | null;
+    }>) {
+      bookingById.set(b.id, {
+        shipmentId: b.shipment_id ?? null,
+        capacityListingId: b.capacity_listing_id ?? null,
+      });
+    }
+  }
+
+  if (telemetryResult.error) {
+    // Graceful degradation: list still renders, telemetry fields stay
+    // undefined and the UI renders «نامشخص».
+    console.error(
+      "driver_trips.carrier_list_my_telemetry_session_statuses",
+      telemetryResult.error,
+    );
+  } else if (telemetryResult.data) {
+    for (const t of telemetryResult.data as unknown as TelematicsCarrierSessionStatus[]) {
+      telemetryById.set(t.dispatch_id, t);
     }
   }
 
@@ -144,12 +199,14 @@ export async function listDriverTrips({
     return `${from || "—"} → ${to || "—"}`;
   }
 
-  return dispatches.map((d) => {
+  return dispatches.map((d): DriverTrip => {
     const booking = bookingById.get(d.booking_request_id);
     const listing = booking?.capacityListingId
       ? listingById.get(booking.capacityListingId)
       : undefined;
-    return {
+    const tele = telemetryById.get(d.id);
+
+    const base: DriverTrip = {
       dispatchId: d.id,
       bookingRequestId: d.booking_request_id,
       shipmentId: booking?.shipmentId ?? null,
@@ -159,6 +216,31 @@ export async function listDriverTrips({
       plannedPickupAt: d.planned_pickup_at ?? null,
       routeSummary: formatRoute(listing),
       transportMode: listing?.transportMode ?? null,
+    };
+
+    if (!tele) return base;
+
+    return {
+      ...base,
+      sessionActive: tele.session_active,
+      latestSessionStartedAt: tele.latest_session_started_at,
+      latestSessionEndedAt: tele.latest_session_ended_at,
+      lastPositionAt: tele.last_position_at,
+      lastLatitude:
+        tele.last_latitude != null ? Number(tele.last_latitude) : null,
+      lastLongitude:
+        tele.last_longitude != null ? Number(tele.last_longitude) : null,
+      lastAccuracyMeters:
+        tele.last_accuracy_meters != null
+          ? Number(tele.last_accuracy_meters)
+          : null,
+      lastSource: tele.last_source,
+      lastEventType: tele.last_event_type,
+      lastEventAt: tele.last_event_at,
+      positionCount:
+        tele.position_count != null ? Number(tele.position_count) : 0,
+      eventCount: tele.event_count != null ? Number(tele.event_count) : 0,
+      stalenessStatus: tele.staleness_status,
     };
   });
 }

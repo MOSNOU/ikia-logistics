@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DispatchStatusBadge } from "@/components/dispatch/dispatch-status-badge";
+import { DriverTripTelemetryStatus } from "@/components/tracking/driver-trip-telemetry-status";
 import { listDriverTrips } from "@/lib/telematics/list-driver-trips";
 
 export default async function DriverTripsListPage() {
@@ -98,6 +99,18 @@ export default async function DriverTripsListPage() {
                       {t.driverName ? <div>راننده: {t.driverName}</div> : null}
                     </div>
                   </div>
+
+                  {/* CC-55 — compact telemetry health row.
+                      Reads only from already-loaded DriverTrip fields (CC-53
+                      batch RPC); no per-trip fetch. */}
+                  <DriverTripTelemetryStatus
+                    sessionActive={t.sessionActive}
+                    stalenessStatus={t.stalenessStatus}
+                    lastPositionAt={t.lastPositionAt ?? null}
+                    lastEventType={t.lastEventType ?? null}
+                    positionCount={t.positionCount}
+                    eventCount={t.eventCount}
+                  />
 
                   <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap sm:gap-2">
                     {t.shipmentId ? (

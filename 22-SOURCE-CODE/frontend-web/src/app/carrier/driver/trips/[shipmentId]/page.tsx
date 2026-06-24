@@ -15,6 +15,8 @@ import {
   ManualPositionForm,
   SessionControls,
 } from "@/app/carrier/tracking/[shipmentId]/report/report-forms";
+import { DriverTripTimeline } from "@/components/tracking/driver-trip-timeline";
+import { buildDriverTripTimeline } from "@/lib/telematics/build-driver-trip-timeline";
 
 interface PageProps {
   params: Promise<{ shipmentId: string }>;
@@ -56,6 +58,11 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
   );
   const sessionActive = sessionGate?.event_type === "session_started";
   const latest = snapshot?.latest_position ?? null;
+  const timelineItems = buildDriverTripTimeline({
+    snapshot,
+    positions,
+    dispatch: detail,
+  });
 
   return (
     <div className="space-y-5">
@@ -129,70 +136,13 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
         </Card>
       </section>
 
-      <section className="space-y-2">
-        <h2 className="text-base font-semibold">رویدادهای اخیر</h2>
-        <Card>
-          <CardContent className="p-4 text-sm">
-            {snapshot?.recent_events?.length ? (
-              <ul className="space-y-1 text-xs">
-                {snapshot.recent_events.slice(0, 10).map((e) => (
-                  <li key={e.id} className="flex flex-wrap items-center gap-2">
-                    <span className="font-mono">{e.event_type}</span>
-                    <span className="text-muted-foreground">{e.created_at}</span>
-                    {e.actor_party ? (
-                      <span className="text-muted-foreground">
-                        ({e.actor_party})
-                      </span>
-                    ) : null}
-                    {e.reason ? <span>— {e.reason}</span> : null}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-xs text-muted-foreground">
-                هیچ رویداد تله‌متری ثبت نشده است.
-              </p>
-            )}
-          </CardContent>
-        </Card>
+      <section className="space-y-2 scroll-mt-4">
+        <h2 className="text-base font-semibold">خط زمانی سفر</h2>
+        <p className="text-[11px] text-muted-foreground">
+          ترکیب رویدادهای نشست، گزارش‌های موقعیت و تغییرات وضعیت اعزام — جدیدترین مورد در بالا.
+        </p>
+        <DriverTripTimeline items={timelineItems} anchorId="timeline" />
       </section>
-
-      {positions.length > 0 ? (
-        <section className="space-y-2">
-          <h2 className="text-base font-semibold">نقاط اخیر</h2>
-          <Card>
-            <CardContent className="p-4 text-sm">
-              <ul className="space-y-1 text-xs">
-                {positions.slice(0, 5).map((p) => (
-                  <li
-                    key={p.id}
-                    className="flex flex-wrap items-center gap-2"
-                  >
-                    <span dir="ltr" className="font-mono">
-                      {Number(p.latitude).toFixed(4)},{" "}
-                      {Number(p.longitude).toFixed(4)}
-                    </span>
-                    <span className="text-muted-foreground">
-                      {p.reported_at}
-                    </span>
-                    {p.speed_kmh != null ? (
-                      <span className="text-muted-foreground">
-                        {p.speed_kmh} km/h
-                      </span>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
-              {positions.length > 5 ? (
-                <p className="mt-2 text-[11px] text-muted-foreground">
-                  {positions.length.toLocaleString("fa-IR")} نقطه اخیر بارگذاری شد؛
-                  ۵ مورد نخست نمایش داده شد.
-                </p>
-              ) : null}
-            </CardContent>
-          </Card>
-        </section>
-      ) : null}
 
       <section className="space-y-2">
         <h2 className="text-base font-semibold">۱. مدیریت نشست</h2>

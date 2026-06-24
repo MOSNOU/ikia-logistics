@@ -16,6 +16,36 @@ export default async function BuyerTrackingMapPage({ params }: PageProps) {
   const { shipmentId } = await params;
   const resolved = await resolveDispatchForShipment(shipmentId);
 
+  let body: React.ReactNode;
+  if (!resolved) {
+    body = (
+      <Card>
+        <CardContent className="p-4 text-sm text-muted-foreground">
+          هنوز اعزام فعالی برای این محموله ثبت نشده است. پس از تأیید رزرو و
+          ایجاد اعزام، داده‌های تله‌متری در دسترس قرار می‌گیرد.
+        </CardContent>
+      </Card>
+    );
+  } else {
+    const [snapshot, positions] = await Promise.all([
+      getTelematicsSnapshot(resolved.dispatchId, "buyer"),
+      listPositions(resolved.dispatchId, "buyer", { limit: 500 }),
+    ]);
+    if (positions.length === 0 && !snapshot?.latest_position) {
+      body = (
+        <Card>
+          <CardContent className="p-4 text-sm text-muted-foreground">
+            اعزام برای این محموله ثبت شده است، اما حمل‌کننده هنوز هیچ گزارش
+            موقعیتی ارسال نکرده است. پس از شروع نشست تله‌متری، نقشه به‌روزرسانی
+            می‌شود.
+          </CardContent>
+        </Card>
+      );
+    } else {
+      body = <DispatchMapMount snapshot={snapshot} positions={positions} />;
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
@@ -30,21 +60,7 @@ export default async function BuyerTrackingMapPage({ params }: PageProps) {
         </Button>
       </div>
 
-      {!resolved ? (
-        <Card>
-          <CardContent className="p-4 text-xs text-muted-foreground">
-            هنوز اعزام فعالی برای این محموله ثبت نشده است. پس از تأیید رزرو و ایجاد اعزام، داده‌های تله‌متری در دسترس قرار می‌گیرد.
-          </CardContent>
-        </Card>
-      ) : (
-        await (async () => {
-          const [snapshot, positions] = await Promise.all([
-            getTelematicsSnapshot(resolved.dispatchId, "buyer"),
-            listPositions(resolved.dispatchId, "buyer", { limit: 500 }),
-          ]);
-          return <DispatchMapMount snapshot={snapshot} positions={positions} />;
-        })()
-      )}
+      {body}
     </div>
   );
 }

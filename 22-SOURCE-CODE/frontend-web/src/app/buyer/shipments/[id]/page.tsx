@@ -62,6 +62,9 @@ export default async function BuyerShipmentDetailPage({ params }: PageProps) {
           <Link href={`/buyer/shipments/${shipment.id}/tracking`}>ردیابی محموله</Link>
         </Button>
         <Button asChild variant="outline" size="sm">
+          <Link href={`/buyer/tracking/${shipment.id}/map`}>نقشه ردیابی</Link>
+        </Button>
+        <Button asChild variant="outline" size="sm">
           <Link href="/buyer/shipments">بازگشت به فهرست</Link>
         </Button>
       </div>

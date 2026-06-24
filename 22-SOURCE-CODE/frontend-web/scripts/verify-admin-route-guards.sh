@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-# CC-06 / CC-07 / CC-24 / CC-25 / CC-26 / CC-27 / CC-28 / CC-29 / CC-30 / CC-31 / CC-32 / CC-33 / CC-34 / CC-36 / CC-37 / CC-38 / CC-41 / CC-42 / CC-43 / CC-44 / CC-46 — Route-guard verification.
+# CC-06 / CC-07 / CC-24 / CC-25 / CC-26 / CC-27 / CC-28 / CC-29 / CC-30 / CC-31 / CC-32 / CC-33 / CC-34 / CC-36 / CC-37 / CC-38 / CC-41 / CC-42 / CC-43 / CC-44 / CC-46 / CC-47 — Route-guard verification.
+#
+# CC-47 adds no new routes — it self-hosts Leaflet assets, wires navigation
+# links into existing guarded layouts, and polishes empty/stale states.
+# The CC-46 tracking-map routes remain covered below.
 #
 # Proves at build time, without spinning up a browser, that:
 #   ADMIN PORTAL:

@@ -18,6 +18,9 @@ export default async function AdminControlTowerPage() {
         </div>
         <div className="flex gap-2">
           <Button asChild variant="outline" size="sm">
+            <Link href="/admin/tracking/live">نقشه زنده عملیات</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm">
             <Link href="/admin/control-tower/activity">جریان رویدادها</Link>
           </Button>
           <Button asChild variant="outline" size="sm">

@@ -29,9 +29,14 @@ export default async function AdminShipmentTrackingPage({ params }: PageProps) {
             <span className="font-mono text-xs">{shipment.organization_id}</span>
           </p>
         </div>
-        <Button asChild variant="outline" size="sm">
-          <Link href={`/admin/shipments/${id}`}>بازگشت به محموله</Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button asChild variant="outline" size="sm">
+            <Link href={`/admin/tracking/${id}/map`}>نقشه</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm">
+            <Link href={`/admin/shipments/${id}`}>بازگشت به محموله</Link>
+          </Button>
+        </div>
       </div>
 
       <TrackingTimeline

@@ -32,9 +32,14 @@ export default async function BuyerShipmentTrackingPage({ params }: PageProps) {
             <Badge variant="outline">{shipment.transport_mode ?? "—"}</Badge>
           </p>
         </div>
-        <Button asChild variant="outline" size="sm">
-          <Link href={`/buyer/shipments/${id}`}>بازگشت به محموله</Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button asChild variant="outline" size="sm">
+            <Link href={`/buyer/tracking/${id}/map`}>نقشه</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm">
+            <Link href={`/buyer/shipments/${id}`}>بازگشت به محموله</Link>
+          </Button>
+        </div>
       </div>
 
       <TrackingTimeline

@@ -16,6 +16,39 @@ export default async function AdminTrackingMapPage({ params }: PageProps) {
   const { shipmentId } = await params;
   const resolved = await resolveDispatchForShipment(shipmentId);
 
+  let body: React.ReactNode;
+  if (!resolved) {
+    body = (
+      <Card>
+        <CardContent className="p-4 text-sm text-muted-foreground">
+          اعزامی برای این محموله ثبت نشده است. پس از تأیید رزرو و ایجاد اعزام
+          توسط حمل‌کننده، نقشه ردیابی در دسترس قرار می‌گیرد.
+        </CardContent>
+      </Card>
+    );
+  } else {
+    const [snapshot, positions] = await Promise.all([
+      getTelematicsSnapshot(resolved.dispatchId, "admin"),
+      listPositions(resolved.dispatchId, "admin", { limit: 1000 }),
+    ]);
+    if (positions.length === 0 && !snapshot?.latest_position) {
+      body = (
+        <Card>
+          <CardContent className="space-y-2 p-4 text-sm text-muted-foreground">
+            <p>
+              برای اعزام مرتبط با این محموله هنوز گزارش موقعیتی ثبت نشده است.
+            </p>
+            <p className="text-xs">
+              اعزام: <span className="font-mono">{resolved.dispatchId}</span>
+            </p>
+          </CardContent>
+        </Card>
+      );
+    } else {
+      body = <DispatchMapMount snapshot={snapshot} positions={positions} />;
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
@@ -35,21 +68,7 @@ export default async function AdminTrackingMapPage({ params }: PageProps) {
         </div>
       </div>
 
-      {!resolved ? (
-        <Card>
-          <CardContent className="p-4 text-xs text-muted-foreground">
-            اعزامی برای این محموله ثبت نشده است.
-          </CardContent>
-        </Card>
-      ) : (
-        await (async () => {
-          const [snapshot, positions] = await Promise.all([
-            getTelematicsSnapshot(resolved.dispatchId, "admin"),
-            listPositions(resolved.dispatchId, "admin", { limit: 1000 }),
-          ]);
-          return <DispatchMapMount snapshot={snapshot} positions={positions} />;
-        })()
-      )}
+      {body}
     </div>
   );
 }

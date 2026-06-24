@@ -15,14 +15,13 @@ import type {
   TelematicsSnapshot,
 } from "@/types/database";
 
-// Patch default marker icon paths so webpack-bundled apps render them.
+// Self-hosted marker assets under /public/leaflet so the map continues to
+// work offline and behind air-gapped deployments. Files are copies of the
+// leaflet package's dist/images/ icons.
 const defaultIcon = L.icon({
-  iconUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  shadowUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconUrl: "/leaflet/marker-icon.png",
+  iconRetinaUrl: "/leaflet/marker-icon-2x.png",
+  shadowUrl: "/leaflet/marker-shadow.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
@@ -66,6 +65,15 @@ export function DispatchMap({
   return (
     <div className="space-y-2">
       <LeafletStyles />
+      {isStale ? (
+        <div
+          role="status"
+          className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900"
+        >
+          آخرین گزارش بیش از {Math.round(ageMinutes ?? 0).toLocaleString("fa-IR")} دقیقه پیش
+          ثبت شده است. ممکن است داده‌های نمایش‌داده‌شده با موقعیت فعلی محموله مطابقت نداشته باشد.
+        </div>
+      ) : null}
       <div className="h-[480px] overflow-hidden rounded-md border" dir="ltr">
         <MapContainer
           center={center}
@@ -99,7 +107,7 @@ export function DispatchMap({
         {lastReportedAt ? (
           <span>
             آخرین گزارش: {lastReportedAt}
-            {isStale ? <strong className="text-amber-600"> (داده قدیمی)</strong> : null}
+            {isStale ? <strong className="text-amber-700"> (داده قدیمی)</strong> : null}
           </span>
         ) : (
           <span>هیچ گزارشی برای این محموله ثبت نشده است.</span>

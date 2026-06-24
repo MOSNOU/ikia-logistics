@@ -16,6 +16,39 @@ export default async function CarrierTrackingMapPage({ params }: PageProps) {
   const { shipmentId } = await params;
   const resolved = await resolveDispatchForShipment(shipmentId);
 
+  let body: React.ReactNode;
+  if (!resolved) {
+    body = (
+      <Card>
+        <CardContent className="p-4 text-sm text-muted-foreground">
+          اعزام مرتبط با این محموله یافت نشد یا برای سازمان شما قابل مشاهده نیست.
+        </CardContent>
+      </Card>
+    );
+  } else {
+    const [snapshot, positions] = await Promise.all([
+      getTelematicsSnapshot(resolved.dispatchId, "carrier"),
+      listPositions(resolved.dispatchId, "carrier", { limit: 500 }),
+    ]);
+    if (positions.length === 0 && !snapshot?.latest_position) {
+      body = (
+        <Card>
+          <CardContent className="space-y-2 p-4 text-sm text-muted-foreground">
+            <p>
+              برای این اعزام هنوز گزارش موقعیتی ارسال نشده است. پس از آغاز
+              نشست تله‌متری از دستگاه حمل‌کننده، نقشه بارگذاری می‌شود.
+            </p>
+            <p className="text-xs">
+              اعزام: <span className="font-mono">{resolved.dispatchId}</span>
+            </p>
+          </CardContent>
+        </Card>
+      );
+    } else {
+      body = <DispatchMapMount snapshot={snapshot} positions={positions} />;
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
@@ -32,21 +65,7 @@ export default async function CarrierTrackingMapPage({ params }: PageProps) {
         </Button>
       </div>
 
-      {!resolved ? (
-        <Card>
-          <CardContent className="p-4 text-xs text-muted-foreground">
-            اعزام مرتبط با این محموله یافت نشد یا برای سازمان شما قابل مشاهده نیست.
-          </CardContent>
-        </Card>
-      ) : (
-        await (async () => {
-          const [snapshot, positions] = await Promise.all([
-            getTelematicsSnapshot(resolved.dispatchId, "carrier"),
-            listPositions(resolved.dispatchId, "carrier", { limit: 500 }),
-          ]);
-          return <DispatchMapMount snapshot={snapshot} positions={positions} />;
-        })()
-      )}
+      {body}
     </div>
   );
 }

@@ -39,3 +39,34 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# --- merged baseline additions ---
+# macOS
+**/.DS_Store
+
+# Claude / local settings
+.claude/settings.local.json
+
+# Supabase local temp
+supabase/.temp/
+supabase/.branches/
+
+# Node / Next
+node_modules/
+.next/
+out/
+dist/
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+
+# Word temporary lock files
+~$*.docx
+**/~$*.docx
+
+# Local archives / backups
+*.tar.gz
+*.zip

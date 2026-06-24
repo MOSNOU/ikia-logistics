@@ -1,0 +1,44 @@
+flowchart TB
+
+    DEV[Developer]
+
+    GIT[GitHub Repository]
+
+    PR[Pull Request]
+
+    CI[GitHub Actions CI]
+
+    TEST[Automated Tests]
+
+    BUILD[Build Validation]
+
+    PREVIEW[Vercel Preview]
+
+    STAGING[Staging Environment]
+
+    PROD[Production Environment]
+
+    SUPA[Supabase Project]
+
+    MIG[Database Migrations]
+
+    EDGE[Edge Functions]
+
+    MON[Monitoring]
+
+    DEV --> GIT
+    GIT --> PR
+    PR --> CI
+    CI --> TEST
+    TEST --> BUILD
+    BUILD --> PREVIEW
+    PREVIEW --> STAGING
+    STAGING --> PROD
+
+    CI --> MIG
+    MIG --> SUPA
+    CI --> EDGE
+    EDGE --> SUPA
+
+    PROD --> MON
+    SUPA --> MON

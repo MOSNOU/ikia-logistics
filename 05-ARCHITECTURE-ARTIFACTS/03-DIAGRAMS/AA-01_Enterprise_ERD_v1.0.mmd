@@ -1,0 +1,62 @@
+erDiagram
+    ORGANIZATION ||--o{ USER : has
+    ORGANIZATION ||--o{ BRANCH : has
+    ORGANIZATION ||--o{ CONTACT : has
+    ORGANIZATION ||--o| CUSTOMER : may_be
+    ORGANIZATION ||--o| SUPPLIER : may_be
+    ORGANIZATION ||--o| CARRIER : may_be
+
+    USER }o--o{ ROLE : assigned
+    ROLE }o--o{ PERMISSION : grants
+
+    CUSTOMER ||--o{ RFQ : creates
+    SUPPLIER ||--o{ OFFER : publishes
+    SUPPLIER ||--o{ RFQ_RESPONSE : submits
+    SUPPLIER ||--o{ SUPPLIER_CAPABILITY : has
+    SUPPLIER ||--o{ SUPPLIER_CERTIFICATE : has
+
+    COMMODITY_CATEGORY ||--o{ COMMODITY_FAMILY : contains
+    COMMODITY_FAMILY ||--o{ COMMODITY : contains
+    COMMODITY ||--o{ COMMODITY_SPECIFICATION : has
+    COMMODITY ||--o{ PRODUCT_CODE : has
+
+    OFFER ||--o{ OFFER_ITEM : contains
+    COMMODITY ||--o{ OFFER_ITEM : offered_as
+
+    RFQ ||--o{ RFQ_ITEM : contains
+    COMMODITY ||--o{ RFQ_ITEM : requested_as
+    RFQ ||--o{ RFQ_RESPONSE : receives
+
+    RFQ ||--o| CONTRACT : results_in
+    CONTRACT ||--o{ CONTRACT_PARTY : has
+    CONTRACT ||--o{ CONTRACT_OBLIGATION : has
+    CONTRACT ||--o{ DOCUMENT : references
+
+    CONTRACT ||--o{ LOGISTICS_ORDER : creates
+    LOGISTICS_ORDER ||--o{ TRANSPORT_PLAN : has
+    TRANSPORT_PLAN }o--|| CARRIER : assigns
+    CARRIER ||--o{ VEHICLE : owns
+    CARRIER ||--o{ DRIVER : employs
+
+    LOGISTICS_ORDER ||--o{ SHIPMENT : executes
+    SHIPMENT ||--o{ SHIPMENT_ITEM : contains
+    SHIPMENT ||--o{ TRACKING_EVENT : has
+    SHIPMENT ||--o| PROOF_OF_DELIVERY : produces
+
+    SHIPMENT ||--o{ INVOICE : triggers
+    INVOICE ||--o{ PAYMENT : paid_by
+    PAYMENT ||--o{ SETTLEMENT : settles
+    CONTRACT ||--o{ ESCROW_CASE : may_have
+
+    ORGANIZATION ||--o| TRUST_PROFILE : has
+    TRUST_PROFILE ||--o{ TRUST_SCORE : records
+    ORGANIZATION ||--o{ VERIFICATION_RECORD : verified_by
+    ORGANIZATION ||--o{ COMPLIANCE_CASE : may_have
+
+    DOCUMENT ||--o{ DOCUMENT_VERSION : has
+    WORKFLOW_INSTANCE ||--o{ WORKFLOW_TASK : contains
+
+    KNOWLEDGE_ASSET ||--o{ KNOWLEDGE_CHUNK : split_into
+    KNOWLEDGE_CHUNK ||--o{ VECTOR_EMBEDDING : embedded_as
+    USER ||--o{ AI_INTERACTION : creates
+    AI_INTERACTION }o--o{ KNOWLEDGE_ASSET : uses

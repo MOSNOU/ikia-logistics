@@ -1,0 +1,92 @@
+flowchart TD
+
+    USER[User / Organization]
+    PORTAL[Web / Admin / Supplier / Buyer / Carrier Portal]
+    APIGW[API Gateway]
+
+    ID[Identity Service]
+    ORG[Organization Service]
+    SUP[Supplier Service]
+    COM[Commodity Service]
+    OFF[Offer Service]
+    RFQ[RFQ Service]
+    MATCH[Matching Engine]
+    CON[Contract Service]
+    DOC[Document Service]
+    WF[Workflow Engine]
+    SIG[Digital Signature Service]
+    ESC[Escrow Service]
+    FIN[Invoice / Payment / Settlement Services]
+    LOG[Logistics Service]
+    CAR[Carrier Service]
+    SHP[Shipment Service]
+    TRK[Tracking Service]
+    CT[Control Tower]
+    AI[AI Gateway / Copilot]
+    RAG[RAG Service]
+    KG[Knowledge Graph]
+    VDB[Vector Database]
+    DW[Data Warehouse]
+    BI[Analytics / BI Dashboards]
+    INT[Integration Hub]
+    EXT[External Systems]
+
+    USER --> PORTAL
+    PORTAL --> APIGW
+
+    APIGW --> ID
+    APIGW --> ORG
+    APIGW --> SUP
+    APIGW --> COM
+    APIGW --> OFF
+    APIGW --> RFQ
+    APIGW --> CON
+    APIGW --> LOG
+    APIGW --> SHP
+    APIGW --> AI
+
+    RFQ --> COM
+    RFQ --> SUP
+    RFQ --> MATCH
+    MATCH --> OFF
+    MATCH --> WF
+    MATCH --> AI
+
+    CON --> WF
+    CON --> DOC
+    CON --> SIG
+    CON --> ESC
+    CON --> FIN
+
+    LOG --> CAR
+    LOG --> SHP
+    SHP --> TRK
+    TRK --> CT
+    CT --> BI
+
+    DOC --> AI
+    AI --> RAG
+    RAG --> KG
+    RAG --> VDB
+
+    ID --> DW
+    ORG --> DW
+    SUP --> DW
+    COM --> DW
+    RFQ --> DW
+    CON --> DW
+    SHP --> DW
+    FIN --> DW
+    AI --> DW
+    DW --> BI
+
+    APIGW --> INT
+    INT --> EXT
+
+    WF --> SUP
+    WF --> COM
+    WF --> OFF
+    WF --> RFQ
+    WF --> CON
+    WF --> SHP
+    WF --> ESC

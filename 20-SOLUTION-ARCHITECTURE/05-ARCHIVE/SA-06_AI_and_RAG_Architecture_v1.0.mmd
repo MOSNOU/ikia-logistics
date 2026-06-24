@@ -1,0 +1,55 @@
+flowchart TB
+
+    USER[User / Operator / Executive]
+
+    COPILOT[AI Copilot]
+
+    ORCH[Agent Orchestrator]
+
+    AGENTS[Domain Agents]
+
+    RAG[RAG Service]
+
+    GRAG[GraphRAG Service]
+
+    VDB[(Vector Database)]
+
+    KG[(Knowledge Graph)]
+
+    KB[(Enterprise Knowledge Base)]
+
+    PROMPT[Prompt Registry]
+
+    MODEL[Model Router]
+
+    LLM[LLM Provider]
+
+    AUDIT[(AI Audit Logs)]
+
+    GOV[AI Governance]
+
+    USER --> COPILOT
+    COPILOT --> ORCH
+    ORCH --> AGENTS
+
+    AGENTS --> RAG
+    AGENTS --> GRAG
+
+    RAG --> VDB
+    RAG --> KB
+
+    GRAG --> VDB
+    GRAG --> KG
+
+    ORCH --> PROMPT
+    PROMPT --> MODEL
+    MODEL --> LLM
+
+    LLM --> COPILOT
+
+    COPILOT --> AUDIT
+    ORCH --> AUDIT
+    RAG --> AUDIT
+    GRAG --> AUDIT
+
+    AUDIT --> GOV

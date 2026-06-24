@@ -1,0 +1,1 @@
+../../23-DATABASE/migrations/0023_contract_preparation_foundation.sql

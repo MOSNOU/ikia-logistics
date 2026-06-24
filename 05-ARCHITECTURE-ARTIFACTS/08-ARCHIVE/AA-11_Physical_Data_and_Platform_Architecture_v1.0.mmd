@@ -1,0 +1,73 @@
+flowchart TB
+
+    USER[Users]
+
+    WEB[Web Portal]
+    ADMIN[Admin Portal]
+
+    APIGW[API Gateway]
+
+    ID[Identity Service]
+    ORG[Organization Service]
+    SUP[Supplier Service]
+    COM[Commodity Service]
+    RFQ[RFQ Service]
+    OFF[Offer Service]
+    CON[Contract Service]
+    LOG[Logistics Service]
+    DOC[Document Service]
+    WF[Workflow Engine]
+
+    DB[(PostgreSQL)]
+
+    VDB[(Vector Database)]
+    KG[(Knowledge Graph)]
+
+    AI[AI Copilot / RAG]
+
+    DW[(Data Warehouse)]
+    BI[BI Dashboards]
+
+    INT[Integration Layer]
+    EXT[External Systems]
+
+    USER --> WEB
+    USER --> ADMIN
+
+    WEB --> APIGW
+    ADMIN --> APIGW
+
+    APIGW --> ID
+    APIGW --> ORG
+    APIGW --> SUP
+    APIGW --> COM
+    APIGW --> RFQ
+    APIGW --> OFF
+    APIGW --> CON
+    APIGW --> LOG
+    APIGW --> DOC
+
+    ID --> DB
+    ORG --> DB
+    SUP --> DB
+    COM --> DB
+    RFQ --> DB
+    OFF --> DB
+    CON --> DB
+    LOG --> DB
+    DOC --> DB
+
+    WF --> DB
+
+    DB --> DW
+    DW --> BI
+
+    DOC --> VDB
+    DB --> KG
+
+    AI --> VDB
+    AI --> KG
+    AI --> DB
+
+    APIGW --> INT
+    INT --> EXT

@@ -1,0 +1,37 @@
+flowchart TB
+
+    USER[Frontend / Mobile / Partner Apps]
+
+    APIGW[API Gateway]
+
+    AUTH[Supabase Auth / JWT]
+
+    RLS[RLS + RBAC]
+
+    DOMAIN[Domain APIs]
+
+    REALTIME[Realtime Channels]
+
+    WEBHOOK[Webhook Engine]
+
+    EXT[External Consumers]
+
+    OBS[API Observability]
+
+    DB[(PostgreSQL)]
+
+    USER --> APIGW
+
+    APIGW --> AUTH
+    AUTH --> RLS
+    RLS --> DOMAIN
+
+    DOMAIN --> DB
+    DOMAIN --> REALTIME
+    DOMAIN --> WEBHOOK
+    DOMAIN --> OBS
+
+    WEBHOOK --> EXT
+    REALTIME --> USER
+
+    OBS --> DB

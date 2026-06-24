@@ -30,9 +30,16 @@ export default async function CarrierDispatchDetailPage({ params }: PageProps) {
         </div>
         <div className="flex gap-2">
           {shipmentId ? (
-            <Button asChild variant="outline" size="sm">
-              <Link href={`/carrier/tracking/${shipmentId}/map`}>نقشه ردیابی</Link>
-            </Button>
+            <>
+              <Button asChild size="sm">
+                <Link href={`/carrier/tracking/${shipmentId}/report`}>
+                  گزارش تله‌متری
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link href={`/carrier/tracking/${shipmentId}/map`}>نقشه ردیابی</Link>
+              </Button>
+            </>
           ) : null}
           <Button asChild variant="outline" size="sm">
             <Link href="/carrier/dispatches">بازگشت</Link>

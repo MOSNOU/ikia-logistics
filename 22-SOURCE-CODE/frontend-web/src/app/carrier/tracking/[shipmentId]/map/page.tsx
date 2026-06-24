@@ -58,11 +58,20 @@ export default async function CarrierTrackingMapPage({ params }: PageProps) {
             نمای موقعیت‌های ارسالی توسط دستگاه حمل‌کننده. این صفحه فقط نمایشی است؛ تغییری در اعزام یا محموله ایجاد نمی‌کند.
           </p>
         </div>
-        <Button asChild variant="outline" size="sm">
-          <Link href={`/carrier/dispatches${resolved ? "/" + resolved.dispatchId : ""}`}>
-            بازگشت به اعزام
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          {resolved ? (
+            <Button asChild size="sm">
+              <Link href={`/carrier/tracking/${shipmentId}/report`}>
+                گزارش تله‌متری
+              </Link>
+            </Button>
+          ) : null}
+          <Button asChild variant="outline" size="sm">
+            <Link href={`/carrier/dispatches${resolved ? "/" + resolved.dispatchId : ""}`}>
+              بازگشت به اعزام
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {body}

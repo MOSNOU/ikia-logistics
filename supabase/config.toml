@@ -9,8 +9,45 @@ project_id = "ikia-logistics"
 enabled = true
 # PostgREST exposes these schemas. `audit` is intentionally omitted —
 # no client-side reads of audit.* are allowed.
-schemas = ["public", "identity", "organization", "supplier"]
-extra_search_path = ["public", "identity", "organization", "supplier"]
+# Updated in CC-20: expanded from 4 schemas to 14 to cover all accepted
+# business-domain foundations (CC-07 through CC-19). `audit` remains omitted
+# per CC-20 Q3=NO. `app_storage` is exposed; the native Supabase `storage`
+# schema is owned by supabase_storage_admin and managed by the Storage Service.
+# CC-22 Q2=Yes: `kyc` added for KYC/KYB admin & portal RPCs.
+# CC-23 Q2=Yes: `pricing` added for price-list / quotation / FX RPCs.
+# CC-39 Q1=marketplace: `marketplace` added for carrier directory / capacity
+# listings / activity ledger RPCs. Required so CC-40 (frontend wiring) can
+# call buyer_list_carriers, supplier_publish_capacity, admin_list_activity, etc.
+schemas = [
+  "public", "identity", "organization",
+  "supplier", "commodity",
+  "rfq", "offer", "evaluation",
+  "contract", "shipment",
+  "app_storage",
+  "finance", "settlement", "dispute",
+  "notify",
+  "kyc",
+  "pricing",
+  "marketplace",
+  # CC-43 added dispatch for operational-readiness RPCs.
+  "dispatch",
+  # CC-45 added telematics for GPS position stream + telemetry event ledger RPCs.
+  "telematics"
+]
+extra_search_path = [
+  "public", "identity", "organization",
+  "supplier", "commodity",
+  "rfq", "offer", "evaluation",
+  "contract", "shipment",
+  "app_storage",
+  "finance", "settlement", "dispute",
+  "notify",
+  "kyc",
+  "pricing",
+  "marketplace",
+  "dispatch",
+  "telematics"
+]
 max_rows = 1000
 
 [db]

@@ -822,76 +822,177 @@ export default function HomePage() {
   return (
     <div className="bg-ikia-premium-page">
       {/* =====================================================================
-          CC-66C — Fullscreen cinematic hero.
-          • Edge-to-edge image at /marketing/01-hero-fullscreen-clean.png.
-          • Sits directly below the sticky 64-px header.
-          • Subtle navy gradient + bottom porcelain fade for premium depth.
-          • Minimal text overlay (no chips, no metrics, no widgets) — extra
-            data overlays will land in a later CC.
+          CC-69 — Two-column dark-navy product-platform hero.
+          • No photo: midnight navy + radial+linear gradient + faint grid.
+          • Right column (RTL inline-start): eyebrow chip · massive
+            headline · subhead · 2 CTAs.
+          • Left column: live product UI panel — iKIA OS · Shipment ID ·
+            route · 4 doc tiles · 3 metric cards.
+          • Mobile: text first (order-1) · panel second (order-2).
           ===================================================================== */}
       <section
         aria-labelledby="hero-headline"
-        className="relative isolate ikia-hero-bottom-fade overflow-hidden min-h-[72vh] lg:min-h-[calc(100vh-64px)]"
+        className="relative isolate overflow-hidden bg-[#0A1B2E] text-white"
       >
-        <Image
-          src="/marketing/01-hero-fullscreen-clean.png"
-          alt="ناوگان چندوجهی iKIA Logistics — کریدور ملی حمل‌ونقل ایران"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-        {/* Side-to-side overlay: deepest at the right (Persian start edge),
-            fading toward the left for image clarity. */}
+        {/* Atmospheric gradient + faint grid. */}
         <div
           aria-hidden
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(270deg, rgba(2, 6, 23, 0.62) 0%, rgba(15, 23, 42, 0.30) 42%, rgba(15, 23, 42, 0.08) 100%)",
+              "radial-gradient(circle at 20% 20%, rgba(31, 156, 224, 0.25), transparent 35%), linear-gradient(135deg, #0A1B2E 0%, #0E2640 55%, #103A5E 100%)",
           }}
         />
-        {/* CC-66D — Hero content moved to the visual right (items-start in
-            RTL = inline-start = right edge), wrapped in a localized glass
-            text card so the headline pops without over-darkening the
-            whole image. Brighter typography + green/red CTAs. */}
-        <div className="relative mx-auto flex h-full min-h-[72vh] max-w-7xl flex-col items-start justify-center px-4 py-20 sm:px-6 lg:min-h-[calc(100vh-64px)] lg:py-28">
-          <div className="w-full max-w-xl rounded-[2rem] border border-white/15 bg-slate-950/25 p-5 text-right shadow-2xl shadow-slate-950/30 backdrop-blur-[2px] sm:p-7">
-            <div className="space-y-5">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-slate-950/30 px-3 py-1 text-[11px] font-semibold tracking-[0.15em] text-white backdrop-blur-md">
-                <span aria-hidden className="inline-block size-1.5 rounded-full bg-emerald-400" />
-                سامانه عملیات لجستیک ایران
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-25"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px)",
+            backgroundSize: "64px 64px",
+          }}
+        />
+
+        <div className="relative mx-auto grid min-h-[calc(100vh-64px)] max-w-[1320px] items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:py-28">
+          {/* ----- Product UI panel (mobile order 2, desktop left) ----- */}
+          <div className="order-2 lg:order-1">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4 shadow-2xl shadow-black/40 backdrop-blur sm:p-5">
+              {/* Chrome bar. */}
+              <div className="mb-4 flex items-center justify-between gap-3 border-b border-white/10 pb-3">
+                <div className="flex items-center gap-2">
+                  <span aria-hidden className="size-2 rounded-full bg-red-400/70" />
+                  <span aria-hidden className="size-2 rounded-full bg-amber-400/70" />
+                  <span aria-hidden className="size-2 rounded-full bg-emerald-400/70" />
+                  <span
+                    dir="ltr"
+                    className="ms-2 font-mono text-[11px] text-sky-200"
+                  >
+                    iKIA OS · Live Shipment
+                  </span>
+                </div>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/15 px-2.5 py-0.5 text-[10px] font-bold text-emerald-200">
+                  <span aria-hidden className="size-1.5 rounded-full bg-emerald-400" />
+                  Live
+                </span>
               </div>
-              <h1
-                id="hero-headline"
-                className="text-3xl font-extrabold leading-snug tracking-tight text-white sm:text-5xl lg:text-6xl"
-                style={{ textShadow: "0 4px 32px rgba(0, 0, 0, 0.75)" }}
-              >
-                سامانه عملیاتی لجستیک برای کنترل حمل، اسناد و زنجیره تأمین
-              </h1>
-              <p
-                className="max-w-lg text-base leading-8 text-white/90 sm:text-lg"
-                style={{ textShadow: "0 2px 18px rgba(0, 0, 0, 0.7)" }}
-              >
-                از ثبت سفارش تا تخصیص ناوگان، رهگیری، اسناد گمرکی، تطبیق و تسویه
-                — همه در یک پلتفرم واحد برای بازار ایران و کریدورهای منطقه‌ای.
-              </p>
-              <div className="flex flex-wrap gap-3 pt-2">
-                <Button
-                  asChild
-                  size="lg"
-                  className="w-full bg-gradient-to-l from-emerald-600 via-green-500 to-lime-400 text-white shadow-lg shadow-emerald-950/30 hover:from-emerald-700 hover:via-green-600 hover:to-lime-500 sm:w-auto"
-                >
-                  <Link href="/#start">درخواست جلسه معرفی</Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  className="w-full border border-red-300/60 bg-gradient-to-l from-red-700 via-rose-600 to-orange-500 text-white shadow-lg shadow-red-950/25 hover:from-red-800 hover:via-rose-700 hover:to-orange-600 sm:w-auto"
-                >
-                  <Link href="#platform">مشاهده پلتفرم</Link>
-                </Button>
+
+              <div className="space-y-4">
+                {/* Shipment ID + route row. */}
+                <div className="rounded-xl border border-white/10 bg-white/[0.05] p-4">
+                  <div className="mb-3 flex items-center justify-between gap-2">
+                    <span className="text-[11px] text-white/60">Shipment ID</span>
+                    <span dir="ltr" className="font-mono text-sm font-semibold text-white">
+                      SH-2026-08471
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between gap-2 text-sm">
+                    <span className="font-bold text-white">تهران</span>
+                    <span
+                      aria-hidden
+                      className="mx-3 h-px flex-1 bg-gradient-to-l from-sky-300/0 via-sky-300/60 to-sky-300/0"
+                    />
+                    <span aria-hidden className="text-sky-300">●</span>
+                    <span
+                      aria-hidden
+                      className="mx-3 h-px flex-1 bg-gradient-to-l from-sky-300/0 via-sky-300/30 to-sky-300/0"
+                    />
+                    <span className="font-bold text-white">بندرعباس</span>
+                  </div>
+                  <div className="mt-2 flex items-center justify-between text-[11px] text-white/60">
+                    <span>۱٬۳۱۰ کیلومتر</span>
+                    <span>کریدور شمال–جنوب</span>
+                  </div>
+                </div>
+
+                {/* 4 doc tiles. */}
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { fa: "اظهارنامه", en: "Customs" },
+                    { fa: "بارنامه", en: "BoL" },
+                    { fa: "بیمه", en: "Insurance" },
+                    { fa: "گواهی مبدأ", en: "Origin" },
+                  ].map((doc) => (
+                    <div
+                      key={doc.en}
+                      className="rounded-xl border border-white/10 bg-white/[0.05] p-3"
+                    >
+                      <div className="text-sm font-semibold text-white">{doc.fa}</div>
+                      <div
+                        dir="ltr"
+                        className="mt-1 font-mono text-[10px] text-emerald-200"
+                      >
+                        ✓ {doc.en}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 3 metric cards: ETA / Capacity Match / Delay. */}
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="rounded-xl border border-white/10 bg-white/[0.06] p-3 text-center">
+                    <div
+                      dir="ltr"
+                      className="text-[10px] uppercase tracking-[0.18em] text-white/60"
+                    >
+                      ETA
+                    </div>
+                    <div className="mt-0.5 text-base font-extrabold text-sky-200">۲٫۴ روز</div>
+                  </div>
+                  <div className="rounded-xl border border-white/10 bg-white/[0.06] p-3 text-center">
+                    <div
+                      dir="ltr"
+                      className="text-[10px] uppercase tracking-[0.18em] text-white/60"
+                    >
+                      Capacity
+                    </div>
+                    <div className="mt-0.5 text-base font-extrabold text-emerald-200">٪۹۴</div>
+                  </div>
+                  <div className="rounded-xl border border-white/10 bg-white/[0.06] p-3 text-center">
+                    <div
+                      dir="ltr"
+                      className="text-[10px] uppercase tracking-[0.18em] text-white/60"
+                    >
+                      Delay
+                    </div>
+                    <div className="mt-0.5 text-base font-extrabold text-orange-200">۰</div>
+                  </div>
+                </div>
               </div>
+            </div>
+          </div>
+
+          {/* ----- Text + CTAs (mobile order 1, desktop right) ----- */}
+          <div className="order-1 text-right lg:order-2">
+            <div className="inline-flex items-center gap-2 rounded-full border border-sky-300/30 bg-sky-300/10 px-4 py-2 text-[11px] font-semibold tracking-[0.22em] text-sky-100">
+              <span aria-hidden className="inline-block size-1.5 rounded-full bg-sky-300" />
+              IKIA LOGISTICS OPERATING SYSTEM
+            </div>
+            <h1
+              id="hero-headline"
+              className="mt-5 max-w-3xl font-extrabold leading-[1.1] tracking-tight text-white"
+              style={{ fontSize: "clamp(2.6rem, 5vw, 4.25rem)" }}
+            >
+              سامانه عملیاتی لجستیک برای کنترل حمل، اسناد و زنجیره تأمین
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-9 text-slate-200">
+              از ثبت سفارش تا تخصیص ناوگان، رهگیری، اسناد گمرکی، تطبیق و تسویه
+              — همه در یک پلتفرم واحد برای بازار ایران و کریدورهای منطقه‌ای.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-start lg:justify-end">
+              <Button
+                asChild
+                size="lg"
+                className="bg-gradient-to-l from-emerald-600 via-green-500 to-lime-400 text-white shadow-lg shadow-emerald-950/30 hover:from-emerald-700 hover:via-green-600 hover:to-lime-500"
+              >
+                <Link href="#start">درخواست جلسه معرفی</Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                className="border border-white/30 bg-white/10 text-white shadow-lg shadow-black/20 backdrop-blur hover:border-sky-300 hover:bg-white/20"
+              >
+                <Link href="#platform">مشاهده پلتفرم</Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -1273,138 +1374,23 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4">
           <PremiumSectionHeader
             eyebrow="شبکه کریدورهای راهبردی"
-            title="شبکه کریدورهای راهبردی متصل به ایران"
+            title="کریدورهای منطقه‌ای را مثل یک شبکه زنده مدیریت کنید"
             intro="iKIA Logistics لایه عملیاتی دیجیتال برای کریدورهای ترانزیتی متصل به ایران است — اتصال شرق به غرب و شمال به جنوب با حمل چندوجهی و گردش کار گمرکی منسجم."
           />
 
-          {/* CC-Phase3 — Stylized inline-SVG regional corridor network.
-              No image, no library; pure SVG + Tailwind. ایران sits at
-              the centre with 4 regional nodes (ترکیه · قفقاز ·
-              آسیای میانه · خلیج فارس) and route lines. */}
-          <div className="mt-10 bg-ikia-product-card p-6 sm:p-8">
-            <div className="mb-4 flex items-center justify-between gap-3">
-              <div
-                dir="ltr"
-                className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-sky-700"
-              >
-                Regional Corridor Network
-              </div>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 text-[10px] font-bold text-sky-700">
-                <span aria-hidden className="size-1.5 rounded-full bg-sky-500" />
-                ۵ گره منطقه‌ای
-              </span>
-            </div>
-            <svg
-              viewBox="0 0 600 320"
-              role="img"
-              aria-label="نقشه شماتیک کریدورهای منطقه‌ای متصل به ایران"
-              className="block h-auto w-full"
-            >
-              {/* Decorative grid. */}
-              <defs>
-                <pattern id="ikia-corridor-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path d="M40 0H0V40" fill="none" stroke="rgba(15, 23, 42, 0.05)" strokeWidth="1" />
-                </pattern>
-                <radialGradient id="ikia-corridor-iran-glow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#1F9CE0" stopOpacity="0.45" />
-                  <stop offset="100%" stopColor="#1F9CE0" stopOpacity="0" />
-                </radialGradient>
-              </defs>
-              <rect x="0" y="0" width="600" height="320" fill="url(#ikia-corridor-grid)" />
-
-              {/* Iran glow halo. */}
-              <circle cx="300" cy="180" r="90" fill="url(#ikia-corridor-iran-glow)" />
-
-              {/* Route lines — Iran ↔ each regional node.
-                  Solid for active corridors, dashed for emerging. */}
-              <line x1="300" y1="180" x2="120" y2="90"  stroke="#0B6FB5" strokeWidth="2" strokeLinecap="round" />
-              <line x1="300" y1="180" x2="220" y2="50"  stroke="#0B6FB5" strokeWidth="2" strokeLinecap="round" />
-              <line x1="300" y1="180" x2="500" y2="110" stroke="#0B6FB5" strokeWidth="2" strokeLinecap="round" strokeDasharray="6 4" />
-              <line x1="300" y1="180" x2="380" y2="280" stroke="#0B6FB5" strokeWidth="2" strokeLinecap="round" />
-
-              {/* Cross routes — Turkey ↔ Caucasus, Central Asia ↔ Gulf. */}
-              <path
-                d="M120 90 Q 170 30 220 50"
-                fill="none"
-                stroke="#1F9CE0"
-                strokeWidth="1.5"
-                strokeDasharray="4 4"
-                strokeLinecap="round"
-                opacity="0.65"
-              />
-              <path
-                d="M500 110 Q 470 200 380 280"
-                fill="none"
-                stroke="#1F9CE0"
-                strokeWidth="1.5"
-                strokeDasharray="4 4"
-                strokeLinecap="round"
-                opacity="0.55"
-              />
-
-              {/* Nodes — outer ring + inner dot. */}
-              {/* Iran (central, larger). */}
-              <circle cx="300" cy="180" r="38" fill="#0B6FB5" />
-              <circle cx="300" cy="180" r="38" fill="none" stroke="#1F9CE0" strokeWidth="3" strokeOpacity="0.5" />
-              <text x="300" y="178" textAnchor="middle" fill="#FFFFFF" fontSize="18" fontWeight="800">ایران</text>
-              <text x="300" y="196" textAnchor="middle" fill="#E8F0F8" fontSize="9" fontFamily="monospace" letterSpacing="2">HUB</text>
-
-              {/* Turkey (west). */}
-              <circle cx="120" cy="90" r="22" fill="#FFFFFF" stroke="#0B6FB5" strokeWidth="2" />
-              <text x="120" y="94" textAnchor="middle" fill="#0A1B2E" fontSize="12" fontWeight="700">ترکیه</text>
-
-              {/* Caucasus (north-west). */}
-              <circle cx="220" cy="50" r="22" fill="#FFFFFF" stroke="#0B6FB5" strokeWidth="2" />
-              <text x="220" y="54" textAnchor="middle" fill="#0A1B2E" fontSize="12" fontWeight="700">قفقاز</text>
-
-              {/* Central Asia (east). */}
-              <circle cx="500" cy="110" r="26" fill="#FFFFFF" stroke="#0B6FB5" strokeWidth="2" />
-              <text x="500" y="108" textAnchor="middle" fill="#0A1B2E" fontSize="11" fontWeight="700">آسیای</text>
-              <text x="500" y="122" textAnchor="middle" fill="#0A1B2E" fontSize="11" fontWeight="700">میانه</text>
-
-              {/* Persian Gulf (south). */}
-              <circle cx="380" cy="280" r="26" fill="#FFFFFF" stroke="#0B6FB5" strokeWidth="2" />
-              <text x="380" y="278" textAnchor="middle" fill="#0A1B2E" fontSize="11" fontWeight="700">خلیج</text>
-              <text x="380" y="292" textAnchor="middle" fill="#0A1B2E" fontSize="11" fontWeight="700">فارس</text>
-
-              {/* Direction tag chips along key routes. */}
-              <g transform="translate(165, 130)">
-                <rect x="-30" y="-10" width="60" height="20" rx="10" fill="#0A1B2E" />
-                <text x="0" y="4" textAnchor="middle" fill="#E8F0F8" fontSize="10" fontWeight="700">شمال–غرب</text>
-              </g>
-              <g transform="translate(420, 130)">
-                <rect x="-32" y="-10" width="64" height="20" rx="10" fill="#0A1B2E" />
-                <text x="0" y="4" textAnchor="middle" fill="#E8F0F8" fontSize="10" fontWeight="700">شرق</text>
-              </g>
-              <g transform="translate(340, 230)">
-                <rect x="-30" y="-10" width="60" height="20" rx="10" fill="#0A1B2E" />
-                <text x="0" y="4" textAnchor="middle" fill="#E8F0F8" fontSize="10" fontWeight="700">جنوب</text>
-              </g>
-            </svg>
-            <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-slate-600">
-              <span className="inline-flex items-center gap-1.5">
-                <span aria-hidden className="inline-block h-px w-6 bg-[#0B6FB5]" />
-                کریدور فعال
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span
-                  aria-hidden
-                  className="inline-block h-px w-6"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(to right, #0B6FB5 50%, transparent 0%)",
-                    backgroundSize: "6px 1px",
-                    backgroundRepeat: "repeat-x",
-                  }}
-                />
-                مسیر در حال توسعه
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span aria-hidden className="inline-block size-1.5 rounded-full bg-[#1F9CE0]" />
-                گره عملیاتی
-              </span>
-            </div>
-          </div>
+          {/* CC-69-fix — Replaced the prior inline-SVG corridor diagram
+              with the new realistic Iran-hub photograph. The image
+              already carries node labels and route lines, so no overlay
+              text is layered on top. */}
+          <figure className="relative mt-10 aspect-[16/9] w-full overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-2xl shadow-slate-950/10">
+            <Image
+              src="/marketing/corridor-network-iran-hub-realistic.jpg"
+              alt="نقشه کریدورهای منطقه‌ای با ایران در مرکز شبکه شرق به غرب و شمال به جنوب"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px"
+              className="object-cover object-center"
+            />
+          </figure>
 
           <ul className="mt-10 grid gap-4 sm:grid-cols-2">
             {CORRIDORS.map((c, idx) => (
@@ -1994,7 +1980,7 @@ export default function HomePage() {
                 Control Tower
               </div>
               <h2 className="text-3xl font-extrabold leading-snug tracking-tight text-night-text sm:text-4xl lg:text-[44px]">
-                برج کنترل دیجیتال زنجیره تأمین
+                برج کنترل دیجیتال برای دیدن، تصمیم‌گیری و اقدام در لحظه
               </h2>
               <p className="max-w-xl text-base leading-8 text-night-text-muted sm:text-lg sm:leading-9">
                 iKIA Control Tower یک منبع واحد حقیقت برای همه ذی‌نفعان زنجیره
@@ -2033,7 +2019,7 @@ export default function HomePage() {
                   variant="outline"
                   className="border-white/30 bg-white/5 text-night-text backdrop-blur hover:border-sky-300 hover:bg-white/10 hover:text-night-text"
                 >
-                  <Link href="/login">ورود به پلتفرم</Link>
+                  <Link href="#platform">مشاهده پلتفرم</Link>
                 </Button>
               </div>
             </div>
@@ -2405,9 +2391,8 @@ export default function HomePage() {
                   زنجیره حمل خود را روی یک پلتفرم واحد ببینید و کنترل کنید
                 </h2>
                 <p className="max-w-2xl text-sm leading-7 text-night-text-muted sm:text-base sm:leading-8">
-                  بازار حمل، اجرای عملیات، رؤیت لحظه‌ای، اسناد گمرکی و تسویه —
-                  در یک پلتفرم یکپارچه برای صنایع راهبردی، کریدورهای ترانزیتی و
-                  اکوسیستم کالاهای ملی.
+                  برای هماهنگی حمل، بازار ظرفیت، اسناد، تطبیق، رهگیری و تسویه —
+                  یک جریان عملیاتی واحد بسازید.
                 </p>
                 <div className="flex flex-wrap gap-3 pt-2">
                   <Button
@@ -2415,14 +2400,14 @@ export default function HomePage() {
                     size="lg"
                     className="w-full bg-gradient-to-l from-emerald-600 via-green-500 to-lime-400 text-white shadow-lg shadow-emerald-950/30 hover:from-emerald-700 hover:via-green-600 hover:to-lime-500 sm:w-auto"
                   >
-                    <Link href="/login">درخواست جلسه معرفی</Link>
+                    <Link href="#start">درخواست جلسه معرفی</Link>
                   </Button>
                   <Button
                     asChild
                     size="lg"
                     className="w-full border border-red-300/60 bg-gradient-to-l from-red-700 via-rose-600 to-orange-500 text-white shadow-lg shadow-red-950/25 hover:from-red-800 hover:via-rose-700 hover:to-orange-600 sm:w-auto"
                   >
-                    <Link href="/login">شروع همکاری</Link>
+                    <Link href="#platform">مشاهده پلتفرم</Link>
                   </Button>
                 </div>
               </div>

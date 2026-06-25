@@ -52,7 +52,7 @@ const FOOTER_RESOURCES: { href: string; label: string }[] = [
 const FOOTER_COMPANY: { href: string; label: string }[] = [
   { href: "/#enterprise-readiness", label: "درباره ما" },
   { href: "/#start", label: "درخواست جلسه معرفی" },
-  { href: "/login", label: "ورود به پلتفرم" },
+  { href: "/#platform", label: "مشاهده پلتفرم" },
   { href: "/#future", label: "نسل آینده زیرساخت" },
   { href: "/#economics-model", label: "اقتصاد پلتفرم" },
 ];
@@ -116,7 +116,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               <Link href="/#start">درخواست همکاری</Link>
             </Button>
             <Button asChild size="sm">
-              <Link href="/login">ورود به پلتفرم</Link>
+              <Link href="/#start">درخواست جلسه معرفی</Link>
             </Button>
 
             {/* CC-60 — server-renderable mobile menu using <details>. No

@@ -3,18 +3,27 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-// CC-66B — Auto-advancing service image slider. Client component because
-// it owns interval/timer state and reacts to `prefers-reduced-motion`.
+// CC-66B (orig) → CC-69-fix — Auto-advancing service image slider.
 //
 // Behavior:
 //   • Each slide enters from the right edge and slides leftward across
-//     the viewport (right-to-left motion). 700ms ease-out per step.
+//     the viewport (right-to-left motion). 700 ms ease-out per step.
 //   • Auto-advance every `intervalMs` (default 4 000 ms).
 //   • Continuous loop with wrap-around — slide 0 follows the last slide
 //     by computing the modular shortest-distance offset.
 //   • Pauses on hover/focus-within so the user can read.
 //   • Respects `prefers-reduced-motion: reduce` — shows slide 0 only and
 //     skips the interval.
+//
+// Layout (CC-69-fix):
+//   • Image area is now CLEAN — the photo itself usually carries title
+//     copy, so the old centered icon + headline + subhead + ghost text
+//     stack on top of the image has been removed.
+//   • A subtle bottom gradient stays only to keep the indicator dots
+//     legible on bright photos.
+//   • The active slide's title / description / pills move to a clean
+//     light caption panel rendered BELOW the image, so the text never
+//     overlaps the photograph.
 //
 // No deps beyond React + next/image.
 
@@ -36,7 +45,7 @@ interface Props {
 }
 
 // Compute the signed shortest distance from `current` to `i`, with wrap.
-// For 5 slides, distance is in {-2, -1, 0, 1, 2}. Active slide → 0,
+// For 6 slides, distance is in {-3, -2, -1, 0, 1, 2, 3}. Active slide → 0,
 // next → +1 (waiting at +100 %), previous → -1 (parked at -100 %).
 function getOffset(i: number, current: number, total: number): number {
   const diff = i - current;
@@ -75,6 +84,8 @@ export function ServiceImageSlider({
     return () => window.clearInterval(id);
   }, [intervalMs, paused, reducedMotion, slides.length]);
 
+  const currentSlide = slides[current] ?? slides[0]!;
+
   return (
     <div
       role="region"
@@ -84,91 +95,93 @@ export function ServiceImageSlider({
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      className="relative overflow-hidden rounded-[2rem] border border-white/20 shadow-2xl shadow-slate-950/20"
+      className="overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-2xl shadow-slate-950/10"
     >
-      {/* Aspect ratio holder — taller portrait on mobile, cinematic on
-          desktop. Slides fill this box absolutely. */}
-      <div className="relative aspect-[4/5] w-full sm:aspect-[16/9] lg:aspect-[16/8]">
-        {slides.map((slide, i) => {
-          const offset = getOffset(i, current, slides.length);
-          const isActive = offset === 0;
-          // translateX is physical (left/right viewport pixels), so the
-          // same value reads correctly under RTL document direction.
-          const tx = `${offset * 100}%`;
-          return (
-            <div
-              key={slide.image}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${i + 1} از ${slides.length}: ${slide.title}`}
-              aria-hidden={!isActive}
-              className="absolute inset-0 transition-transform duration-700 ease-out"
-              style={{ transform: `translateX(${tx})` }}
-            >
-              <Image
-                src={slide.image}
-                alt={slide.alt}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px"
-                className="object-cover object-center"
-                priority={i === 0}
-              />
-              {/* Premium overlay — bottom navy heavy, top mostly clear. */}
+      {/* ===== Image area — clean. No title / subtitle / icon overlay. ===== */}
+      <div className="relative">
+        <div className="relative aspect-[4/5] w-full overflow-hidden sm:aspect-[16/9] lg:aspect-[16/8]">
+          {slides.map((slide, i) => {
+            const offset = getOffset(i, current, slides.length);
+            const isActive = offset === 0;
+            // translateX is physical (left/right viewport pixels), so the
+            // same value reads correctly under RTL document direction.
+            const tx = `${offset * 100}%`;
+            return (
               <div
-                aria-hidden
-                className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-900/35 to-slate-950/5"
-              />
-              {/* Centered content. */}
-              <div
-                dir="rtl"
-                className="absolute inset-x-0 bottom-8 z-10 mx-auto flex max-w-4xl flex-col items-center px-4 text-center"
+                key={slide.image}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${i + 1} از ${slides.length}: ${slide.title}`}
+                aria-hidden={!isActive}
+                className="absolute inset-0 transition-transform duration-700 ease-out"
+                style={{ transform: `translateX(${tx})` }}
               >
-                <div className="mb-4 inline-flex size-14 items-center justify-center rounded-2xl border border-sky-300/35 bg-slate-950/35 text-white shadow-lg shadow-sky-950/30 backdrop-blur-md">
-                  {slide.icon}
-                </div>
-                <h3
-                  className="text-2xl font-bold text-white sm:text-3xl lg:text-4xl"
-                  style={{ textShadow: "0 2px 16px rgba(2, 6, 23, 0.6)" }}
-                >
-                  {slide.title}
-                </h3>
-                <p
-                  className="mt-3 max-w-2xl text-sm leading-7 text-slate-100 sm:text-base"
-                  style={{ textShadow: "0 1px 12px rgba(2, 6, 23, 0.5)" }}
-                >
-                  {slide.description}
-                </p>
-                <ul className="mt-5 flex flex-wrap justify-center gap-2">
-                  {slide.pills.map((pill) => (
-                    <li
-                      key={pill}
-                      className="rounded-2xl border border-sky-300/35 bg-slate-950/45 px-4 py-2 text-xs font-semibold text-white shadow-lg backdrop-blur-md sm:px-5 sm:py-2.5 sm:text-sm"
-                    >
-                      {pill}
-                    </li>
-                  ))}
-                </ul>
+                <Image
+                  src={slide.image}
+                  alt={slide.alt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px"
+                  className="object-cover object-center"
+                  priority={i === 0}
+                />
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+          {/* Subtle bottom anchor so the dots stay legible on bright photos. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-950/40 to-transparent"
+          />
+        </div>
+
+        {/* Slide indicator dots — sit just above the image's lower edge. */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-3 z-20 flex justify-center gap-1.5"
+        >
+          {slides.map((_, i) => (
+            <span
+              key={i}
+              className={`block h-1.5 rounded-full transition-all duration-300 ${
+                i === current ? "w-6 bg-sky-300" : "w-1.5 bg-white/50"
+              }`}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Subtle slide indicator dots. */}
+      {/* ===== Caption panel — below the image, clean and on-brand. ===== */}
       <div
-        aria-hidden
-        className="absolute inset-x-0 bottom-3 z-20 flex justify-center gap-1.5"
+        key={current}
+        dir="rtl"
+        className="border-t border-slate-200/70 bg-white p-5 text-right sm:p-6"
       >
-        {slides.map((_, i) => (
-          <span
-            key={i}
-            className={`block h-1.5 rounded-full transition-all duration-300 ${
-              i === current
-                ? "w-6 bg-sky-300"
-                : "w-1.5 bg-white/40"
-            }`}
-          />
-        ))}
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-xl font-extrabold tracking-tight text-deep-navy sm:text-2xl">
+            {currentSlide.title}
+          </h3>
+          <div
+            aria-hidden
+            className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl border border-sky-200 bg-sky-50 text-sky-700"
+          >
+            {currentSlide.icon}
+          </div>
+        </div>
+        <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+          {currentSlide.description}
+        </p>
+        {currentSlide.pills.length > 0 ? (
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {currentSlide.pills.map((pill) => (
+              <li
+                key={pill}
+                className="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700"
+              >
+                {pill}
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </div>
     </div>
   );

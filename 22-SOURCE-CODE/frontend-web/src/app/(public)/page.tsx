@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -46,21 +47,9 @@ interface TextItem {
   description: string;
 }
 
-const HERO_HIGHLIGHTS: { label: string; tone: "blue" | "green" | "amber" | "navy" }[] = [
-  { label: "حمل چندوجهی یکپارچه", tone: "blue" },
-  { label: "کنترل‌تاور لحظه‌ای", tone: "green" },
-  { label: "اسناد گمرکی و انطباق", tone: "amber" },
-  { label: "تسویه ساختارمند", tone: "navy" },
-];
-
-const HIGHLIGHT_TONES = {
-  blue: "border-brand-100 bg-brand-50 text-brand-700",
-  green: "border-emerald-100 bg-emerald-50 text-emerald-700",
-  amber: "border-amber-200 bg-amber-50 text-amber-800",
-  navy: "border-deep-navy/10 bg-deep-navy/5 text-deep-navy",
-} as const;
-
-const HERO_COVERAGE_CHIPS: string[] = ["داخلی", "بین‌المللی", "ترانزیت"];
+// CC-66C — Removed HERO_HIGHLIGHTS, HIGHLIGHT_TONES, HERO_COVERAGE_CHIPS.
+// The fullscreen cinematic hero no longer renders the highlight chips or
+// coverage chip strip, so the data arrays are dead.
 
 const TRUST_METRICS: { label: string; value: string; hint: string }[] = [
   { label: "حمل چندوجهی", value: "۴", hint: "جاده‌ای، دریایی، ریلی، هوایی" },
@@ -759,91 +748,76 @@ function FlowArrow() {
 
 export default function HomePage() {
   return (
-    <div className="bg-background">
+    <div className="bg-ikia-premium-page">
       {/* =====================================================================
-          1. HERO — image 03 (corrected; iKIA logo already on truck curtain).
+          CC-66C — Fullscreen cinematic hero.
+          • Edge-to-edge image at /marketing/01-hero-fullscreen-clean.png.
+          • Sits directly below the sticky 64-px header.
+          • Subtle navy gradient + bottom porcelain fade for premium depth.
+          • Minimal text overlay (no chips, no metrics, no widgets) — extra
+            data overlays will land in a later CC.
           ===================================================================== */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-brand-50/60 via-background to-background">
+      <section
+        aria-labelledby="hero-headline"
+        className="relative isolate ikia-hero-bottom-fade overflow-hidden min-h-[72vh] lg:min-h-[calc(100vh-64px)]"
+      >
+        <Image
+          src="/marketing/01-hero-fullscreen-clean.png"
+          alt="ناوگان چندوجهی iKIA Logistics — کریدور ملی حمل‌ونقل ایران"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        {/* Side-to-side overlay: deepest at the right (Persian start edge),
+            fading toward the left for image clarity. */}
         <div
           aria-hidden
-          className="absolute inset-y-0 left-0 w-1/2 opacity-30"
+          className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(circle at 30% 50%, var(--color-brand-100) 0, transparent 60%)",
+              "linear-gradient(270deg, rgba(2, 6, 23, 0.62) 0%, rgba(15, 23, 42, 0.30) 42%, rgba(15, 23, 42, 0.08) 100%)",
           }}
         />
-        <div className="relative mx-auto max-w-7xl px-4 py-14 sm:py-20 lg:py-24">
-          <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1.15fr]">
-            <div className="space-y-6 text-right">
-              <div className="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-[11px] font-semibold tracking-[0.15em] text-brand-700">
-                <span className="inline-block size-1.5 rounded-full bg-brand-500" />
-                سامانه عملیات لجستیک ایران
-              </div>
-              <h1 className="text-3xl font-bold leading-snug tracking-tight text-deep-navy sm:text-4xl lg:text-5xl">
-                سیستم عامل دیجیتال لجستیک ایران
-              </h1>
-              <p className="max-w-xl text-base leading-8 text-deep-navy-soft sm:text-lg">
-                iKIA Logistics جریان حمل، اسناد، ظرفیت، قرارداد، ردیابی، تسویه
-                و کنترل عملیات را در یک پلتفرم یکپارچه برای حمل‌ونقل داخلی،
-                بین‌المللی و ترانزیت متصل می‌کند.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Button asChild size="lg" className="w-full sm:w-auto">
-                  <Link href="/login">شروع همکاری</Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="w-full border-deep-navy/20 text-deep-navy hover:bg-deep-navy/5 sm:w-auto"
-                >
-                  <Link href="#how-it-works">پلتفرم چگونه کار می‌کند</Link>
-                </Button>
-              </div>
-              <ul
-                aria-label="پوشش جغرافیایی"
-                className="flex flex-wrap items-center gap-2 pt-1"
-              >
-                <li className="text-[11px] font-semibold tracking-[0.15em] text-deep-navy-soft">
-                  پوشش
-                </li>
-                {HERO_COVERAGE_CHIPS.map((c) => (
-                  <li
-                    key={c}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-deep-navy/10 bg-white px-3 py-1 text-[11px] font-medium text-deep-navy shadow-card"
-                  >
-                    <span
-                      aria-hidden
-                      className="inline-block size-1.5 rounded-full bg-brand-500"
-                    />
-                    {c}
-                  </li>
-                ))}
-              </ul>
-              <ul className="flex flex-wrap gap-2 pt-2">
-                {HERO_HIGHLIGHTS.map((h) => (
-                  <li
-                    key={h.label}
-                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium ${HIGHLIGHT_TONES[h.tone]}`}
-                  >
-                    <span
-                      aria-hidden
-                      className="inline-block size-1.5 rounded-full bg-current"
-                    />
-                    {h.label}
-                  </li>
-                ))}
-              </ul>
+        {/* Hero content — minimal, right-aligned, vertically centered.
+            No HERO_HIGHLIGHTS chips, no coverage strip, no widgets. */}
+        <div className="relative mx-auto flex h-full min-h-[72vh] max-w-7xl flex-col items-end justify-center px-4 py-20 sm:px-6 lg:min-h-[calc(100vh-64px)] lg:py-28">
+          <div className="max-w-xl space-y-5 text-right text-night-text">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-[0.15em] text-night-text backdrop-blur-md">
+              <span aria-hidden className="inline-block size-1.5 rounded-full bg-sky-400" />
+              سامانه عملیات لجستیک ایران
             </div>
-            <MarketingScreenshot
-              src="/marketing/03-hero-multimodal-with-ikia-logo-clean.png"
-              alt="نمای چندوجهی حمل‌ونقل iKIA — جاده، دریا، ریل و هوا روی یک پلتفرم واحد"
-              width={1536}
-              height={1024}
-              priority
-              sizes="(max-width: 1024px) 100vw, 720px"
-              className="w-full"
-            />
+            <h1
+              id="hero-headline"
+              className="text-3xl font-bold leading-snug tracking-tight sm:text-4xl lg:text-5xl"
+              style={{ textShadow: "0 2px 24px rgba(2, 6, 23, 0.45)" }}
+            >
+              سیستم عامل دیجیتال لجستیک ایران
+            </h1>
+            <p
+              className="max-w-lg text-base leading-8 text-night-text-muted sm:text-lg"
+              style={{ textShadow: "0 1px 14px rgba(2, 6, 23, 0.4)" }}
+            >
+              زیرساخت یکپارچه برای حمل جاده‌ای، دریایی، ریلی، هوایی، انبارداری و
+              ترانزیت — در سطح ملی و بین‌المللی.
+            </p>
+            <div className="flex flex-wrap gap-3 pt-2">
+              <Button
+                asChild
+                size="lg"
+                className="w-full bg-gradient-to-l from-blue-700 via-sky-600 to-cyan-500 text-white shadow-lg shadow-sky-900/20 hover:from-blue-800 hover:via-sky-700 hover:to-cyan-600 sm:w-auto"
+              >
+                <Link href="/login">شروع همکاری</Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="w-full border-white/40 bg-white/10 text-night-text backdrop-blur hover:border-sky-300 hover:bg-white/20 hover:text-night-text sm:w-auto"
+              >
+                <Link href="#how-it-works">پلتفرم چگونه کار می‌کند</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>

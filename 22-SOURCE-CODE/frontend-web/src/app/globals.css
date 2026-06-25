@@ -59,3 +59,25 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+/* CC-65 — Marquee animation for the marketing transport-services strip.
+   Pure CSS; no JS, no deps. The track duplicates its content and shifts
+   by -50% to loop seamlessly. Right-to-left motion is physical, so it
+   reads correctly in both LTR and RTL document directions. */
+@keyframes ikia-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ikia-marquee-track {
+  animation: ikia-marquee 40s linear infinite;
+}
+.ikia-marquee-track:hover,
+.ikia-marquee-track:focus-within {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ikia-marquee-track {
+    animation: none;
+    transform: none;
+  }
+}

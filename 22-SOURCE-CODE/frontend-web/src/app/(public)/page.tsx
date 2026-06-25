@@ -897,44 +897,47 @@ export default function HomePage() {
               "linear-gradient(270deg, rgba(2, 6, 23, 0.62) 0%, rgba(15, 23, 42, 0.30) 42%, rgba(15, 23, 42, 0.08) 100%)",
           }}
         />
-        {/* Hero content — minimal, right-aligned, vertically centered.
-            No HERO_HIGHLIGHTS chips, no coverage strip, no widgets. */}
-        <div className="relative mx-auto flex h-full min-h-[72vh] max-w-7xl flex-col items-end justify-center px-4 py-20 sm:px-6 lg:min-h-[calc(100vh-64px)] lg:py-28">
-          <div className="max-w-xl space-y-5 text-right text-night-text">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-[0.15em] text-night-text backdrop-blur-md">
-              <span aria-hidden className="inline-block size-1.5 rounded-full bg-sky-400" />
-              سامانه عملیات لجستیک ایران
-            </div>
-            <h1
-              id="hero-headline"
-              className="text-3xl font-bold leading-snug tracking-tight sm:text-4xl lg:text-5xl"
-              style={{ textShadow: "0 2px 24px rgba(2, 6, 23, 0.45)" }}
-            >
-              سیستم عامل دیجیتال لجستیک ایران
-            </h1>
-            <p
-              className="max-w-lg text-base leading-8 text-night-text-muted sm:text-lg"
-              style={{ textShadow: "0 1px 14px rgba(2, 6, 23, 0.4)" }}
-            >
-              زیرساخت یکپارچه برای حمل جاده‌ای، دریایی، ریلی، هوایی، انبارداری و
-              ترانزیت — در سطح ملی و بین‌المللی.
-            </p>
-            <div className="flex flex-wrap gap-3 pt-2">
-              <Button
-                asChild
-                size="lg"
-                className="w-full bg-gradient-to-l from-blue-700 via-sky-600 to-cyan-500 text-white shadow-lg shadow-sky-900/20 hover:from-blue-800 hover:via-sky-700 hover:to-cyan-600 sm:w-auto"
+        {/* CC-66D — Hero content moved to the visual right (items-start in
+            RTL = inline-start = right edge), wrapped in a localized glass
+            text card so the headline pops without over-darkening the
+            whole image. Brighter typography + green/red CTAs. */}
+        <div className="relative mx-auto flex h-full min-h-[72vh] max-w-7xl flex-col items-start justify-center px-4 py-20 sm:px-6 lg:min-h-[calc(100vh-64px)] lg:py-28">
+          <div className="w-full max-w-xl rounded-[2rem] border border-white/15 bg-slate-950/25 p-5 text-right shadow-2xl shadow-slate-950/30 backdrop-blur-[2px] sm:p-7">
+            <div className="space-y-5">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-slate-950/30 px-3 py-1 text-[11px] font-semibold tracking-[0.15em] text-white backdrop-blur-md">
+                <span aria-hidden className="inline-block size-1.5 rounded-full bg-emerald-400" />
+                سامانه عملیات لجستیک ایران
+              </div>
+              <h1
+                id="hero-headline"
+                className="text-3xl font-extrabold leading-snug tracking-tight text-white sm:text-5xl lg:text-6xl"
+                style={{ textShadow: "0 4px 32px rgba(0, 0, 0, 0.75)" }}
               >
-                <Link href="/login">شروع همکاری</Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="w-full border-white/40 bg-white/10 text-night-text backdrop-blur hover:border-sky-300 hover:bg-white/20 hover:text-night-text sm:w-auto"
+                سیستم عامل دیجیتال لجستیک ایران
+              </h1>
+              <p
+                className="max-w-lg text-base leading-8 text-white/90 sm:text-lg"
+                style={{ textShadow: "0 2px 18px rgba(0, 0, 0, 0.7)" }}
               >
-                <Link href="#how-it-works">پلتفرم چگونه کار می‌کند</Link>
-              </Button>
+                زیرساخت یکپارچه برای حمل جاده‌ای، دریایی، ریلی، هوایی، انبارداری و
+                ترانزیت — در سطح ملی و بین‌المللی.
+              </p>
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Button
+                  asChild
+                  size="lg"
+                  className="w-full bg-gradient-to-l from-emerald-600 via-green-500 to-lime-400 text-white shadow-lg shadow-emerald-950/30 hover:from-emerald-700 hover:via-green-600 hover:to-lime-500 sm:w-auto"
+                >
+                  <Link href="/login">شروع همکاری</Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  className="w-full border border-red-300/60 bg-gradient-to-l from-red-700 via-rose-600 to-orange-500 text-white shadow-lg shadow-red-950/25 hover:from-red-800 hover:via-rose-700 hover:to-orange-600 sm:w-auto"
+                >
+                  <Link href="#how-it-works">پلتفرم چگونه کار می‌کند</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

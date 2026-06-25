@@ -7,64 +7,80 @@ import { siteConfig } from "@/lib/config/site";
 // (only collapses on mobile) + cinematic dark navy footer with four
 // disclosure columns. Persian-first, RTL-first.
 
-// CC-64 — Header nav grows to seven items. CC-63's six existing anchors
-// stay; «صنایع» (#industries) is added as the entry point to the new
-// industry/commodity narrative block. «درباره ما» still points to
-// #enterprise-readiness from CC-63.
+// CC-68 — Header nav reordered to match the global freight-platform IA:
+//   پلتفرم / خدمات حمل / راهکارها / کریدورها / بازار حمل /
+//   اسناد و تطبیق / درباره ما
+// All hrefs still match real section IDs on the homepage. «خدمات حمل»
+// → #marketplace (service slider); «بازار حمل» → #commodities (cargo
+// taxonomy). The «صنایع» entry stays in the footer.
 const NAV_ITEMS: { href: string; label: string }[] = [
   { href: "/#platform", label: "پلتفرم" },
+  { href: "/#marketplace", label: "خدمات حمل" },
   { href: "/#solutions", label: "راهکارها" },
-  { href: "/#industries", label: "صنایع" },
   { href: "/#corridors", label: "کریدورها" },
-  { href: "/#marketplace", label: "بازار حمل" },
+  { href: "/#commodities", label: "بازار حمل" },
   { href: "/#documents", label: "اسناد و تطبیق" },
   { href: "/#enterprise-readiness", label: "درباره ما" },
 ];
 
-// CC-64 — Footer platform column extended with the nine new CC-64
-// anchors (#industries, #oil-gas, #mining, #agriculture, #retail,
-// #transit, #commodities, #scenarios, #differentiation) on top of the
-// CC-63 set.
-const PLATFORM_LINKS: { href: string; label: string }[] = [
+// CC-68 — Flexport-benchmark footer IA. Replaces the prior single
+// overflowing platform list. Four columns max — Platform / Services /
+// Resources / Company. Every href still maps to a real homepage anchor.
+const FOOTER_PLATFORM: { href: string; label: string }[] = [
   { href: "/#platform", label: "بخش‌های پلتفرم" },
   { href: "/#how-it-works", label: "نحوه کار پلتفرم" },
   { href: "/#shipment-lifecycle", label: "چرخه عمر محموله" },
-  { href: "/#modules", label: "ماژول‌های عملیاتی" },
-  { href: "/#market-structure", label: "ساختار بازار" },
-  { href: "/#industries", label: "راهکارهای صنعتی" },
-  { href: "/#oil-gas", label: "نفت و پتروشیمی" },
-  { href: "/#mining", label: "معدن و فلزات" },
-  { href: "/#agriculture", label: "کشاورزی و مواد غذایی" },
-  { href: "/#retail", label: "کالاهای مصرفی" },
-  { href: "/#transit", label: "ترانزیت و کریدورها" },
-  { href: "/#commodities", label: "اکوسیستم کالاها" },
-  { href: "/#scenarios", label: "سناریوهای عملیاتی" },
-  { href: "/#differentiation", label: "تمایز راهبردی" },
-  { href: "/#corridors", label: "شبکه کریدورها" },
-  { href: "/#why-iran", label: "جایگاه راهبردی ایران" },
-  { href: "/#ecosystem", label: "ارزش‌آفرینی اکوسیستم" },
-  { href: "/#interaction-model", label: "مدل تعامل اکوسیستم" },
-  { href: "/#flywheel", label: "چرخه رشد پلتفرم" },
-  { href: "/#documents", label: "اسناد و انطباق" },
-  { href: "/#marketplace", label: "بازار حمل و ظرفیت" },
-  { href: "/#settlement", label: "تسویه و کنترل اختلاف" },
-  { href: "/#control-tower", label: "برج کنترل دیجیتال" },
-  { href: "/#data-flow", label: "جریان داده پلتفرم" },
+  { href: "/#control-tower", label: "برج کنترل" },
+  { href: "/#data-flow", label: "جریان داده" },
   { href: "/#operating-system", label: "سیستم عامل لجستیک" },
-  { href: "/#economics-model", label: "اقتصاد پلتفرم" },
-  { href: "/#future", label: "نسل آینده زیرساخت" },
-  { href: "/#enterprise-readiness", label: "آمادگی سازمانی" },
 ];
 
-const COMPANY_LINKS: { href: string; label: string }[] = [
-  { href: "/#start", label: "شروع همکاری راهبردی" },
-  { href: "/login", label: "ورود به پلتفرم" },
+const FOOTER_SERVICES: { href: string; label: string }[] = [
+  { href: "/#marketplace", label: "خدمات حمل چندوجهی" },
+  { href: "/#commodities", label: "اکوسیستم کالاها" },
+  { href: "/#documents", label: "اسناد و تطبیق گمرکی" },
+  { href: "/#settlement", label: "تسویه و کنترل اختلاف" },
+  { href: "/#corridors", label: "شبکه کریدورها" },
+  { href: "/#transit", label: "ترانزیت بین‌المللی" },
+];
+
+const FOOTER_RESOURCES: { href: string; label: string }[] = [
+  { href: "/#scenarios", label: "سناریوهای عملیاتی" },
+  { href: "/#industries", label: "راهکارهای صنعتی" },
+  { href: "/#market-structure", label: "ساختار بازار" },
+  { href: "/#ecosystem", label: "ارزش‌آفرینی اکوسیستم" },
+  { href: "/#differentiation", label: "تمایز راهبردی" },
+  { href: "/#why-iran", label: "جایگاه راهبردی ایران" },
+];
+
+const FOOTER_COMPANY: { href: string; label: string }[] = [
   { href: "/#enterprise-readiness", label: "درباره ما" },
+  { href: "/#future", label: "نسل آینده زیرساخت" },
+  { href: "/#economics-model", label: "اقتصاد پلتفرم" },
+  { href: "/#start", label: "درخواست جلسه معرفی" },
+  { href: "/login", label: "ورود به پلتفرم" },
 ];
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      {/* ===================== CC-68 Announcement strip ===================== */}
+      <div className="ikia-announcement">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-2 text-center text-[11px] leading-5 sm:flex-row sm:px-6 sm:text-right">
+          <span className="text-night-text">
+            زیرساخت دیجیتال لجستیک، حمل، اسناد و زنجیره تأمین برای بازار ایران و
+            کریدورهای منطقه‌ای
+          </span>
+          <Link
+            href="/#platform"
+            className="inline-flex items-center gap-1 font-semibold text-sky-300 transition-colors hover:text-sky-200"
+          >
+            مشاهده توانمندی‌ها
+            <span aria-hidden>←</span>
+          </Link>
+        </div>
+      </div>
+
       {/* ===================== Header ===================== */}
       <header className="sticky top-0 z-30 border-b border-border-soft bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
         <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:px-6">
@@ -175,86 +191,103 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       {/* ===================== Main ===================== */}
       <main className="flex-1">{children}</main>
 
-      {/* ===================== Footer ===================== */}
+      {/* ===================== CC-68 Footer ===================== */}
       <footer
         className="border-t border-white/10"
-        style={{
-          background:
-            "linear-gradient(180deg, var(--color-deep-navy) 0%, oklch(0.15 0.04 250) 100%)",
-        }}
+        style={{ backgroundColor: "var(--color-ikia-midnight)" }}
       >
-        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Identity column. */}
-            <div className="space-y-4 lg:col-span-1">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:py-16">
+          {/* Brand row — logo + short description on top, decoupled
+              from the link columns for a cleaner Flexport-style top. */}
+          <div className="grid gap-8 lg:grid-cols-[1.2fr_2fr] lg:items-start lg:gap-16">
+            <div className="space-y-4 text-right">
               <IkiaLogo variant="footer" />
-              <p className="text-xs leading-7 text-night-text-muted">
-                {siteConfig.taglineFa}. iKIA Logistics پلتفرم یکپارچه‌ای برای
-                صاحبان کالا، شرکت‌های حمل‌ونقل و رانندگان است — قابل اعتماد،
-                شفاف، و آماده اتصال سازمانی.
+              <p className="max-w-md text-sm leading-7 text-night-text-muted">
+                iKIA Logistics زیرساخت دیجیتال لجستیک، اسناد، بازار حمل و
+                کنترل عملیات برای صنایع راهبردی، کریدورهای ترانزیتی و
+                اکوسیستم تجارت منطقه‌ای ایران است.
               </p>
             </div>
 
-            {/* Platform links. */}
-            <div className="space-y-3">
-              <div className="text-xs font-bold uppercase tracking-[0.18em] text-night-text">
-                پلتفرم
+            {/* 4-column link grid. Stacks 2-col on tablet, 4-col on lg+. */}
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="space-y-3 text-right">
+                <div className="ikia-footer-heading">پلتفرم</div>
+                <ul className="space-y-1.5 text-sm text-night-text-muted">
+                  {FOOTER_PLATFORM.map((l) => (
+                    <li key={l.href}>
+                      <Link
+                        href={l.href}
+                        className="transition-colors hover:text-night-text"
+                      >
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-1.5 text-sm text-night-text-muted">
-                {PLATFORM_LINKS.map((l) => (
-                  <li key={l.href}>
-                    <Link href={l.href} className="hover:text-night-text">
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
 
-            {/* Services links. */}
-            <div className="space-y-3">
-              <div className="text-xs font-bold uppercase tracking-[0.18em] text-night-text">
-                خدمات حمل‌ونقل
+              <div className="space-y-3 text-right">
+                <div className="ikia-footer-heading">خدمات</div>
+                <ul className="space-y-1.5 text-sm text-night-text-muted">
+                  {FOOTER_SERVICES.map((l) => (
+                    <li key={l.href}>
+                      <Link
+                        href={l.href}
+                        className="transition-colors hover:text-night-text"
+                      >
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-1.5 text-sm text-night-text-muted">
-                <li>حمل جاده‌ای</li>
-                <li>حمل دریایی</li>
-                <li>حمل ریلی</li>
-                <li>حمل هوایی</li>
-                <li>خدمات انبارداری</li>
-                <li>ترخیص و انطباق گمرکی</li>
-              </ul>
-            </div>
 
-            {/* Company / Connect links. */}
-            <div className="space-y-3">
-              <div className="text-xs font-bold uppercase tracking-[0.18em] text-night-text">
-                شرکت و همکاری
+              <div className="space-y-3 text-right">
+                <div className="ikia-footer-heading">منابع</div>
+                <ul className="space-y-1.5 text-sm text-night-text-muted">
+                  {FOOTER_RESOURCES.map((l) => (
+                    <li key={l.href}>
+                      <Link
+                        href={l.href}
+                        className="transition-colors hover:text-night-text"
+                      >
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-1.5 text-sm text-night-text-muted">
-                {COMPANY_LINKS.map((l) => (
-                  <li key={l.href}>
-                    <Link href={l.href} className="hover:text-night-text">
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <div className="pt-3">
-                <span className="inline-flex items-center gap-2 rounded-full border border-amber-300/30 bg-amber-400/10 px-3 py-1 text-[10px] font-medium text-amber-200">
-                  API سازمانی — در نقشه راه
-                </span>
+
+              <div className="space-y-3 text-right">
+                <div className="ikia-footer-heading">شرکت</div>
+                <ul className="space-y-1.5 text-sm text-night-text-muted">
+                  {FOOTER_COMPANY.map((l) => (
+                    <li key={l.href}>
+                      <Link
+                        href={l.href}
+                        className="transition-colors hover:text-night-text"
+                      >
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
 
-          {/* Bottom bar. */}
+          {/* Bottom legal row. */}
           <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-6 text-xs text-night-text-muted sm:flex-row sm:items-center">
             <span>
               © {new Date().getFullYear()} {siteConfig.nameFa} ·{" "}
               {siteConfig.nameEn}
             </span>
-            <span>سامانه عملیات لجستیک ایران</span>
+            <span className="flex items-center gap-4">
+              <span>سامانه عملیات لجستیک ایران</span>
+              <span aria-hidden className="opacity-40">·</span>
+              <span dir="ltr">FA</span>
+            </span>
           </div>
         </div>
       </footer>

@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { MarketingImageFill } from "@/components/marketing/marketing-image-fill";
 import { MarketingScreenshot } from "@/components/marketing/marketing-screenshot";
 import { PremiumSectionHeader } from "@/components/marketing/premium-section-header";
@@ -122,13 +121,40 @@ const STAKEHOLDERS: {
   },
 ];
 
-const PLATFORM_MODULES: TextItem[] = [
-  { title: "بازار بار و ظرفیت", description: "تطبیق ساختارمند ظرفیت حمل‌کنندگان با تقاضای بار، در یک بازار شفاف و قابل پیگیری." },
-  { title: "مدیریت اعزام", description: "تخصیص خودرو و راننده، اعلام آمادگی، آزادسازی محموله و چرخه اعزام در یک نما." },
-  { title: "ردیابی زنده و کنترل‌تاور", description: "موقعیت، نقاط عطف، توقف‌ها و خط زمانی سفر — به همراه شاخص‌های زنده عملیات." },
-  { title: "مدیریت اسناد", description: "نگه‌داری اسناد گمرکی، بیمه، بارنامه و قرارداد اجراشده با حافظه ممیزی." },
-  { title: "تسویه و گزارش مالی", description: "صدور فاکتور، حساب امانی، آزادسازی مرحله‌ای و گزارش‌های قابل ممیزی." },
-  { title: "گزارش‌ها و تحلیل‌ها", description: "تحلیل عملکرد ناوگان، مسیرها، استثناها و چرخه مالی برای تصمیم‌سازی." },
+// CC-68 — Platform modules realigned to the 6 product capabilities
+// expected by the rebuilt #platform section. Each carries an English
+// code chip used in the new product-card layout.
+const PLATFORM_MODULES: { en: string; title: string; description: string }[] = [
+  {
+    en: "Control Tower",
+    title: "کنترل‌تاور",
+    description: "دید لحظه‌ای بر محموله، اعزام، نشست تله‌متری و استثنا — روی یک منبع داده مشترک.",
+  },
+  {
+    en: "Freight Marketplace",
+    title: "بازار حمل",
+    description: "تطبیق ساختارمند ظرفیت حمل‌کنندگان با تقاضای بار، در پنج شیوه حمل و در یک بازار شفاف.",
+  },
+  {
+    en: "Documents & Compliance",
+    title: "اسناد و تطبیق",
+    description: "اظهارنامه، بارنامه، بیمه و گواهی‌های انطباق با گردش کار درخواست/تأیید و حافظه ممیزی.",
+  },
+  {
+    en: "Route Intelligence",
+    title: "هوش مسیر",
+    description: "تحلیل کریدورها، مسیرها و رفتار ناوگان برای تصمیم‌سازی عملیاتی و تأخیرشناسی.",
+  },
+  {
+    en: "Settlement",
+    title: "تسویه و صورتحساب",
+    description: "صدور فاکتور، حساب امانی و آزادسازی مرحله‌ای — همراه با گردش کار اختلاف.",
+  },
+  {
+    en: "Partner Portal",
+    title: "پرتال همکاران",
+    description: "پرتال اختصاصی برای حمل‌کنندگان، فورواردرها و رانندگان — با کنترل دسترسی نقش‌محور.",
+  },
 ];
 
 const MARKET_STRUCTURE: TextItem[] = [
@@ -162,6 +188,20 @@ const SHIPMENT_LIFECYCLE: { num: string; en: string; label: string; description:
   { num: "۰۶", en: "In Transit", label: "در حال حمل", description: "محموله در مسیر است و موقعیت آن لحظه‌ای پیگیری می‌شود." },
   { num: "۰۷", en: "Delivered", label: "تحویل‌شده", description: "محموله در مقصد تحویل داده شده و اسناد تحویل ثبت شده‌اند." },
   { num: "۰۸", en: "Closed", label: "بسته‌شده", description: "تسویه نهایی انجام شده و چرخه مالی محموله بسته شده است." },
+];
+
+// CC-68 — Status tone for each lifecycle stage. Index aligns with
+// SHIPMENT_LIFECYCLE. Translucent chips read cleanly on the new
+// .ikia-section-dark navy backdrop.
+const LIFECYCLE_TONES: { dot: string; chip: string }[] = [
+  { dot: "bg-slate-400",   chip: "border-white/15 bg-white/10 text-slate-200" },        // Draft
+  { dot: "bg-sky-400",     chip: "border-sky-400/30 bg-sky-400/10 text-sky-200" },      // Published
+  { dot: "bg-sky-400",     chip: "border-sky-400/30 bg-sky-400/10 text-sky-200" },      // Matched
+  { dot: "bg-indigo-400",  chip: "border-indigo-400/30 bg-indigo-400/10 text-indigo-200" }, // Booked
+  { dot: "bg-cyan-400",    chip: "border-cyan-400/30 bg-cyan-400/10 text-cyan-200" },   // Dispatched
+  { dot: "bg-amber-400",   chip: "border-amber-400/30 bg-amber-400/10 text-amber-200" },// In Transit
+  { dot: "bg-emerald-400", chip: "border-emerald-400/30 bg-emerald-400/10 text-emerald-200" }, // Delivered
+  { dot: "bg-emerald-500", chip: "border-emerald-500/30 bg-emerald-500/15 text-emerald-100" }, // Closed
 ];
 
 // =============================================================================
@@ -1030,8 +1070,8 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4">
           <PremiumSectionHeader
             eyebrow="پلتفرم iKIA OS"
-            title="شش بخش، یک سیستم عامل لجستیک کامل"
-            intro="هر بخش از iKIA Logistics به‌تنهایی قدرتمند است و در کنار بقیه، یک پلتفرم عملیاتی یکپارچه می‌سازد."
+            title="یک پلتفرم عملیاتی برای کنترل کل زنجیره حمل"
+            intro="شش بخش هسته‌ای — هر یک مستقل و قدرتمند؛ در کنار هم یک سیستم عامل لجستیک ملی برای صنایع، فورواردرها و حمل‌کنندگان."
           />
           <MarketingScreenshot
             src="/marketing/02-global-control-tower-dashboard-clean.png"
@@ -1040,26 +1080,33 @@ export default function HomePage() {
             height={1024}
             className="mt-10"
           />
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* CC-68 — Product card grid (2×3 on desktop). Strong title
+              hierarchy, EN code chip, ↗ explore link in lieu of a button. */}
+          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {PLATFORM_MODULES.map((m, idx) => (
-              <Card
-                key={m.title}
-                className="border-border-soft shadow-card transition-shadow hover:shadow-elevated"
-              >
-                <CardContent className="p-5 space-y-2 text-right">
-                  <div className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-2.5 py-1 text-[10px] font-semibold tracking-[0.15em] text-brand-700">
-                    {String(idx + 1).padStart(2, "0")}
+              <li key={m.en}>
+                <article className="bg-ikia-product-card flex h-full flex-col p-6 text-right transition-shadow hover:shadow-md">
+                  <div className="flex items-center justify-between">
+                    <div className="text-[10px] font-bold tracking-[0.22em] text-sky-700">
+                      ماژول {String(idx + 1).padStart(2, "0")}
+                    </div>
+                    <span
+                      dir="ltr"
+                      className="rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-sky-700"
+                    >
+                      {m.en}
+                    </span>
                   </div>
-                  <div className="text-base font-bold tracking-tight text-deep-navy">
+                  <h3 className="mt-3 text-lg font-extrabold tracking-tight text-deep-navy">
                     {m.title}
-                  </div>
-                  <p className="text-sm leading-7 text-muted-foreground">
+                  </h3>
+                  <p className="mt-2 text-sm leading-7 text-slate-600">
                     {m.description}
                   </p>
-                </CardContent>
-              </Card>
+                </article>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
@@ -1140,39 +1187,248 @@ export default function HomePage() {
           7. CC-63 SECTION B — SHIPMENT LIFECYCLE (#shipment-lifecycle)
           8 states with inline ↓ arrows.
           ===================================================================== */}
-      <section id="shipment-lifecycle" className="py-20 sm:py-28 scroll-mt-16">
+      {/* CC-68 — Full-bleed dark navy product section. Left column
+          (RTL inline-end) hosts a logistics-software dashboard mock:
+          timeline rail · status cards · corridor row · doc compliance
+          row · metric chips. Right column carries narrative + CTAs. */}
+      <section
+        id="shipment-lifecycle"
+        className="ikia-section-dark py-20 sm:py-28 scroll-mt-16"
+      >
         <div className="mx-auto max-w-7xl px-4">
-          <PremiumSectionHeader
-            eyebrow="چرخه عمر محموله"
-            title="چرخه عمر یک محموله"
-            intro="هر محموله در iKIA Logistics مسیر مشخصی را طی می‌کند — از پیش‌نویس تا تسویه نهایی، با وضعیت روشن در هر مرحله و حافظه ممیزی کامل."
-          />
-          <ol className="mt-10 mx-auto max-w-2xl space-y-3">
-            {SHIPMENT_LIFECYCLE.map((state, idx) => (
-              <li key={state.num}>
-                <div className="rounded-2xl border border-border-soft bg-card p-5 text-right shadow-card transition-shadow hover:shadow-elevated">
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start lg:gap-16">
+            {/* Right column — narrative + CTA. */}
+            <div className="space-y-5 text-right">
+              <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-400/10 px-3 py-1 text-[11px] font-semibold tracking-[0.22em] text-sky-200">
+                <span aria-hidden className="inline-block size-1.5 rounded-full bg-sky-400" />
+                Shipment Lifecycle
+              </div>
+              <h2 className="text-3xl font-extrabold leading-snug tracking-tight text-night-text sm:text-4xl lg:text-[44px]">
+                هر محموله، یک خط حرکت روشن از پیش‌نویس تا تسویه
+              </h2>
+              <p className="max-w-xl text-base leading-8 text-night-text-muted sm:text-lg sm:leading-9">
+                هر محموله در iKIA Logistics از طریق هشت وضعیت قابل پیگیری
+                مدیریت می‌شود — روی یک منبع داده مشترک، با گردش کار شفاف برای
+                واحدهای عملیات، انطباق و مالی.
+              </p>
+
+              {/* Operational phase summary chips on dark. */}
+              <ul className="grid gap-2 pt-1 sm:grid-cols-2">
+                {[
+                  { fa: "سفارش حمل", en: "Order" },
+                  { fa: "تخصیص ناوگان", en: "Fleet assignment" },
+                  { fa: "بارگیری", en: "Loading" },
+                  { fa: "عبور از کریدور", en: "Corridor transit" },
+                  { fa: "تحویل و تسویه", en: "Delivery & settlement" },
+                ].map((phase) => (
+                  <li
+                    key={phase.en}
+                    className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 backdrop-blur-sm"
+                  >
+                    <span className="text-sm font-semibold text-night-text">
+                      {phase.fa}
+                    </span>
+                    <span dir="ltr" className="font-mono text-[10px] text-sky-300/80">
+                      {phase.en}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-gradient-to-l from-emerald-600 via-green-500 to-lime-400 text-white shadow-lg shadow-emerald-950/30 hover:from-emerald-700 hover:via-green-600 hover:to-lime-500"
+                >
+                  <Link href="/login">شروع همکاری</Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="border-white/30 bg-white/5 text-night-text backdrop-blur hover:border-sky-300 hover:bg-white/10 hover:text-night-text"
+                >
+                  <Link href="#how-it-works">پلتفرم چگونه کار می‌کند</Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Left column — product dashboard mockup. */}
+            <div className="ikia-product-card-dark relative">
+              {/* Top dashboard chrome bar: app name + window dots + status. */}
+              <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
+                <div className="flex items-center gap-2">
+                  <span aria-hidden className="size-2 rounded-full bg-red-400/70" />
+                  <span aria-hidden className="size-2 rounded-full bg-amber-400/70" />
+                  <span aria-hidden className="size-2 rounded-full bg-emerald-400/70" />
+                  <span
+                    dir="ltr"
+                    className="ms-3 font-mono text-[11px] text-sky-300/80"
+                  >
+                    iKIA OS · Shipment SH-2026-08471
+                  </span>
+                </div>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-200">
+                  <span aria-hidden className="size-1.5 rounded-full bg-emerald-400" />
+                  Live
+                </span>
+              </div>
+
+              {/* Mock product body. */}
+              <div className="space-y-5 p-5 sm:p-6">
+                {/* Header bar: shipment timeline title + count chip. */}
+                <div className="flex items-center justify-between gap-3">
+                  <div
+                    dir="ltr"
+                    className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-night-text-muted"
+                  >
+                    Shipment Timeline · ۸ مرحله
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-400/30 bg-sky-400/10 px-2 py-0.5 text-[10px] font-semibold text-sky-200">
+                    در حال حمل
+                  </span>
+                </div>
+
+                {/* Vertical timeline rail with the 8 states. */}
+                <ol className="relative space-y-2.5">
+                  {SHIPMENT_LIFECYCLE.map((state, idx) => {
+                    const tone =
+                      LIFECYCLE_TONES[idx] ?? LIFECYCLE_TONES[0]!;
+                    const isLast = idx === SHIPMENT_LIFECYCLE.length - 1;
+                    // Mark the current shipment as currently at "In Transit" (idx 5).
+                    const isCurrent = idx === 5;
+                    return (
+                      <li key={state.num} className="relative ps-9">
+                        {!isLast ? (
+                          <span
+                            aria-hidden
+                            className="absolute start-[10px] top-5 h-[calc(100%+0.25rem)] w-px bg-white/10"
+                          />
+                        ) : null}
+                        <span
+                          aria-hidden
+                          className={`absolute start-1.5 top-[14px] size-3 rounded-full ring-4 ring-[#0E2640] ${tone.dot}`}
+                        />
+                        <div
+                          className={`rounded-xl border p-3 text-right transition-colors ${
+                            isCurrent
+                              ? "border-sky-400/40 bg-sky-400/[0.06]"
+                              : "border-white/10 bg-white/[0.03]"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="text-[10px] font-bold tracking-[0.2em] text-night-text-muted">
+                              مرحله {state.num}
+                            </div>
+                            <span
+                              dir="ltr"
+                              className={`ikia-status-pill ${tone.chip}`}
+                            >
+                              {state.en}
+                            </span>
+                          </div>
+                          <div className="mt-1.5 text-sm font-bold text-night-text">
+                            {state.label}
+                          </div>
+                          <p className="mt-0.5 text-[11px] leading-6 text-night-text-muted">
+                            {state.description}
+                          </p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ol>
+
+                {/* Route / corridor row. */}
+                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
                   <div className="flex items-center justify-between gap-3">
-                    <div className="text-[10px] font-bold tracking-[0.18em] text-brand-700">
-                      وضعیت {state.num}
-                    </div>
-                    <span
+                    <div
                       dir="ltr"
-                      className="rounded-full bg-deep-navy/5 px-2.5 py-0.5 font-mono text-[10px] text-deep-navy"
+                      className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-night-text-muted"
                     >
-                      {state.en}
+                      Route · Corridor
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-200">
+                      شمال–جنوب
                     </span>
                   </div>
-                  <h3 className="mt-2 text-base font-bold tracking-tight text-deep-navy">
-                    {state.label}
-                  </h3>
-                  <p className="mt-1 text-xs leading-6 text-muted-foreground">
-                    {state.description}
-                  </p>
+                  <div className="mt-3 flex items-center justify-between gap-2 text-sm text-night-text">
+                    <span className="font-bold">تهران</span>
+                    <span
+                      aria-hidden
+                      className="flex-1 mx-3 h-px bg-gradient-to-l from-cyan-400/0 via-cyan-400/60 to-cyan-400/0"
+                    />
+                    <span aria-hidden className="text-sky-300">●</span>
+                    <span
+                      aria-hidden
+                      className="flex-1 mx-3 h-px bg-gradient-to-l from-cyan-400/0 via-cyan-400/30 to-cyan-400/0"
+                    />
+                    <span className="font-bold">بندرعباس</span>
+                  </div>
+                  <div className="mt-2 flex items-center justify-between text-[11px] text-night-text-muted">
+                    <span>۱٬۳۱۰ کیلومتر</span>
+                    <span>ETA · ۲ روز ۴ ساعت</span>
+                  </div>
                 </div>
-                {idx < SHIPMENT_LIFECYCLE.length - 1 ? <FlowArrow /> : null}
-              </li>
-            ))}
-          </ol>
+
+                {/* Document compliance row. */}
+                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <div
+                      dir="ltr"
+                      className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-night-text-muted"
+                    >
+                      Documents · Compliance
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-200">
+                      ۴ از ۴ تأیید
+                    </span>
+                  </div>
+                  <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                    {[
+                      { fa: "اظهارنامه", en: "Customs" },
+                      { fa: "بارنامه", en: "BoL" },
+                      { fa: "بیمه", en: "Insurance" },
+                      { fa: "گواهی مبدأ", en: "Origin" },
+                    ].map((doc) => (
+                      <li
+                        key={doc.en}
+                        className="flex flex-col items-center rounded-lg border border-emerald-400/20 bg-emerald-400/[0.06] p-2 text-center"
+                      >
+                        <span className="text-[11px] font-semibold text-night-text">
+                          {doc.fa}
+                        </span>
+                        <span
+                          dir="ltr"
+                          className="font-mono text-[9px] text-emerald-200"
+                        >
+                          ✓ {doc.en}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Metric chip strip. */}
+                <ul className="grid grid-cols-3 gap-2">
+                  {[
+                    { fa: "میانگین زمان تحویل", value: "۲٫۴ روز", tone: "text-emerald-200" },
+                    { fa: "نرخ تطبیق ظرفیت", value: "٪۹۴", tone: "text-sky-200" },
+                    { fa: "تأخیر فعال", value: "۰ مورد", tone: "text-amber-200" },
+                  ].map((m) => (
+                    <li
+                      key={m.fa}
+                      className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-center"
+                    >
+                      <div className={`text-base font-extrabold ${m.tone}`}>{m.value}</div>
+                      <div className="mt-0.5 text-[10px] text-night-text-muted">{m.fa}</div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -2245,55 +2501,67 @@ export default function HomePage() {
           ===================================================================== */}
       <section id="start" className="py-20 sm:py-28 scroll-mt-16">
         <div className="mx-auto max-w-7xl px-4">
+          {/* CC-67 — Final conversion banner. Layered navy product
+              background (.bg-ikia-cta-banner) instead of the previous
+              muddy photo overlay. Green primary + red secondary mirror
+              the new hero CTA palette for visual consistency. */}
           <div
-            className="relative overflow-hidden rounded-3xl border border-border-soft"
-            style={{ boxShadow: "var(--shadow-elevated)" }}
+            className="relative overflow-hidden rounded-[1.5rem] border border-white/10 shadow-2xl shadow-slate-950/30 bg-ikia-cta-banner"
           >
-            <div className="relative aspect-[4/5] w-full sm:aspect-[16/9] lg:aspect-[16/7]">
-              <MarketingImageFill
-                src="/marketing/01-hero-multimodal-transport-clean.png"
-                alt="نمای چندوجهی پایانی iKIA — جاده، دریا، ریل و هوا"
-                sizes="(max-width: 1024px) 100vw, 1200px"
-              />
-              <div
-                aria-hidden
-                className="absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(90deg, oklch(0.18 0.04 250 / 0.88) 0%, oklch(0.18 0.04 250 / 0.55) 65%, transparent 100%)",
-                }}
-              />
-              <div className="absolute inset-0 flex items-center">
-                <div className="mx-auto w-full max-w-7xl px-6 sm:px-10">
-                  <div className="max-w-3xl space-y-4 text-right text-night-text">
-                    <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-[0.15em] text-night-text backdrop-blur-md">
-                      گفت‌وگوی راهبردی
-                    </div>
-                    <h2 className="text-2xl font-bold leading-snug tracking-tight sm:text-3xl lg:text-4xl">
-                      زیرساخت دیجیتال برای نسل جدید لجستیک
-                    </h2>
-                    <p className="text-sm leading-7 text-night-text-muted sm:text-base sm:leading-8">
-                      iKIA Logistics برای صنایع راهبردی، کریدورهای ترانزیتی و
-                      اکوسیستم کالاهای ملی طراحی شده است. وارد گفت‌وگوی همکاری
-                      شوید و عملیات سازمانی خود را در یک پلتفرم واحد یکپارچه
-                      کنید.
-                    </p>
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      <Button asChild size="lg" className="w-full sm:w-auto">
-                        <Link href="/login">درخواست جلسه معرفی</Link>
-                      </Button>
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="lg"
-                        className="w-full border-white/30 bg-transparent text-night-text hover:bg-white/10 hover:text-night-text sm:w-auto"
-                      >
-                        <Link href="/login">شروع همکاری راهبردی</Link>
-                      </Button>
-                    </div>
-                  </div>
+            <div className="relative grid gap-8 px-6 py-12 sm:px-10 sm:py-16 lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-12 lg:px-14 lg:py-20">
+              <div className="space-y-5 text-right text-night-text">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-semibold tracking-[0.2em] text-night-text backdrop-blur-md">
+                  <span aria-hidden className="inline-block size-1.5 rounded-full bg-emerald-400" />
+                  گفت‌وگوی راهبردی
+                </div>
+                <h2 className="text-2xl font-extrabold leading-snug tracking-tight sm:text-3xl lg:text-4xl">
+                  زنجیره حمل خود را روی یک پلتفرم واحد ببینید و کنترل کنید
+                </h2>
+                <p className="max-w-2xl text-sm leading-7 text-night-text-muted sm:text-base sm:leading-8">
+                  بازار حمل، اجرای عملیات، رؤیت لحظه‌ای، اسناد گمرکی و تسویه —
+                  در یک پلتفرم یکپارچه برای صنایع راهبردی، کریدورهای ترانزیتی و
+                  اکوسیستم کالاهای ملی.
+                </p>
+                <div className="flex flex-wrap gap-3 pt-2">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="w-full bg-gradient-to-l from-emerald-600 via-green-500 to-lime-400 text-white shadow-lg shadow-emerald-950/30 hover:from-emerald-700 hover:via-green-600 hover:to-lime-500 sm:w-auto"
+                  >
+                    <Link href="/login">درخواست جلسه معرفی</Link>
+                  </Button>
+                  <Button
+                    asChild
+                    size="lg"
+                    className="w-full border border-red-300/60 bg-gradient-to-l from-red-700 via-rose-600 to-orange-500 text-white shadow-lg shadow-red-950/25 hover:from-red-800 hover:via-rose-700 hover:to-orange-600 sm:w-auto"
+                  >
+                    <Link href="/login">شروع همکاری راهبردی</Link>
+                  </Button>
                 </div>
               </div>
+              {/* Right column (RTL inline-end) — compact product-stat
+                  badges. No screenshots, no widgets — just three crisp
+                  capability anchors. */}
+              <ul className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                {[
+                  { fa: "بازار حمل چندوجهی", en: "Multimodal marketplace" },
+                  { fa: "برج کنترل و رؤیت", en: "Control tower" },
+                  { fa: "اسناد و تسویه دیجیتال", en: "Docs & settlement" },
+                ].map((cap) => (
+                  <li
+                    key={cap.en}
+                    className="rounded-xl border border-white/10 bg-white/[0.06] p-3 text-right text-night-text backdrop-blur-sm"
+                  >
+                    <div className="text-sm font-bold">{cap.fa}</div>
+                    <div
+                      dir="ltr"
+                      className="mt-0.5 font-mono text-[10px] text-night-text-muted"
+                    >
+                      {cap.en}
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

@@ -61,3 +61,33 @@
     0 24px 60px -16px rgb(15 23 42 / 0.40),
     0 8px 24px -8px rgb(15 23 42 / 0.25);
 }
+
+/* CC-68 — Flexport-benchmark IKIA palette. Additive — does not replace
+   existing tokens. Used by new utilities .ikia-section-dark,
+   .ikia-product-card-dark, and the rebuilt navy footer/lifecycle. */
+@theme {
+  /* Navy stack. */
+  --color-ikia-midnight: #0A1B2E;
+  --color-ikia-navy: #0E2640;
+  --color-ikia-navy-mid: #103A5E;
+
+  /* Brand blues. */
+  --color-ikia-blue: #0B6FB5;
+  --color-ikia-blue-bright: #1F9CE0;
+  --color-ikia-cerulean: #0093BF;
+
+  /* Functional accents. */
+  --color-ikia-green: #15C26B;
+  --color-ikia-orange: #F5A623;
+
+  /* Soft surfaces. */
+  --color-ikia-soft: #F5F8FB;
+  --color-ikia-soft-2: #EEF3F8;
+  --color-ikia-border: #D6E0EA;
+
+  /* Text. */
+  --color-ikia-text: #0A1B2E;
+  --color-ikia-text-muted: #51637A;
+  --color-ikia-text-on-dark: #E8F0F8;
+  --color-ikia-text-on-dark-muted: #9FB4C9;
+}

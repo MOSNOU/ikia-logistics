@@ -52,11 +52,13 @@ interface TextItem {
 // The fullscreen cinematic hero no longer renders the highlight chips or
 // coverage chip strip, so the data arrays are dead.
 
+// CC-Phase3 — Trust strip realigned to the design guide §13 operational
+// metrics: 24/7 visibility · 4 modes · 8 lifecycle states · 1 OS.
 const TRUST_METRICS: { label: string; value: string; hint: string }[] = [
-  { label: "حمل چندوجهی", value: "۴", hint: "جاده‌ای، دریایی، ریلی، هوایی" },
-  { label: "سطح کریدور", value: "۳", hint: "داخلی، بین‌المللی، ترانزیت" },
-  { label: "نقش‌های عملیاتی", value: "۴", hint: "خریدار، حمل‌کننده، راننده، ادمین" },
-  { label: "حافظه ممیزی", value: "۱۰۰٪", hint: "هر تغییر وضعیت و تراکنش" },
+  { label: "رؤیت لحظه‌ای", value: "۲۴/۷", hint: "نمای زنده محموله، اسناد و وضعیت عملیات" },
+  { label: "شیوه حمل متصل", value: "۴", hint: "جاده‌ای، دریایی، ریلی و هوایی" },
+  { label: "وضعیت چرخه عمر", value: "۸", hint: "از پیش‌نویس تا تسویه" },
+  { label: "سیستم عامل لجستیک", value: "۱", hint: "بازار، اجرا، اسناد و تسویه یکپارچه" },
 ];
 
 const STAKEHOLDERS: {
@@ -914,6 +916,10 @@ export default function HomePage() {
                 می‌کند. حافظه ممیزی کامل، کنترل دسترسی نقش‌محور و میزبانی روی
                 زیرساخت داخلی، تضمین امنیت، انطباق و شفافیت عملیاتی روزانه است.
               </p>
+              <p className="text-sm font-semibold leading-7 text-deep-navy/80">
+                طراحی‌شده برای شرکت‌های صنعتی، بازرگانی، حمل‌ونقل و فعالان
+                کریدورهای منطقه‌ای.
+              </p>
             </div>
             <ul className="grid gap-3 sm:grid-cols-2">
               {TRUST_METRICS.map((m) => (
@@ -992,32 +998,51 @@ export default function HomePage() {
             height={1024}
             className="mt-10"
           />
-          {/* CC-68 — Product card grid (2×3 on desktop). Strong title
-              hierarchy, EN code chip, ↗ explore link in lieu of a button. */}
+          {/* CC-Phase3 — Each platform module card now ends with a
+              «مشاهده ←» text link routing to the most relevant existing
+              section anchor, and lifts on hover via .ikia-hover-lift. */}
           <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {PLATFORM_MODULES.map((m, idx) => (
-              <li key={m.en}>
-                <article className="bg-ikia-product-card flex h-full flex-col p-6 text-right transition-shadow hover:shadow-md">
-                  <div className="flex items-center justify-between">
-                    <div className="text-[10px] font-bold tracking-[0.22em] text-sky-700">
-                      ماژول {String(idx + 1).padStart(2, "0")}
+            {PLATFORM_MODULES.map((m, idx) => {
+              const moduleHref: Record<string, string> = {
+                "Control Tower": "#control-tower",
+                "Freight Marketplace": "#marketplace",
+                "Documents & Compliance": "#documents",
+                "Route Intelligence": "#corridors",
+                "Settlement": "#settlement",
+                "Partner Portal": "#solutions",
+              };
+              const href = moduleHref[m.en] ?? "#platform";
+              return (
+                <li key={m.en}>
+                  <article className="bg-ikia-product-card ikia-hover-lift flex h-full flex-col p-6 text-right">
+                    <div className="flex items-center justify-between">
+                      <div className="text-[10px] font-bold tracking-[0.22em] text-sky-700">
+                        ماژول {String(idx + 1).padStart(2, "0")}
+                      </div>
+                      <span
+                        dir="ltr"
+                        className="rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-sky-700"
+                      >
+                        {m.en}
+                      </span>
                     </div>
-                    <span
-                      dir="ltr"
-                      className="rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-sky-700"
+                    <h3 className="mt-3 text-lg font-extrabold tracking-tight text-deep-navy">
+                      {m.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-7 text-slate-600">
+                      {m.description}
+                    </p>
+                    <Link
+                      href={href}
+                      className="mt-4 inline-flex items-center gap-1 text-[12px] font-semibold text-sky-700 transition-colors hover:text-sky-900"
                     >
-                      {m.en}
-                    </span>
-                  </div>
-                  <h3 className="mt-3 text-lg font-extrabold tracking-tight text-deep-navy">
-                    {m.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-7 text-slate-600">
-                    {m.description}
-                  </p>
-                </article>
-              </li>
-            ))}
+                      مشاهده
+                      <span aria-hidden>←</span>
+                    </Link>
+                  </article>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </section>
@@ -1251,18 +1276,141 @@ export default function HomePage() {
             title="شبکه کریدورهای راهبردی متصل به ایران"
             intro="iKIA Logistics لایه عملیاتی دیجیتال برای کریدورهای ترانزیتی متصل به ایران است — اتصال شرق به غرب و شمال به جنوب با حمل چندوجهی و گردش کار گمرکی منسجم."
           />
-          <MarketingScreenshot
-            src="/marketing/15-east-west-north-south-iran-corridors.png"
-            alt="شبکه کریدورهای راهبردی متصل به ایران — شرق-غرب و شمال-جنوب"
-            width={1535}
-            height={1024}
-            className="mt-10"
-          />
+
+          {/* CC-Phase3 — Stylized inline-SVG regional corridor network.
+              No image, no library; pure SVG + Tailwind. ایران sits at
+              the centre with 4 regional nodes (ترکیه · قفقاز ·
+              آسیای میانه · خلیج فارس) and route lines. */}
+          <div className="mt-10 bg-ikia-product-card p-6 sm:p-8">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div
+                dir="ltr"
+                className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-sky-700"
+              >
+                Regional Corridor Network
+              </div>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 text-[10px] font-bold text-sky-700">
+                <span aria-hidden className="size-1.5 rounded-full bg-sky-500" />
+                ۵ گره منطقه‌ای
+              </span>
+            </div>
+            <svg
+              viewBox="0 0 600 320"
+              role="img"
+              aria-label="نقشه شماتیک کریدورهای منطقه‌ای متصل به ایران"
+              className="block h-auto w-full"
+            >
+              {/* Decorative grid. */}
+              <defs>
+                <pattern id="ikia-corridor-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M40 0H0V40" fill="none" stroke="rgba(15, 23, 42, 0.05)" strokeWidth="1" />
+                </pattern>
+                <radialGradient id="ikia-corridor-iran-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#1F9CE0" stopOpacity="0.45" />
+                  <stop offset="100%" stopColor="#1F9CE0" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+              <rect x="0" y="0" width="600" height="320" fill="url(#ikia-corridor-grid)" />
+
+              {/* Iran glow halo. */}
+              <circle cx="300" cy="180" r="90" fill="url(#ikia-corridor-iran-glow)" />
+
+              {/* Route lines — Iran ↔ each regional node.
+                  Solid for active corridors, dashed for emerging. */}
+              <line x1="300" y1="180" x2="120" y2="90"  stroke="#0B6FB5" strokeWidth="2" strokeLinecap="round" />
+              <line x1="300" y1="180" x2="220" y2="50"  stroke="#0B6FB5" strokeWidth="2" strokeLinecap="round" />
+              <line x1="300" y1="180" x2="500" y2="110" stroke="#0B6FB5" strokeWidth="2" strokeLinecap="round" strokeDasharray="6 4" />
+              <line x1="300" y1="180" x2="380" y2="280" stroke="#0B6FB5" strokeWidth="2" strokeLinecap="round" />
+
+              {/* Cross routes — Turkey ↔ Caucasus, Central Asia ↔ Gulf. */}
+              <path
+                d="M120 90 Q 170 30 220 50"
+                fill="none"
+                stroke="#1F9CE0"
+                strokeWidth="1.5"
+                strokeDasharray="4 4"
+                strokeLinecap="round"
+                opacity="0.65"
+              />
+              <path
+                d="M500 110 Q 470 200 380 280"
+                fill="none"
+                stroke="#1F9CE0"
+                strokeWidth="1.5"
+                strokeDasharray="4 4"
+                strokeLinecap="round"
+                opacity="0.55"
+              />
+
+              {/* Nodes — outer ring + inner dot. */}
+              {/* Iran (central, larger). */}
+              <circle cx="300" cy="180" r="38" fill="#0B6FB5" />
+              <circle cx="300" cy="180" r="38" fill="none" stroke="#1F9CE0" strokeWidth="3" strokeOpacity="0.5" />
+              <text x="300" y="178" textAnchor="middle" fill="#FFFFFF" fontSize="18" fontWeight="800">ایران</text>
+              <text x="300" y="196" textAnchor="middle" fill="#E8F0F8" fontSize="9" fontFamily="monospace" letterSpacing="2">HUB</text>
+
+              {/* Turkey (west). */}
+              <circle cx="120" cy="90" r="22" fill="#FFFFFF" stroke="#0B6FB5" strokeWidth="2" />
+              <text x="120" y="94" textAnchor="middle" fill="#0A1B2E" fontSize="12" fontWeight="700">ترکیه</text>
+
+              {/* Caucasus (north-west). */}
+              <circle cx="220" cy="50" r="22" fill="#FFFFFF" stroke="#0B6FB5" strokeWidth="2" />
+              <text x="220" y="54" textAnchor="middle" fill="#0A1B2E" fontSize="12" fontWeight="700">قفقاز</text>
+
+              {/* Central Asia (east). */}
+              <circle cx="500" cy="110" r="26" fill="#FFFFFF" stroke="#0B6FB5" strokeWidth="2" />
+              <text x="500" y="108" textAnchor="middle" fill="#0A1B2E" fontSize="11" fontWeight="700">آسیای</text>
+              <text x="500" y="122" textAnchor="middle" fill="#0A1B2E" fontSize="11" fontWeight="700">میانه</text>
+
+              {/* Persian Gulf (south). */}
+              <circle cx="380" cy="280" r="26" fill="#FFFFFF" stroke="#0B6FB5" strokeWidth="2" />
+              <text x="380" y="278" textAnchor="middle" fill="#0A1B2E" fontSize="11" fontWeight="700">خلیج</text>
+              <text x="380" y="292" textAnchor="middle" fill="#0A1B2E" fontSize="11" fontWeight="700">فارس</text>
+
+              {/* Direction tag chips along key routes. */}
+              <g transform="translate(165, 130)">
+                <rect x="-30" y="-10" width="60" height="20" rx="10" fill="#0A1B2E" />
+                <text x="0" y="4" textAnchor="middle" fill="#E8F0F8" fontSize="10" fontWeight="700">شمال–غرب</text>
+              </g>
+              <g transform="translate(420, 130)">
+                <rect x="-32" y="-10" width="64" height="20" rx="10" fill="#0A1B2E" />
+                <text x="0" y="4" textAnchor="middle" fill="#E8F0F8" fontSize="10" fontWeight="700">شرق</text>
+              </g>
+              <g transform="translate(340, 230)">
+                <rect x="-30" y="-10" width="60" height="20" rx="10" fill="#0A1B2E" />
+                <text x="0" y="4" textAnchor="middle" fill="#E8F0F8" fontSize="10" fontWeight="700">جنوب</text>
+              </g>
+            </svg>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-[11px] text-slate-600">
+              <span className="inline-flex items-center gap-1.5">
+                <span aria-hidden className="inline-block h-px w-6 bg-[#0B6FB5]" />
+                کریدور فعال
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span
+                  aria-hidden
+                  className="inline-block h-px w-6"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(to right, #0B6FB5 50%, transparent 0%)",
+                    backgroundSize: "6px 1px",
+                    backgroundRepeat: "repeat-x",
+                  }}
+                />
+                مسیر در حال توسعه
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span aria-hidden className="inline-block size-1.5 rounded-full bg-[#1F9CE0]" />
+                گره عملیاتی
+              </span>
+            </div>
+          </div>
+
           <ul className="mt-10 grid gap-4 sm:grid-cols-2">
             {CORRIDORS.map((c, idx) => (
               <li
                 key={c.title}
-                className="rounded-2xl border border-border-soft bg-card p-6 text-right shadow-card transition-shadow hover:shadow-elevated"
+                className="ikia-hover-lift rounded-2xl border border-border-soft bg-card p-6 text-right shadow-card"
               >
                 <div className="flex items-center justify-between gap-3">
                   <div className="text-[10px] font-bold tracking-[0.18em] text-brand-700">
@@ -2274,7 +2422,7 @@ export default function HomePage() {
                     size="lg"
                     className="w-full border border-red-300/60 bg-gradient-to-l from-red-700 via-rose-600 to-orange-500 text-white shadow-lg shadow-red-950/25 hover:from-red-800 hover:via-rose-700 hover:to-orange-600 sm:w-auto"
                   >
-                    <Link href="/login">شروع همکاری راهبردی</Link>
+                    <Link href="/login">شروع همکاری</Link>
                   </Button>
                 </div>
               </div>
@@ -2289,7 +2437,7 @@ export default function HomePage() {
                 ].map((cap) => (
                   <li
                     key={cap.en}
-                    className="rounded-xl border border-white/10 bg-white/[0.06] p-3 text-right text-night-text backdrop-blur-sm"
+                    className="ikia-hover-lift rounded-xl border border-white/10 bg-white/[0.06] p-3 text-right text-night-text backdrop-blur-sm"
                   >
                     <div className="text-sm font-bold">{cap.fa}</div>
                     <div

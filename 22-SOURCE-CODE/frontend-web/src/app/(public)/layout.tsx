@@ -23,42 +23,39 @@ const NAV_ITEMS: { href: string; label: string }[] = [
   { href: "/#enterprise-readiness", label: "درباره ما" },
 ];
 
-// CC-68 — Flexport-benchmark footer IA. Replaces the prior single
-// overflowing platform list. Four columns max — Platform / Services /
-// Resources / Company. Every href still maps to a real homepage anchor.
+// CC-Phase1 — Slim footer columns to ~5 links each per brief §17.
+// Every href still resolves to a real homepage section ID; no routes
+// or anchors changed.
 const FOOTER_PLATFORM: { href: string; label: string }[] = [
-  { href: "/#platform", label: "بخش‌های پلتفرم" },
-  { href: "/#how-it-works", label: "نحوه کار پلتفرم" },
+  { href: "/#platform", label: "پلتفرم" },
+  { href: "/#control-tower", label: "کنترل‌تاور" },
   { href: "/#shipment-lifecycle", label: "چرخه عمر محموله" },
-  { href: "/#control-tower", label: "برج کنترل" },
-  { href: "/#data-flow", label: "جریان داده" },
+  { href: "/#modules", label: "ماژول‌های عملیاتی" },
   { href: "/#operating-system", label: "سیستم عامل لجستیک" },
 ];
 
 const FOOTER_SERVICES: { href: string; label: string }[] = [
   { href: "/#marketplace", label: "خدمات حمل چندوجهی" },
-  { href: "/#commodities", label: "اکوسیستم کالاها" },
-  { href: "/#documents", label: "اسناد و تطبیق گمرکی" },
-  { href: "/#settlement", label: "تسویه و کنترل اختلاف" },
-  { href: "/#corridors", label: "شبکه کریدورها" },
+  { href: "/#documents", label: "گمرک و اسناد" },
+  { href: "/#settlement", label: "تسویه و صورتحساب" },
   { href: "/#transit", label: "ترانزیت بین‌المللی" },
+  { href: "/#corridors", label: "شبکه کریدورها" },
 ];
 
 const FOOTER_RESOURCES: { href: string; label: string }[] = [
-  { href: "/#scenarios", label: "سناریوهای عملیاتی" },
   { href: "/#industries", label: "راهکارهای صنعتی" },
+  { href: "/#commodities", label: "بازار کالاها" },
+  { href: "/#scenarios", label: "سناریوهای عملیاتی" },
   { href: "/#market-structure", label: "ساختار بازار" },
-  { href: "/#ecosystem", label: "ارزش‌آفرینی اکوسیستم" },
-  { href: "/#differentiation", label: "تمایز راهبردی" },
   { href: "/#why-iran", label: "جایگاه راهبردی ایران" },
 ];
 
 const FOOTER_COMPANY: { href: string; label: string }[] = [
   { href: "/#enterprise-readiness", label: "درباره ما" },
-  { href: "/#future", label: "نسل آینده زیرساخت" },
-  { href: "/#economics-model", label: "اقتصاد پلتفرم" },
   { href: "/#start", label: "درخواست جلسه معرفی" },
   { href: "/login", label: "ورود به پلتفرم" },
+  { href: "/#future", label: "نسل آینده زیرساخت" },
+  { href: "/#economics-model", label: "اقتصاد پلتفرم" },
 ];
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {

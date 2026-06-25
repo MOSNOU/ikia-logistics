@@ -91,3 +91,11 @@
   --color-ikia-text-on-dark: #E8F0F8;
   --color-ikia-text-on-dark-muted: #9FB4C9;
 }
+
+/* CC-Phase1 — Complete the brief's §4 palette: the IKIA red accent +
+   the two product card shadow tokens. Additive only. */
+@theme {
+  --color-ikia-red: #D8202A;
+  --shadow-ikia-card: 0 8px 30px rgba(10, 27, 46, 0.08);
+  --shadow-ikia-pop: 0 16px 50px rgba(10, 27, 46, 0.16);
+}

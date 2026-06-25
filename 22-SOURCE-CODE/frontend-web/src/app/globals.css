@@ -232,3 +232,41 @@
   font-weight: 600;
   letter-spacing: 0.02em;
 }
+
+/* CC-Phase1 — Fluid type scale per brief §5. Values can be consumed
+   inline (`style={{ fontSize: 'var(--fs-h2)' }}`) or by future utility
+   layers. Brief uses clamp() so headings scale between mobile and
+   desktop without media queries. */
+:root {
+  --fs-hero: clamp(2.6rem, 5vw, 4.25rem);
+  --fs-h2: clamp(1.9rem, 3.2vw, 2.75rem);
+  --fs-h3: 1.5rem;
+  --fs-lead: 1.25rem;
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-eyebrow: 0.8125rem;
+}
+
+/* CC-Phase1 — Subtle product-card hover lift per brief §18.
+   translateY(-2px) + softer shadow expansion. Honors
+   prefers-reduced-motion: no transform under reduced motion. */
+.ikia-hover-lift {
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
+  will-change: transform;
+}
+.ikia-hover-lift:hover,
+.ikia-hover-lift:focus-within {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-ikia-pop, 0 16px 50px rgba(10, 27, 46, 0.16));
+}
+@media (prefers-reduced-motion: reduce) {
+  .ikia-hover-lift {
+    transition: none;
+  }
+  .ikia-hover-lift:hover,
+  .ikia-hover-lift:focus-within {
+    transform: none;
+  }
+}

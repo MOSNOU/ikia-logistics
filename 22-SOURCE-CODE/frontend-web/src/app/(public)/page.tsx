@@ -953,14 +953,14 @@ export default function HomePage() {
                 className="text-3xl font-extrabold leading-snug tracking-tight text-white sm:text-5xl lg:text-6xl"
                 style={{ textShadow: "0 4px 32px rgba(0, 0, 0, 0.75)" }}
               >
-                سیستم عامل دیجیتال لجستیک ایران
+                سامانه عملیاتی لجستیک برای کنترل حمل، اسناد و زنجیره تأمین
               </h1>
               <p
                 className="max-w-lg text-base leading-8 text-white/90 sm:text-lg"
                 style={{ textShadow: "0 2px 18px rgba(0, 0, 0, 0.7)" }}
               >
-                زیرساخت یکپارچه برای حمل جاده‌ای، دریایی، ریلی، هوایی، انبارداری و
-                ترانزیت — در سطح ملی و بین‌المللی.
+                از ثبت سفارش تا تخصیص ناوگان، رهگیری، اسناد گمرکی، تطبیق و تسویه
+                — همه در یک پلتفرم واحد برای بازار ایران و کریدورهای منطقه‌ای.
               </p>
               <div className="flex flex-wrap gap-3 pt-2">
                 <Button
@@ -968,14 +968,14 @@ export default function HomePage() {
                   size="lg"
                   className="w-full bg-gradient-to-l from-emerald-600 via-green-500 to-lime-400 text-white shadow-lg shadow-emerald-950/30 hover:from-emerald-700 hover:via-green-600 hover:to-lime-500 sm:w-auto"
                 >
-                  <Link href="/login">شروع همکاری</Link>
+                  <Link href="/#start">درخواست جلسه معرفی</Link>
                 </Button>
                 <Button
                   asChild
                   size="lg"
                   className="w-full border border-red-300/60 bg-gradient-to-l from-red-700 via-rose-600 to-orange-500 text-white shadow-lg shadow-red-950/25 hover:from-red-800 hover:via-rose-700 hover:to-orange-600 sm:w-auto"
                 >
-                  <Link href="#how-it-works">پلتفرم چگونه کار می‌کند</Link>
+                  <Link href="/login">ورود به پلتفرم</Link>
                 </Button>
               </div>
             </div>

@@ -889,7 +889,7 @@ export default function HomePage() {
                   size="lg"
                   className="w-full border border-red-300/60 bg-gradient-to-l from-red-700 via-rose-600 to-orange-500 text-white shadow-lg shadow-red-950/25 hover:from-red-800 hover:via-rose-700 hover:to-orange-600 sm:w-auto"
                 >
-                  <Link href="/login">ورود به پلتفرم</Link>
+                  <Link href="#platform">مشاهده پلتفرم</Link>
                 </Button>
               </div>
             </div>

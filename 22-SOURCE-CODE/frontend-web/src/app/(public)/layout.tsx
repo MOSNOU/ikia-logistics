@@ -10,11 +10,11 @@ import { siteConfig } from "@/lib/config/site";
 const NAV_ITEMS: { href: string; label: string }[] = [
   { href: "/", label: "خانه" },
   { href: "/#solutions", label: "راهکارها" },
-  { href: "/#transport", label: "خدمات" },
-  { href: "/#control-tower", label: "حمل‌ونقل" },
-  { href: "/#coverage", label: "زنجیره تأمین" },
+  { href: "/#services", label: "خدمات" },
+  { href: "/#corridors", label: "حمل‌ونقل" },
+  { href: "/#process", label: "زنجیره تأمین" },
   { href: "/#platform", label: "منابع" },
-  { href: "/#integration", label: "درباره ما" },
+  { href: "/#trust", label: "درباره ما" },
   { href: "/#start", label: "تماس با ما" },
 ];
 
@@ -22,9 +22,10 @@ const PLATFORM_LINKS: { href: string; label: string }[] = [
   { href: "/#platform", label: "بازار، اعزام، تسویه" },
   { href: "/#control-tower", label: "کنترل‌تاور و رؤیت زنده" },
   { href: "/#solutions", label: "کنسول راننده" },
-  { href: "/#transport", label: "خدمات حمل‌ونقل" },
-  { href: "/#coverage", label: "پوشش جغرافیایی" },
+  { href: "/#services", label: "خدمات حمل‌ونقل" },
+  { href: "/#corridors", label: "پوشش جغرافیایی" },
   { href: "/#integration", label: "اتصال سازمانی" },
+  { href: "/#trust", label: "امنیت و انطباق" },
 ];
 
 const COMPANY_LINKS: { href: string; label: string }[] = [

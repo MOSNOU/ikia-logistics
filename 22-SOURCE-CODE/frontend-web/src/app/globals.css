@@ -59,3 +59,59 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+/* CC-65 — Marquee animation for the marketing transport-services strip.
+   Pure CSS; no JS, no deps. The track duplicates its content and shifts
+   by -50% to loop seamlessly. Right-to-left motion is physical, so it
+   reads correctly in both LTR and RTL document directions. */
+@keyframes ikia-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ikia-marquee-track {
+  animation: ikia-marquee 40s linear infinite;
+}
+.ikia-marquee-track:hover,
+.ikia-marquee-track:focus-within {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ikia-marquee-track {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* CC-66C — Premium layered background for the public homepage. Two
+   subtle radial accents (Persian-blue top-start, faint IKIA red
+   top-end) over a porcelain → white → slate-50 vertical wash. Replaces
+   the flat-white page feel without adding deps or images. */
+.bg-ikia-premium-page {
+  background-color: #f8fafc;
+  background-image:
+    radial-gradient(circle at 8% 8%, rgba(59, 130, 246, 0.10), transparent 28%),
+    radial-gradient(circle at 92% 12%, rgba(220, 38, 38, 0.06), transparent 24%),
+    linear-gradient(180deg, #f8fafc 0%, #ffffff 32%, #f1f5f9 100%);
+}
+
+/* CC-66C — Translucent porcelain panel for sections that previously
+   sat on pure white. Light glass tint, soft 1px hairline, gentle
+   shadow — only visible against the new premium page background. */
+.bg-ikia-panel {
+  background-color: rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-block: 1px solid rgb(226 232 240 / 0.7);
+}
+
+/* CC-66C — Bottom fade used directly below the hero image to lift the
+   page background smoothly out of the cinematic overlay. */
+.ikia-hero-bottom-fade::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 10rem;
+  background: linear-gradient(to top, #f8fafc 0%, transparent 100%);
+  pointer-events: none;
+}

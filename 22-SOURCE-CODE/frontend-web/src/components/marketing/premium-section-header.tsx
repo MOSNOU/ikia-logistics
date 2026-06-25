@@ -1,5 +1,8 @@
-// CC-57R — Shared eyebrow + title + intro composition for marketing
-// sections. Server-renderable, pure presentational.
+// CC-57R / CC-60 — Shared eyebrow + title + intro composition for
+// marketing sections. Server-renderable, pure presentational.
+// CC-60 polish: bumped h2 sizes one step up (text-2xl → text-3xl base,
+// sm → text-4xl) and gave the intro a slightly looser line-height for
+// executive-grade Persian reading on long-form RTL paragraphs.
 
 interface Props {
   eyebrow: string;
@@ -28,7 +31,7 @@ export function PremiumSectionHeader({
     align === "center" ? "text-center mx-auto" : "text-right";
 
   return (
-    <div className={`max-w-2xl space-y-3 ${alignClass} ${className}`}>
+    <div className={`max-w-3xl space-y-4 ${alignClass} ${className}`}>
       <div
         className={`inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] ${eyebrowColor}`}
       >
@@ -36,12 +39,12 @@ export function PremiumSectionHeader({
         {eyebrow}
       </div>
       <h2
-        className={`text-2xl font-bold leading-snug tracking-tight sm:text-3xl ${titleColor}`}
+        className={`text-3xl font-bold leading-snug tracking-tight sm:text-4xl ${titleColor}`}
       >
         {title}
       </h2>
       {intro ? (
-        <p className={`text-sm leading-7 sm:text-base ${introColor}`}>
+        <p className={`text-base leading-8 sm:text-lg sm:leading-9 ${introColor}`}>
           {intro}
         </p>
       ) : null}

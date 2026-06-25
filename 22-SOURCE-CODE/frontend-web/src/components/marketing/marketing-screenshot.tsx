@@ -25,6 +25,12 @@ interface Props {
   /** Optional sizes hint for the responsive srcset. */
   sizes?: string;
   className?: string;
+  /**
+   * CC-58A — optional overlay slot rendered absolutely on top of the
+   * image but inside the rounded-border frame. Used for the official
+   * iKIA logo branding patch on the hero truck.
+   */
+  children?: React.ReactNode;
 }
 
 export function MarketingScreenshot({
@@ -36,11 +42,12 @@ export function MarketingScreenshot({
   priority = false,
   sizes,
   className = "",
+  children,
 }: Props) {
   return (
     <figure className={className}>
       <div
-        className="overflow-hidden rounded-3xl border border-border-soft bg-card p-1.5 sm:p-2"
+        className="relative overflow-hidden rounded-3xl border border-border-soft bg-card p-1.5 sm:p-2"
         style={{ boxShadow: "var(--shadow-elevated)" }}
       >
         <Image
@@ -54,6 +61,7 @@ export function MarketingScreenshot({
           }
           className="block h-auto w-full rounded-2xl"
         />
+        {children}
       </div>
       {caption ? (
         <figcaption className="mt-3 text-center text-xs leading-6 text-deep-navy-soft">

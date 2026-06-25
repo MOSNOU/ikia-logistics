@@ -38,8 +38,7 @@ const FOOTER_SERVICES: { href: string; label: string }[] = [
   { href: "/#marketplace", label: "خدمات حمل چندوجهی" },
   { href: "/#documents", label: "گمرک و اسناد" },
   { href: "/#settlement", label: "تسویه و صورتحساب" },
-  { href: "/#transit", label: "ترانزیت بین‌المللی" },
-  { href: "/#corridors", label: "شبکه کریدورها" },
+  { href: "/#corridors", label: "ترانزیت و کریدورها" },
 ];
 
 const FOOTER_RESOURCES: { href: string; label: string }[] = [

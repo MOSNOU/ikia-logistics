@@ -405,6 +405,32 @@ const SERVICE_SLIDES: ServiceSlide[] = [
       </svg>
     ),
   },
+  // CC-Phase2 — 6th slide added per design guide §12. Reuses image 18
+  // (security/accuracy/commitment) since there is no dedicated customs
+  // image yet; the overlay copy makes the customs framing explicit.
+  {
+    image: "/marketing/18-security-accuracy-commitment-logistics.png",
+    alt: "اسناد و انطباق گمرکی iKIA — خدمات گمرک و تطبیق",
+    title: "گمرک و تطبیق",
+    description:
+      "مدیریت اظهارنامه، گواهی مبدأ، انطباق گمرکی و گردش کار اسناد بین‌المللی در یک منبع.",
+    pills: ["اظهارنامه", "گواهی مبدأ", "ترخیص"],
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={SERVICE_ICON_CLASS}
+        aria-hidden
+      >
+        <path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" />
+        <path d="M9 12l2 2 4-4" />
+      </svg>
+    ),
+  },
 ];
 
 const SETTLEMENT_BULLETS: string[] = [
@@ -521,38 +547,62 @@ const ENTERPRISE_PILLARS: { num: string; title: string; description: string }[] 
 ];
 
 // =============================================================================
-// CC-64 SECTION A — Industry Solutions Hub (#industries) — 6 cards
+// CC-Phase2 — Industries hub (consolidated). The 5 dedicated CC-64
+// industry sections (#oil-gas, #mining, #agriculture, #retail,
+// #transit) have been folded into this single hub of 6 compact cards
+// per the design guide §15. The hub now uses an inline line icon per
+// industry. No external links — cards are self-contained.
 // =============================================================================
+const INDUSTRY_ICON_CLASS = "h-6 w-6";
+
 const INDUSTRY_HUB: {
   num: string;
   en: string;
   title: string;
   description: string;
-  anchor: string;
+  icon: React.ReactNode;
 }[] = [
   {
     num: "۰۱",
-    en: "Oil & Petrochemical",
-    title: "نفت و پتروشیمی",
+    en: "Steel & Mining",
+    title: "فولاد و معدن",
     description:
-      "صادرات محصولات پتروشیمی، حمل تانکر، حمل ریلی شیمیایی و عملیات بندری — با اسناد گمرکی منسجم.",
-    anchor: "#oil-gas",
+      "حمل حجمی سنگ آهن، کنسانتره، فولاد، مس و آلومینیوم در کریدورهای داخلی و صادراتی.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={INDUSTRY_ICON_CLASS} aria-hidden>
+        <path d="M3 20l5-9 3 5 4-7 6 11z" />
+        <circle cx="14" cy="6" r="1.5" />
+      </svg>
+    ),
   },
   {
     num: "۰۲",
-    en: "Mining & Metals",
-    title: "معدن و فلزات",
+    en: "Oil & Petrochemical",
+    title: "نفت و پتروشیمی",
     description:
-      "سنگ آهن، کنسانتره، فولاد، مس و آلومینیوم — حمل حجیم چندوجهی تا بنادر صادراتی.",
-    anchor: "#mining",
+      "صادرات پتروشیمی، حمل تانکر و عملیات بندری با گردش کار اسناد و انطباق گمرکی.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={INDUSTRY_ICON_CLASS} aria-hidden>
+        <path d="M12 3c2.5 4 4 6.5 4 9a4 4 0 1 1-8 0c0-2.5 1.5-5 4-9z" />
+      </svg>
+    ),
   },
   {
     num: "۰۳",
     en: "Agriculture & Food",
     title: "کشاورزی و مواد غذایی",
     description:
-      "غلات، نهاده‌ها، کود و محصولات فاسدشدنی — با هماهنگی زنجیره توزیع و رؤیت لحظه‌ای.",
-    anchor: "#agriculture",
+      "هماهنگی حمل غلات، نهاده‌ها، کود و محصولات فاسدشدنی در زنجیره توزیع ملی.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={INDUSTRY_ICON_CLASS} aria-hidden>
+        <path d="M12 21V8" />
+        <path d="M8 8l4-4 4 4" />
+        <path d="M7 12c2 0 4 1 5 3" />
+        <path d="M17 12c-2 0-4 1-5 3" />
+        <path d="M7 17c2 0 4 1 5 3" />
+        <path d="M17 17c-2 0-4 1-5 3" />
+      </svg>
+    ),
   },
   {
     num: "۰۴",
@@ -560,180 +610,42 @@ const INDUSTRY_HUB: {
     title: "کالاهای مصرفی",
     description:
       "توزیع منطقه‌ای، Cross-Dock، حمل شهری و تأمین فروشگاه‌ها در شبکه ملی.",
-    anchor: "#retail",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={INDUSTRY_ICON_CLASS} aria-hidden>
+        <path d="M4 9h16l-1 11H5z" />
+        <path d="M9 9V6a3 3 0 1 1 6 0v3" />
+      </svg>
+    ),
   },
   {
     num: "۰۵",
-    en: "International Trade",
-    title: "تجارت بین‌المللی",
+    en: "Industrial Projects",
+    title: "پروژه‌های صنعتی",
     description:
-      "هماهنگی واردات و صادرات با گردش کار گمرکی، اسناد بین‌المللی و انطباق چندلایه.",
-    anchor: "#commodities",
+      "حمل تجهیزات حجمی، سازه‌ها و محموله‌های پروژه‌ای با هماهنگی چندوجهی و انطباق.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={INDUSTRY_ICON_CLASS} aria-hidden>
+        <path d="M3 21h18" />
+        <path d="M5 21V11l5-3v13" />
+        <path d="M10 21V8l5-3v16" />
+        <path d="M15 21V5l5-2v18" />
+        <path d="M7 14h1M7 17h1M12 11h1M12 14h1M12 17h1M17 8h1M17 11h1M17 14h1M17 17h1" />
+      </svg>
+    ),
   },
   {
     num: "۰۶",
-    en: "Transit & Corridors",
-    title: "ترانزیت و کریدورها",
+    en: "Export & Import",
+    title: "صادرات و واردات",
     description:
-      "عملیات ترانزیتی چندوجهی در کریدورهای منطقه‌ای — اتصال شرق به غرب و شمال به جنوب.",
-    anchor: "#transit",
-  },
-];
-
-// =============================================================================
-// CC-64 SECTION B — Oil & Petrochemical (#oil-gas) — 5 content pillars
-// =============================================================================
-const OIL_GAS_PILLARS: TextItem[] = [
-  {
-    title: "صادرات محصولات پتروشیمی",
-    description:
-      "هماهنگی صادرات محموله‌های پتروشیمی از مبدأ تولید تا بنادر و مقاصد بین‌المللی، با گردش کار اسناد یکپارچه.",
-  },
-  {
-    title: "حمل مخازن و تانکر",
-    description:
-      "اعزام تانکر و مخازن ویژه با ثبت ساختارمند بارگیری، حمل و تخلیه — همراه با چرخه اعزام منسجم.",
-  },
-  {
-    title: "حمل ریلی مواد شیمیایی",
-    description:
-      "اتصال داده‌ای به شبکه ریلی برای حمل حجمی مواد شیمیایی در مسیرهای داخلی و ترانزیتی.",
-  },
-  {
-    title: "حمل دریایی و بندری",
-    description:
-      "هماهنگی محموله‌های کانتینری و فله از بنادر اصلی جنوب کشور تا مقاصد صادراتی.",
-  },
-  {
-    title: "مدیریت اسناد صادراتی",
-    description:
-      "اظهارنامه‌های صادراتی، گواهی مبدأ، بازرسی و انطباق گمرکی در یک منبع واحد قابل ممیزی.",
-  },
-];
-
-// =============================================================================
-// CC-64 SECTION C — Mining & Metals (#mining) — commodities + focus areas
-// =============================================================================
-const MINING_COMMODITIES: { en: string; title: string }[] = [
-  { en: "Iron Ore", title: "سنگ آهن" },
-  { en: "Concentrate", title: "کنسانتره" },
-  { en: "Steel", title: "فولاد" },
-  { en: "Copper", title: "مس" },
-  { en: "Aluminum", title: "آلومینیوم" },
-];
-
-const MINING_FOCUS: TextItem[] = [
-  {
-    title: "حمل حجیم",
-    description:
-      "هماهنگی حمل بارهای حجمی و سنگین از معدن و کارخانه تا انبارها و بنادر صادراتی.",
-  },
-  {
-    title: "حمل ریلی",
-    description:
-      "اتصال شبکه ریلی ملی برای حمل کارآمد و کم‌هزینه محموله‌های حجمی در مسافت‌های طولانی.",
-  },
-  {
-    title: "بنادر صادراتی",
-    description:
-      "هماهنگی محموله‌های صادراتی با اپراتورهای بنادر اصلی و مسیرهای دریایی منطقه.",
-  },
-  {
-    title: "زنجیره تأمین چندوجهی",
-    description:
-      "ترکیب جاده، ریل و دریا روی یک منبع داده مشترک، با خط زمانی پیوسته محموله.",
-  },
-];
-
-// =============================================================================
-// CC-64 SECTION D — Agriculture & Food (#agriculture) — 5 items
-// =============================================================================
-const AGRICULTURE_ITEMS: { en: string; title: string; description: string }[] = [
-  {
-    en: "Grains",
-    title: "غلات",
-    description: "هماهنگی حمل گندم، جو و ذرت از مبدأ تولید تا انبارهای منطقه‌ای و مراکز توزیع.",
-  },
-  {
-    en: "Inputs",
-    title: "نهاده‌ها",
-    description: "تأمین و توزیع نهاده‌های کشاورزی برای فصل‌های کاشت و برداشت در سراسر کشور.",
-  },
-  {
-    en: "Fertilizers",
-    title: "کود",
-    description: "هماهنگی حمل کودهای شیمیایی از کارخانه به مراکز توزیع کشاورزی.",
-  },
-  {
-    en: "Perishables",
-    title: "محصولات فاسدشدنی",
-    description: "دید لحظه‌ای بر زنجیره حمل محصولات حساس به زمان، با هماهنگی سفت‌وسخت زمانی.",
-  },
-  {
-    en: "Distribution Chain",
-    title: "زنجیره توزیع",
-    description: "نمای یکپارچه از مبدأ تا مصرف‌کننده در شبکه‌ای از انبارها و حمل‌کنندگان همکار.",
-  },
-];
-
-// =============================================================================
-// CC-64 SECTION E — FMCG & Retail (#retail) — 5 pillars
-// =============================================================================
-const RETAIL_PILLARS: { en: string; title: string; description: string }[] = [
-  {
-    en: "Regional Distribution",
-    title: "توزیع منطقه‌ای",
-    description: "هماهنگی توزیع کالا میان مراکز توزیع منطقه‌ای و حمل‌کنندگان همکار.",
-  },
-  {
-    en: "Warehousing",
-    title: "انبار",
-    description: "هماهنگی انبارهای مرکزی و منطقه‌ای، عملیات تجمیع و آماده‌سازی محموله.",
-  },
-  {
-    en: "Cross-Dock",
-    title: "Cross-Dock",
-    description: "گردش کار Cross-Dock برای انتقال سریع محموله بدون نگه‌داری بلندمدت در انبار.",
-  },
-  {
-    en: "Urban Delivery",
-    title: "حمل شهری",
-    description: "تأمین جریان حمل شهری از مراکز توزیع منطقه‌ای تا فروشگاه‌ها و نقاط مصرف.",
-  },
-  {
-    en: "Store Replenishment",
-    title: "تأمین فروشگاه‌ها",
-    description: "هماهنگی تأمین دوره‌ای فروشگاه‌ها بر اساس برنامه سفارش و کسری انبار.",
-  },
-];
-
-// =============================================================================
-// CC-64 SECTION F — Transit Corridors (#transit) — 4 corridor cards
-// =============================================================================
-const TRANSIT_CORRIDOR_CARDS: { en: string; title: string; description: string }[] = [
-  {
-    en: "China → Central Asia → Iran → Europe",
-    title: "چین → آسیای مرکزی → ایران → اروپا",
-    description:
-      "کریدور شرق-غرب — مسیر کوتاه‌تر ترانزیتی برای محموله‌های کانتینری و حجیم میان شرق آسیا و اروپا.",
-  },
-  {
-    en: "India → Iran → CIS",
-    title: "هند → ایران → CIS",
-    description:
-      "کریدور جنوب-شمال — اتصال هند به بازارهای CIS از مسیر بنادر جنوبی و شبکه ریلی-جاده‌ای داخلی.",
-  },
-  {
-    en: "Persian Gulf → Caucasus → Europe",
-    title: "خلیج فارس → قفقاز → اروپا",
-    description:
-      "اتصال بنادر اصلی جنوب به بازارهای قفقاز و اروپا با هماهنگی چندوجهی اسناد و گمرک.",
-  },
-  {
-    en: "North-South",
-    title: "شمال–جنوب",
-    description:
-      "کریدور بنیادی شمال به جنوب — اتصال آسیای مرکزی به خلیج فارس و اقیانوس هند از مسیر ایران.",
+      "هماهنگی واردات و صادرات با گمرک، اسناد بین‌المللی و انطباق چندلایه در مرزها.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={INDUSTRY_ICON_CLASS} aria-hidden>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3 12h18" />
+        <path d="M12 3a13 13 0 0 1 0 18a13 13 0 0 1 0-18z" />
+      </svg>
+    ),
   },
 ];
 
@@ -1187,10 +1099,11 @@ export default function HomePage() {
           7. CC-63 SECTION B — SHIPMENT LIFECYCLE (#shipment-lifecycle)
           8 states with inline ↓ arrows.
           ===================================================================== */}
-      {/* CC-68 — Full-bleed dark navy product section. Left column
-          (RTL inline-end) hosts a logistics-software dashboard mock:
-          timeline rail · status cards · corridor row · doc compliance
-          row · metric chips. Right column carries narrative + CTAs. */}
+      {/* CC-Phase2 — Lifecycle simplified to a clean 8-state timeline
+          rail. The dashboard chrome, route row, doc compliance row, and
+          metric strip moved to #control-tower (the standalone product
+          dashboard section) per design guide §11. Section stays dark
+          for rhythm but reads leaner. */}
       <section
         id="shipment-lifecycle"
         className="ikia-section-dark py-20 sm:py-28 scroll-mt-16"
@@ -1211,37 +1124,13 @@ export default function HomePage() {
                 مدیریت می‌شود — روی یک منبع داده مشترک، با گردش کار شفاف برای
                 واحدهای عملیات، انطباق و مالی.
               </p>
-
-              {/* Operational phase summary chips on dark. */}
-              <ul className="grid gap-2 pt-1 sm:grid-cols-2">
-                {[
-                  { fa: "سفارش حمل", en: "Order" },
-                  { fa: "تخصیص ناوگان", en: "Fleet assignment" },
-                  { fa: "بارگیری", en: "Loading" },
-                  { fa: "عبور از کریدور", en: "Corridor transit" },
-                  { fa: "تحویل و تسویه", en: "Delivery & settlement" },
-                ].map((phase) => (
-                  <li
-                    key={phase.en}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 backdrop-blur-sm"
-                  >
-                    <span className="text-sm font-semibold text-night-text">
-                      {phase.fa}
-                    </span>
-                    <span dir="ltr" className="font-mono text-[10px] text-sky-300/80">
-                      {phase.en}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
               <div className="flex flex-wrap gap-3 pt-2">
                 <Button
                   asChild
                   size="lg"
                   className="bg-gradient-to-l from-emerald-600 via-green-500 to-lime-400 text-white shadow-lg shadow-emerald-950/30 hover:from-emerald-700 hover:via-green-600 hover:to-lime-500"
                 >
-                  <Link href="/login">شروع همکاری</Link>
+                  <Link href="/#start">درخواست جلسه معرفی</Link>
                 </Button>
                 <Button
                   asChild
@@ -1249,184 +1138,64 @@ export default function HomePage() {
                   variant="outline"
                   className="border-white/30 bg-white/5 text-night-text backdrop-blur hover:border-sky-300 hover:bg-white/10 hover:text-night-text"
                 >
-                  <Link href="#how-it-works">پلتفرم چگونه کار می‌کند</Link>
+                  <Link href="#control-tower">برج کنترل دیجیتال</Link>
                 </Button>
               </div>
             </div>
 
-            {/* Left column — product dashboard mockup. */}
-            <div className="ikia-product-card-dark relative">
-              {/* Top dashboard chrome bar: app name + window dots + status. */}
-              <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
-                <div className="flex items-center gap-2">
-                  <span aria-hidden className="size-2 rounded-full bg-red-400/70" />
-                  <span aria-hidden className="size-2 rounded-full bg-amber-400/70" />
-                  <span aria-hidden className="size-2 rounded-full bg-emerald-400/70" />
-                  <span
-                    dir="ltr"
-                    className="ms-3 font-mono text-[11px] text-sky-300/80"
-                  >
-                    iKIA OS · Shipment SH-2026-08471
-                  </span>
+            {/* Left column — clean 8-state timeline rail (only). */}
+            <div className="ikia-product-card-dark p-5 sm:p-6">
+              <div className="mb-5 flex items-center justify-between gap-3">
+                <div
+                  dir="ltr"
+                  className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-night-text-muted"
+                >
+                  Shipment Lifecycle · ۸ مرحله
                 </div>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-200">
-                  <span aria-hidden className="size-1.5 rounded-full bg-emerald-400" />
-                  Live
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-400/30 bg-sky-400/10 px-2 py-0.5 text-[10px] font-semibold text-sky-200">
+                  هشت وضعیت
                 </span>
               </div>
-
-              {/* Mock product body. */}
-              <div className="space-y-5 p-5 sm:p-6">
-                {/* Header bar: shipment timeline title + count chip. */}
-                <div className="flex items-center justify-between gap-3">
-                  <div
-                    dir="ltr"
-                    className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-night-text-muted"
-                  >
-                    Shipment Timeline · ۸ مرحله
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-400/30 bg-sky-400/10 px-2 py-0.5 text-[10px] font-semibold text-sky-200">
-                    در حال حمل
-                  </span>
-                </div>
-
-                {/* Vertical timeline rail with the 8 states. */}
-                <ol className="relative space-y-2.5">
-                  {SHIPMENT_LIFECYCLE.map((state, idx) => {
-                    const tone =
-                      LIFECYCLE_TONES[idx] ?? LIFECYCLE_TONES[0]!;
-                    const isLast = idx === SHIPMENT_LIFECYCLE.length - 1;
-                    // Mark the current shipment as currently at "In Transit" (idx 5).
-                    const isCurrent = idx === 5;
-                    return (
-                      <li key={state.num} className="relative ps-9">
-                        {!isLast ? (
-                          <span
-                            aria-hidden
-                            className="absolute start-[10px] top-5 h-[calc(100%+0.25rem)] w-px bg-white/10"
-                          />
-                        ) : null}
+              <ol className="relative space-y-2.5">
+                {SHIPMENT_LIFECYCLE.map((state, idx) => {
+                  const tone =
+                    LIFECYCLE_TONES[idx] ?? LIFECYCLE_TONES[0]!;
+                  const isLast = idx === SHIPMENT_LIFECYCLE.length - 1;
+                  return (
+                    <li key={state.num} className="relative ps-9">
+                      {!isLast ? (
                         <span
                           aria-hidden
-                          className={`absolute start-1.5 top-[14px] size-3 rounded-full ring-4 ring-[#0E2640] ${tone.dot}`}
+                          className="absolute start-[10px] top-5 h-[calc(100%+0.25rem)] w-px bg-white/10"
                         />
-                        <div
-                          className={`rounded-xl border p-3 text-right transition-colors ${
-                            isCurrent
-                              ? "border-sky-400/40 bg-sky-400/[0.06]"
-                              : "border-white/10 bg-white/[0.03]"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="text-[10px] font-bold tracking-[0.2em] text-night-text-muted">
-                              مرحله {state.num}
-                            </div>
-                            <span
-                              dir="ltr"
-                              className={`ikia-status-pill ${tone.chip}`}
-                            >
-                              {state.en}
-                            </span>
+                      ) : null}
+                      <span
+                        aria-hidden
+                        className={`absolute start-1.5 top-[14px] size-3 rounded-full ring-4 ring-[#0E2640] ${tone.dot}`}
+                      />
+                      <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-right">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="text-[10px] font-bold tracking-[0.2em] text-night-text-muted">
+                            مرحله {state.num}
                           </div>
-                          <div className="mt-1.5 text-sm font-bold text-night-text">
-                            {state.label}
-                          </div>
-                          <p className="mt-0.5 text-[11px] leading-6 text-night-text-muted">
-                            {state.description}
-                          </p>
+                          <span
+                            dir="ltr"
+                            className={`ikia-status-pill ${tone.chip}`}
+                          >
+                            {state.en}
+                          </span>
                         </div>
-                      </li>
-                    );
-                  })}
-                </ol>
-
-                {/* Route / corridor row. */}
-                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div
-                      dir="ltr"
-                      className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-night-text-muted"
-                    >
-                      Route · Corridor
-                    </div>
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-200">
-                      شمال–جنوب
-                    </span>
-                  </div>
-                  <div className="mt-3 flex items-center justify-between gap-2 text-sm text-night-text">
-                    <span className="font-bold">تهران</span>
-                    <span
-                      aria-hidden
-                      className="flex-1 mx-3 h-px bg-gradient-to-l from-cyan-400/0 via-cyan-400/60 to-cyan-400/0"
-                    />
-                    <span aria-hidden className="text-sky-300">●</span>
-                    <span
-                      aria-hidden
-                      className="flex-1 mx-3 h-px bg-gradient-to-l from-cyan-400/0 via-cyan-400/30 to-cyan-400/0"
-                    />
-                    <span className="font-bold">بندرعباس</span>
-                  </div>
-                  <div className="mt-2 flex items-center justify-between text-[11px] text-night-text-muted">
-                    <span>۱٬۳۱۰ کیلومتر</span>
-                    <span>ETA · ۲ روز ۴ ساعت</span>
-                  </div>
-                </div>
-
-                {/* Document compliance row. */}
-                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div
-                      dir="ltr"
-                      className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-night-text-muted"
-                    >
-                      Documents · Compliance
-                    </div>
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-200">
-                      ۴ از ۴ تأیید
-                    </span>
-                  </div>
-                  <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                    {[
-                      { fa: "اظهارنامه", en: "Customs" },
-                      { fa: "بارنامه", en: "BoL" },
-                      { fa: "بیمه", en: "Insurance" },
-                      { fa: "گواهی مبدأ", en: "Origin" },
-                    ].map((doc) => (
-                      <li
-                        key={doc.en}
-                        className="flex flex-col items-center rounded-lg border border-emerald-400/20 bg-emerald-400/[0.06] p-2 text-center"
-                      >
-                        <span className="text-[11px] font-semibold text-night-text">
-                          {doc.fa}
-                        </span>
-                        <span
-                          dir="ltr"
-                          className="font-mono text-[9px] text-emerald-200"
-                        >
-                          ✓ {doc.en}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Metric chip strip. */}
-                <ul className="grid grid-cols-3 gap-2">
-                  {[
-                    { fa: "میانگین زمان تحویل", value: "۲٫۴ روز", tone: "text-emerald-200" },
-                    { fa: "نرخ تطبیق ظرفیت", value: "٪۹۴", tone: "text-sky-200" },
-                    { fa: "تأخیر فعال", value: "۰ مورد", tone: "text-amber-200" },
-                  ].map((m) => (
-                    <li
-                      key={m.fa}
-                      className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-center"
-                    >
-                      <div className={`text-base font-extrabold ${m.tone}`}>{m.value}</div>
-                      <div className="mt-0.5 text-[10px] text-night-text-muted">{m.fa}</div>
+                        <div className="mt-1.5 text-sm font-bold text-night-text">
+                          {state.label}
+                        </div>
+                        <p className="mt-0.5 text-[11px] leading-6 text-night-text-muted">
+                          {state.description}
+                        </p>
+                      </div>
                     </li>
-                  ))}
-                </ul>
-              </div>
+                  );
+                })}
+              </ol>
             </div>
           </div>
         </div>
@@ -1552,8 +1321,12 @@ export default function HomePage() {
       </section>
 
       {/* =====================================================================
-          CC-64 SECTION A — INDUSTRY SOLUTIONS HUB (#industries)
-          Enterprise card grid linking to dedicated industry sections below.
+          CC-Phase2 — INDUSTRIES HUB (#industries)
+          Consolidates the prior CC-64 dedicated industry sections
+          (#oil-gas, #mining, #agriculture, #retail, #transit) into a
+          single compact 6-card grid per the design guide §15. Each card
+          is self-contained (icon + Persian title + 1-line description)
+          and uses the .ikia-hover-lift utility from Phase 1.
           ===================================================================== */}
       <section id="industries" className="py-20 sm:py-28 scroll-mt-16">
         <div className="mx-auto max-w-7xl px-4">
@@ -1565,234 +1338,25 @@ export default function HomePage() {
           <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {INDUSTRY_HUB.map((i) => (
               <li key={i.en}>
-                <Link
-                  href={i.anchor}
-                  className="group flex h-full flex-col rounded-2xl border border-border-soft bg-card p-5 text-right shadow-card transition-shadow hover:shadow-elevated"
-                >
+                <article className="bg-ikia-product-card ikia-hover-lift flex h-full flex-col p-6 text-right">
                   <div className="flex items-center justify-between">
-                    <div className="text-[10px] font-bold tracking-[0.18em] text-brand-700">
-                      {i.num}
+                    <div className="inline-flex size-10 items-center justify-center rounded-xl border border-sky-200 bg-sky-50 text-sky-700">
+                      {i.icon}
                     </div>
                     <span
                       dir="ltr"
-                      className="rounded-full bg-deep-navy/5 px-2.5 py-0.5 font-mono text-[10px] text-deep-navy"
+                      className="rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 font-mono text-[10px] font-semibold text-sky-700"
                     >
                       {i.en}
                     </span>
                   </div>
-                  <h3 className="mt-3 text-base font-bold tracking-tight text-deep-navy group-hover:text-brand-700">
+                  <h3 className="mt-4 text-lg font-extrabold tracking-tight text-deep-navy">
                     {i.title}
                   </h3>
-                  <p className="mt-1 text-xs leading-6 text-muted-foreground">
+                  <p className="mt-2 text-sm leading-7 text-slate-600">
                     {i.description}
                   </p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-[11px] font-semibold text-brand-700">
-                    مشاهده جزئیات
-                    <span aria-hidden>←</span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          CC-64 SECTION B — OIL & PETROCHEMICAL (#oil-gas)
-          Image (17) on the right, 5 pillars on the left.
-          ===================================================================== */}
-      <section id="oil-gas" className="bg-surface-muted py-20 sm:py-28 scroll-mt-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <PremiumSectionHeader
-            eyebrow="نفت و پتروشیمی"
-            title="زنجیره تأمین نفت، گاز و پتروشیمی"
-            intro="هماهنگی صادرات، حمل تانکر، حمل ریلی شیمیایی و عملیات بندری در یک پلتفرم واحد — با گردش کار اسناد صادراتی منسجم."
-          />
-          <div className="mt-10 grid items-center gap-8 lg:grid-cols-[1fr_1.1fr]">
-            <ul className="space-y-3 text-right">
-              {OIL_GAS_PILLARS.map((p) => (
-                <li
-                  key={p.title}
-                  className="rounded-2xl border border-border-soft bg-card p-4 shadow-card"
-                >
-                  <div className="flex items-start gap-2">
-                    <span
-                      aria-hidden
-                      className="mt-2 inline-block size-1.5 shrink-0 rounded-full bg-brand-500"
-                    />
-                    <div>
-                      <div className="text-sm font-bold text-deep-navy">{p.title}</div>
-                      <p className="mt-1 text-xs leading-6 text-muted-foreground">
-                        {p.description}
-                      </p>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <MarketingScreenshot
-              src="/marketing/17-smart-logistics-control-center.png"
-              alt="کنترل‌تاور هوشمند iKIA برای زنجیره تأمین نفت، گاز و پتروشیمی"
-              width={1535}
-              height={1024}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          CC-64 SECTION C — MINING & METALS (#mining)
-          Commodity badges row + 4 focus cards.
-          ===================================================================== */}
-      <section id="mining" className="py-20 sm:py-28 scroll-mt-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <PremiumSectionHeader
-            eyebrow="معدن و فلزات"
-            title="اکوسیستم لجستیک معدن و صنایع معدنی"
-            intro="هماهنگی حمل حجیم سنگ آهن، کنسانتره، فولاد، مس و آلومینیوم در یک زنجیره تأمین چندوجهی متصل به بنادر صادراتی."
-          />
-          <ul className="mt-10 flex flex-wrap gap-2">
-            {MINING_COMMODITIES.map((c) => (
-              <li
-                key={c.en}
-                className="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-brand-50 px-3 py-1.5 text-xs font-medium text-brand-700"
-              >
-                <span aria-hidden className="size-1.5 rounded-full bg-brand-500" />
-                <span>{c.title}</span>
-                <span
-                  dir="ltr"
-                  className="font-mono text-[10px] text-brand-700/70"
-                >
-                  {c.en}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {MINING_FOCUS.map((f) => (
-              <li
-                key={f.title}
-                className="rounded-2xl border border-border-soft bg-card p-5 text-right shadow-card transition-shadow hover:shadow-elevated"
-              >
-                <div className="text-sm font-bold text-deep-navy">{f.title}</div>
-                <p className="mt-1 text-xs leading-6 text-muted-foreground">
-                  {f.description}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          CC-64 SECTION D — AGRICULTURE & FOOD (#agriculture)
-          5 item cards.
-          ===================================================================== */}
-      <section id="agriculture" className="bg-surface-muted py-20 sm:py-28 scroll-mt-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <PremiumSectionHeader
-            eyebrow="کشاورزی و مواد غذایی"
-            title="لجستیک محصولات کشاورزی و غذایی"
-            intro="هماهنگی زنجیره تأمین کشاورزی — از غلات و نهاده‌ها تا کود و محصولات فاسدشدنی — با تمرکز بر رؤیت و هماهنگی."
-          />
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-            {AGRICULTURE_ITEMS.map((a) => (
-              <li
-                key={a.en}
-                className="flex h-full flex-col rounded-2xl border border-border-soft bg-card p-5 text-right shadow-card transition-shadow hover:shadow-elevated"
-              >
-                <span
-                  dir="ltr"
-                  className="self-end rounded-full bg-deep-navy/5 px-2 py-0.5 font-mono text-[10px] text-deep-navy"
-                >
-                  {a.en}
-                </span>
-                <h3 className="mt-3 text-sm font-bold tracking-tight text-deep-navy">
-                  {a.title}
-                </h3>
-                <p className="mt-1 text-xs leading-6 text-muted-foreground">
-                  {a.description}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          CC-64 SECTION E — FMCG & RETAIL (#retail)
-          5 pillar cards.
-          ===================================================================== */}
-      <section id="retail" className="py-20 sm:py-28 scroll-mt-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <PremiumSectionHeader
-            eyebrow="کالاهای مصرفی و خرده‌فروشی"
-            title="شبکه توزیع و خرده‌فروشی"
-            intro="هماهنگی شبکه توزیع منطقه‌ای، انبارها، Cross-Dock و حمل شهری برای تأمین جریان پایدار فروشگاه‌ها."
-          />
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-            {RETAIL_PILLARS.map((p, idx) => (
-              <li
-                key={p.en}
-                className="flex h-full flex-col rounded-2xl border border-border-soft bg-card p-5 text-right shadow-card transition-shadow hover:shadow-elevated"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="text-[10px] font-bold tracking-[0.18em] text-brand-700">
-                    {String(idx + 1).padStart(2, "0")}
-                  </div>
-                  <span
-                    dir="ltr"
-                    className="rounded-full bg-deep-navy/5 px-2 py-0.5 font-mono text-[10px] text-deep-navy"
-                  >
-                    {p.en}
-                  </span>
-                </div>
-                <h3 className="mt-3 text-sm font-bold tracking-tight text-deep-navy">
-                  {p.title}
-                </h3>
-                <p className="mt-1 text-xs leading-6 text-muted-foreground">
-                  {p.description}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          CC-64 SECTION F — TRANSIT CORRIDORS (#transit)
-          4 corridor cards (2×2 grid).
-          ===================================================================== */}
-      <section id="transit" className="bg-surface-muted py-20 sm:py-28 scroll-mt-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <PremiumSectionHeader
-            eyebrow="ترانزیت بین‌المللی"
-            title="عملیات ترانزیتی و کریدورهای بین‌المللی"
-            intro="هماهنگی محموله‌های ترانزیتی در چهار کریدور بنیادی منطقه — از اتصال شرق به غرب تا شمال به جنوب — با اسناد یکپارچه و رؤیت پیوسته."
-          />
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2">
-            {TRANSIT_CORRIDOR_CARDS.map((c, idx) => (
-              <li
-                key={c.title}
-                className="rounded-2xl border border-border-soft bg-card p-6 text-right shadow-card transition-shadow hover:shadow-elevated"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <div className="text-[10px] font-bold tracking-[0.18em] text-brand-700">
-                    کریدور {String(idx + 1).padStart(2, "0")}
-                  </div>
-                  <span
-                    dir="ltr"
-                    className="rounded-full bg-deep-navy/5 px-2.5 py-0.5 font-mono text-[10px] text-deep-navy"
-                  >
-                    {c.en}
-                  </span>
-                </div>
-                <h3 className="mt-3 text-base font-bold tracking-tight text-deep-navy">
-                  {c.title}
-                </h3>
-                <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                  {c.description}
-                </p>
+                </article>
               </li>
             ))}
           </ul>
@@ -2262,42 +1826,217 @@ export default function HomePage() {
       </section>
 
       {/* =====================================================================
-          17. CC-63 SECTION E — DIGITAL CONTROL TOWER NARRATIVE (#control-tower)
-          Dark slab. Pure narrative, no screenshots, 4 pillars.
+          CC-Phase2 — PRODUCT DASHBOARD signature section (#control-tower).
+          Per design guide §10: chrome bar with Shipment ID + Live chip,
+          condensed timeline highlights, route/corridor row, document
+          compliance row, and metric chip strip. The CC-63 narrative
+          pillars become the right column; dashboard mock is the left
+          column. Same dark navy backdrop as before.
           ===================================================================== */}
       <section
         id="control-tower"
-        className="scroll-mt-16"
-        style={{
-          background:
-            "linear-gradient(180deg, var(--color-deep-navy) 0%, var(--color-deep-navy-soft) 100%)",
-        }}
+        className="ikia-section-dark scroll-mt-16"
       >
         <div className="mx-auto max-w-7xl px-4 py-20 sm:py-28">
-          <PremiumSectionHeader
-            eyebrow="برج کنترل دیجیتال"
-            title="برج کنترل دیجیتال زنجیره تأمین"
-            intro="iKIA Control Tower یک منبع واحد حقیقت برای همه ذی‌نفعان زنجیره تأمین است — برای دیدن، تصمیم گرفتن و عمل کردن، در سطح ملی و کریدور."
-            tone="dark"
-          />
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2">
-            {CONTROL_TOWER_PILLARS.map((p, idx) => (
-              <li
-                key={p.title}
-                className="rounded-2xl border border-white/10 bg-white/5 p-5 text-right backdrop-blur-md"
-              >
-                <div className="text-[10px] font-bold tracking-[0.18em] text-brand-100">
-                  پایه {String(idx + 1).padStart(2, "0")}
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start lg:gap-16">
+            {/* Right column — narrative + CTAs. */}
+            <div className="space-y-5 text-right">
+              <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-400/10 px-3 py-1 text-[11px] font-semibold tracking-[0.22em] text-sky-200">
+                <span aria-hidden className="inline-block size-1.5 rounded-full bg-sky-400" />
+                Control Tower
+              </div>
+              <h2 className="text-3xl font-extrabold leading-snug tracking-tight text-night-text sm:text-4xl lg:text-[44px]">
+                برج کنترل دیجیتال زنجیره تأمین
+              </h2>
+              <p className="max-w-xl text-base leading-8 text-night-text-muted sm:text-lg sm:leading-9">
+                iKIA Control Tower یک منبع واحد حقیقت برای همه ذی‌نفعان زنجیره
+                تأمین است — برای دیدن، تصمیم گرفتن و عمل کردن، در سطح ملی و
+                کریدور.
+              </p>
+              <ul className="grid gap-3 pt-1 sm:grid-cols-2">
+                {CONTROL_TOWER_PILLARS.map((p, idx) => (
+                  <li
+                    key={p.title}
+                    className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-right backdrop-blur-sm"
+                  >
+                    <div className="text-[10px] font-bold tracking-[0.2em] text-sky-200/80">
+                      پایه {String(idx + 1).padStart(2, "0")}
+                    </div>
+                    <div className="mt-1 text-sm font-bold text-night-text">
+                      {p.title}
+                    </div>
+                    <p className="mt-1 text-[11px] leading-6 text-night-text-muted">
+                      {p.description}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-gradient-to-l from-emerald-600 via-green-500 to-lime-400 text-white shadow-lg shadow-emerald-950/30 hover:from-emerald-700 hover:via-green-600 hover:to-lime-500"
+                >
+                  <Link href="/#start">درخواست جلسه معرفی</Link>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="border-white/30 bg-white/5 text-night-text backdrop-blur hover:border-sky-300 hover:bg-white/10 hover:text-night-text"
+                >
+                  <Link href="/login">ورود به پلتفرم</Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Left column — product dashboard mockup with chrome,
+                condensed timeline highlights, route, docs, metrics. */}
+            <div className="ikia-product-card-dark relative">
+              {/* Chrome bar. */}
+              <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
+                <div className="flex items-center gap-2">
+                  <span aria-hidden className="size-2 rounded-full bg-red-400/70" />
+                  <span aria-hidden className="size-2 rounded-full bg-amber-400/70" />
+                  <span aria-hidden className="size-2 rounded-full bg-emerald-400/70" />
+                  <span
+                    dir="ltr"
+                    className="ms-3 font-mono text-[11px] text-sky-300/80"
+                  >
+                    iKIA OS · Shipment SH-2026-08471
+                  </span>
                 </div>
-                <h3 className="mt-2 text-lg font-bold tracking-tight text-night-text">
-                  {p.title}
-                </h3>
-                <p className="mt-2 text-sm leading-7 text-night-text-muted">
-                  {p.description}
-                </p>
-              </li>
-            ))}
-          </ul>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-200">
+                  <span aria-hidden className="size-1.5 rounded-full bg-emerald-400" />
+                  Live
+                </span>
+              </div>
+
+              <div className="space-y-5 p-5 sm:p-6">
+                {/* Condensed timeline — 4 highlighted milestone chips. */}
+                <div>
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <div
+                      dir="ltr"
+                      className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-night-text-muted"
+                    >
+                      Timeline · Highlights
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-400/30 bg-sky-400/10 px-2 py-0.5 text-[10px] font-semibold text-sky-200">
+                      در حال حمل
+                    </span>
+                  </div>
+                  <ul className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                    {[
+                      { en: "Booked", fa: "رزرو", tone: "border-indigo-400/30 bg-indigo-400/10 text-indigo-200", done: true },
+                      { en: "Dispatched", fa: "اعزام", tone: "border-cyan-400/30 bg-cyan-400/10 text-cyan-200", done: true },
+                      { en: "In Transit", fa: "در مسیر", tone: "border-amber-400/30 bg-amber-400/10 text-amber-200", done: false },
+                      { en: "Delivered", fa: "تحویل", tone: "border-emerald-400/30 bg-emerald-400/10 text-emerald-200", done: false },
+                    ].map((m) => (
+                      <li
+                        key={m.en}
+                        className={`flex flex-col items-center rounded-lg border p-2 text-center ${m.tone}`}
+                      >
+                        <span dir="ltr" className="font-mono text-[10px] font-semibold">
+                          {m.done ? `✓ ${m.en}` : m.en}
+                        </span>
+                        <span className="mt-0.5 text-[11px] font-bold text-night-text">
+                          {m.fa}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Route / corridor row. */}
+                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <div
+                      dir="ltr"
+                      className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-night-text-muted"
+                    >
+                      Route · Corridor
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-200">
+                      شمال–جنوب
+                    </span>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between gap-2 text-sm text-night-text">
+                    <span className="font-bold">تهران</span>
+                    <span
+                      aria-hidden
+                      className="flex-1 mx-3 h-px bg-gradient-to-l from-cyan-400/0 via-cyan-400/60 to-cyan-400/0"
+                    />
+                    <span aria-hidden className="text-sky-300">●</span>
+                    <span
+                      aria-hidden
+                      className="flex-1 mx-3 h-px bg-gradient-to-l from-cyan-400/0 via-cyan-400/30 to-cyan-400/0"
+                    />
+                    <span className="font-bold">بندرعباس</span>
+                  </div>
+                  <div className="mt-2 flex items-center justify-between text-[11px] text-night-text-muted">
+                    <span>۱٬۳۱۰ کیلومتر</span>
+                    <span>ETA · ۲ روز ۴ ساعت</span>
+                  </div>
+                </div>
+
+                {/* Document compliance row. */}
+                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <div
+                      dir="ltr"
+                      className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-night-text-muted"
+                    >
+                      Documents · Compliance
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-200">
+                      ۴ از ۴ تأیید
+                    </span>
+                  </div>
+                  <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                    {[
+                      { fa: "اظهارنامه", en: "Customs" },
+                      { fa: "بارنامه", en: "BoL" },
+                      { fa: "بیمه", en: "Insurance" },
+                      { fa: "گواهی مبدأ", en: "Origin" },
+                    ].map((doc) => (
+                      <li
+                        key={doc.en}
+                        className="flex flex-col items-center rounded-lg border border-emerald-400/20 bg-emerald-400/[0.06] p-2 text-center"
+                      >
+                        <span className="text-[11px] font-semibold text-night-text">
+                          {doc.fa}
+                        </span>
+                        <span
+                          dir="ltr"
+                          className="font-mono text-[9px] text-emerald-200"
+                        >
+                          ✓ {doc.en}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Metric chip strip. */}
+                <ul className="grid grid-cols-3 gap-2">
+                  {[
+                    { fa: "میانگین زمان تحویل", value: "۲٫۴ روز", tone: "text-emerald-200" },
+                    { fa: "نرخ تطبیق ظرفیت", value: "٪۹۴", tone: "text-sky-200" },
+                    { fa: "تأخیر فعال", value: "۰ مورد", tone: "text-amber-200" },
+                  ].map((m) => (
+                    <li
+                      key={m.fa}
+                      className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-center"
+                    >
+                      <div className={`text-base font-extrabold ${m.tone}`}>{m.value}</div>
+                      <div className="mt-0.5 text-[10px] text-night-text-muted">{m.fa}</div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

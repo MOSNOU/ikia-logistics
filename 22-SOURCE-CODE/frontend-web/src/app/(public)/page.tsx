@@ -3,11 +3,13 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MarketingImageFill } from "@/components/marketing/marketing-image-fill";
-import { MarketingMarquee } from "@/components/marketing/marketing-marquee";
 import { MarketingScreenshot } from "@/components/marketing/marketing-screenshot";
 import { PremiumSectionHeader } from "@/components/marketing/premium-section-header";
+import {
+  ServiceImageSlider,
+  type ServiceSlide,
+} from "@/components/marketing/service-image-slider";
 import { StakeholderSolutionCard } from "@/components/marketing/stakeholder-solution-card";
-import { TransportServiceCard } from "@/components/marketing/transport-service-card";
 
 // CC-63 — Platform Operating Model & End-to-End Journey.
 //
@@ -235,18 +237,134 @@ const DOCUMENT_BULLETS: TextItem[] = [
   { title: "قرارداد اجراشده", description: "قرارداد اجرایی و امضای دیجیتال طرفین در یک منبع واحد." },
 ];
 
-const TRANSPORT_SERVICES: {
-  src: string;
-  alt: string;
-  title: string;
-  description: string;
-  tags: string[];
-}[] = [
-  { src: "/marketing/14-road-freight-service-card-clean.png", alt: "خدمات حمل جاده‌ای iKIA", title: "حمل جاده‌ای", description: "ستون اصلی حمل داخلی و کریدورهای ترانزیتی، با اعزام منسجم و ردیابی زنده در سطح مسیر.", tags: ["داخلی", "چندوجهی", "اعزام"] },
-  { src: "/marketing/13-sea-freight-service-card-clean.png", alt: "خدمات حمل دریایی iKIA", title: "حمل دریایی", description: "هماهنگی محموله‌های کانتینری از بنادر اصلی جنوب کشور تا مقصد نهایی، با اسناد گمرکی منسجم.", tags: ["کانتینر", "بنادر", "صادرات/واردات"] },
-  { src: "/marketing/12-rail-freight-service-card-clean.png", alt: "خدمات حمل ریلی iKIA", title: "حمل ریلی", description: "گزینه کارآمد برای حجم بالا در مسیرهای ریلی داخلی و کریدورهای ترانزیتی شرق-غرب.", tags: ["حجمی", "ترانزیت", "کریدور ریلی"] },
-  { src: "/marketing/11-air-freight-service-card-clean.png", alt: "خدمات حمل هوایی iKIA", title: "حمل هوایی", description: "گزینه سریع برای محموله‌های ارزشمند یا حساس به زمان، با مدیریت کامل اسناد گمرکی.", tags: ["سریع", "ارزشمند", "اسناد گمرکی"] },
-  { src: "/marketing/10-warehouse-service-card-clean.png", alt: "خدمات انبارداری iKIA", title: "خدمات انبارداری", description: "هماهنگی انبار، انبارهای ترانزیتی و عملیات تجمیع/توزیع محموله در شبکه iKIA.", tags: ["انبار", "تجمیع", "توزیع"] },
+// CC-66B — Service slides for the auto-advancing marketplace slider.
+// Replaces the previous TRANSPORT_SERVICES array and its now-retired
+// 10–14 PNG references. All 5 v2 images are used, in the order requested
+// by the brief: warehousing → air → rail → sea → road.
+const SERVICE_ICON_CLASS = "h-7 w-7";
+
+const SERVICE_SLIDES: ServiceSlide[] = [
+  {
+    image: "/marketing/service-warehousing-v2.png",
+    alt: "نمای انبار و عملیات انبارداری iKIA Logistics",
+    title: "خدمات انبارداری",
+    description:
+      "ظرفیت انبار، آماده‌سازی سفارش، کنترل موجودی و اتصال به جریان حمل در یک زنجیره عملیاتی.",
+    pills: ["انبار اختصاصی", "کنترل موجودی", "آماده‌سازی سفارش"],
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={SERVICE_ICON_CLASS}
+        aria-hidden
+      >
+        <path d="M3 9.5 12 4l9 5.5V21H3z" />
+        <path d="M8 21v-6h8v6" />
+        <path d="M8 13h8" />
+      </svg>
+    ),
+  },
+  {
+    image: "/marketing/service-air-freight-v2.png",
+    alt: "محموله هوایی در فرودگاه — خدمات حمل هوایی iKIA Logistics",
+    title: "حمل هوایی",
+    description:
+      "راهکار سریع برای محموله‌های حساس، زمان‌محور و ارزشمند با کنترل وضعیت و اسناد.",
+    pills: ["زمان تحویل کوتاه", "محموله حساس", "ردیابی وضعیت"],
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={SERVICE_ICON_CLASS}
+        aria-hidden
+      >
+        <path d="M21 12c0-1-.6-2-1.5-2H15L10 3H8l2.5 7H6l-2-2H2.5L4 12l-1.5 2H4l2-2h4.5L8 19h2l5-7h4.5c.9 0 1.5-1 1.5-2z" />
+      </svg>
+    ),
+  },
+  {
+    image: "/marketing/service-rail-freight-v2.png",
+    alt: "قطار باری در کریدور ریلی — خدمات حمل ریلی iKIA Logistics",
+    title: "حمل ریلی",
+    description:
+      "حمل پایدار، اقتصادی و مناسب مسیرهای پرتکرار، سنگین و کریدوری در شبکه ریلی.",
+    pills: ["ظرفیت بالا", "مسیر کریدوری", "هزینه بهینه"],
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={SERVICE_ICON_CLASS}
+        aria-hidden
+      >
+        <rect x="5" y="3" width="14" height="14" rx="3" />
+        <path d="M5 11h14" />
+        <circle cx="9" cy="14.5" r="1" />
+        <circle cx="15" cy="14.5" r="1" />
+        <path d="M7 21l2-3M17 21l-2-3" />
+      </svg>
+    ),
+  },
+  {
+    image: "/marketing/service-sea-freight-v2.png",
+    alt: "کشتی کانتینری در بندر — خدمات حمل دریایی iKIA Logistics",
+    title: "حمل دریایی",
+    description:
+      "مدیریت جریان کانتینری و فله برای تجارت بین‌المللی، بنادر و زنجیره اسناد.",
+    pills: ["کانتینری", "فله", "اسناد بندری"],
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={SERVICE_ICON_CLASS}
+        aria-hidden
+      >
+        <path d="M12 3v8" />
+        <path d="M6 11h12l-2 6H8z" />
+        <path d="M3 19c2 1 4 1 6 0s4-1 6 0 4 1 6 0" />
+      </svg>
+    ),
+  },
+  {
+    image: "/marketing/service-road-freight-v2.png",
+    alt: "ناوگان جاده‌ای iKIA در کریدور حمل — خدمات حمل جاده‌ای",
+    title: "حمل جاده‌ای",
+    description:
+      "اتصال ناوگان، راننده، بارنامه، مسیر و تحویل نهایی برای حمل داخلی و بین‌المللی.",
+    pills: ["داخلی", "بین‌المللی", "تحویل نهایی"],
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={SERVICE_ICON_CLASS}
+        aria-hidden
+      >
+        <rect x="2" y="7" width="12" height="9" rx="1.5" />
+        <path d="M14 10h4l3 4v2h-7z" />
+        <circle cx="7" cy="18" r="2" />
+        <circle cx="17" cy="18" r="2" />
+      </svg>
+    ),
+  },
 ];
 
 const SETTLEMENT_BULLETS: string[] = [
@@ -1835,30 +1953,17 @@ export default function HomePage() {
             title="بازار ظرفیت حمل‌ونقل چندوجهی"
             intro="انتشار ظرفیت، پذیرش رزرو و چرخه اعزام منسجم در پنج شیوه حمل — از جاده‌ای و دریایی تا ریلی، هوایی و انبارداری."
           />
-          {/* CC-65 — TRANSPORT_SERVICES rendered as a CSS marquee strip
-              instead of a static grid. Pure CSS animation (see
-              `.ikia-marquee-track` in globals.css); no client JS. */}
-          <MarketingMarquee
-            ariaLabel="نوار اسلاید خدمات حمل‌ونقل iKIA"
-            className="mt-10"
-            cardWidthClassName="w-[280px] sm:w-[320px] lg:w-[360px]"
-          >
-            {TRANSPORT_SERVICES.map((s) => (
-              <TransportServiceCard
-                key={s.title}
-                visual={
-                  <MarketingImageFill
-                    src={s.src}
-                    alt={s.alt}
-                    sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 360px"
-                  />
-                }
-                title={s.title}
-                description={s.description}
-                tags={s.tags}
-              />
-            ))}
-          </MarketingMarquee>
+          {/* CC-66B — Auto-advancing fullscreen slider. Right-to-left
+              motion every 4 s, continuous loop, pauses on hover/focus,
+              honors prefers-reduced-motion. Replaces the previous CSS
+              marquee strip and the older 10–14 service card PNGs. */}
+          <div className="mt-10">
+            <ServiceImageSlider
+              ariaLabel="اسلاید خدمات حمل‌ونقل iKIA Logistics"
+              intervalMs={4000}
+              slides={SERVICE_SLIDES}
+            />
+          </div>
         </div>
       </section>
 

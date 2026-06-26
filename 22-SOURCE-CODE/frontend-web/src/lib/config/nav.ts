@@ -4,7 +4,7 @@ import {
   Users,
   Shield,
   BarChart3,
-  Plug,
+  Bell,
   Package,
   FileText,
   Truck,
@@ -26,15 +26,31 @@ export interface NavItem {
 
 export type Portal = "admin" | "buyer" | "supplier" | "carrier";
 
+// CC-70 — Admin sidebar realigned to actually-shipped admin pages.
+//   • Removed three href dead-ends that returned 404:
+//       /admin/roles · /admin/analytics · /admin/integrations
+//     None of those routes have a page.tsx in src/app/admin/. They were
+//     placeholders from an earlier scaffold. A platform_admin clicking
+//     them landed on a Next.js 404.
+//   • Added three already-built admin routes that previously had no
+//     sidebar entry, so a freshly-logged-in admin has discoverable
+//     access to the operational surfaces that already exist on disk:
+//       /admin/control-tower · /admin/kyc · /admin/notifications
+//   • The remaining admin pages on disk (bookings, contracts,
+//     dispatches, disputes, documents, evaluations, executive, finance,
+//     marketplace, matching, offers, pricing, rfqs, settlements,
+//     shipments) are deliberately NOT added in this minimal CC-70 pass.
+//     A follow-up CC should categorise them under sidebar groups
+//     ("Operations", "Trade", "Finance", …) once the IA is decided.
 export const adminNav: NavItem[] = [
   { labelFa: "داشبورد", labelEn: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { labelFa: "سازمان‌ها", labelEn: "Organizations", href: "/admin/organizations", icon: Building2 },
   { labelFa: "تأمین‌کنندگان", labelEn: "Suppliers", href: "/admin/suppliers", icon: Factory },
   { labelFa: "کاربران", labelEn: "Users", href: "/admin/users", icon: Users },
-  { labelFa: "نقش‌ها و دسترسی", labelEn: "Roles & Access", href: "/admin/roles", icon: Shield },
-  { labelFa: "ممیزی", labelEn: "Audit", href: "/admin/audit", icon: BarChart3 },
-  { labelFa: "تحلیل‌ها", labelEn: "Analytics", href: "/admin/analytics", icon: BarChart3 },
-  { labelFa: "یکپارچه‌سازی", labelEn: "Integrations", href: "/admin/integrations", icon: Plug },
+  { labelFa: "احراز هویت سازمانی", labelEn: "KYC / KYB", href: "/admin/kyc", icon: Shield },
+  { labelFa: "برج کنترل", labelEn: "Control Tower", href: "/admin/control-tower", icon: BarChart3 },
+  { labelFa: "اعلان‌ها", labelEn: "Notifications", href: "/admin/notifications", icon: Bell },
+  { labelFa: "ممیزی", labelEn: "Audit", href: "/admin/audit", icon: FileBadge },
 ];
 
 export const buyerNav: NavItem[] = [

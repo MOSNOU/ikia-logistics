@@ -202,14 +202,14 @@ select throws_ok(
 reset role;
 
 -- 5. CC-12's `ready_for_contract` does not introduce any payment /
--- signature / invoice / negotiation / execution schema. (The `shipment` schema
--- legitimately lands in CC-14 and `settlement` in CC-17 — both removed from
--- this exclusion list.)
+-- signature / invoice / negotiation schema. (The `shipment` schema
+-- legitimately lands in CC-14, `settlement` in CC-17, and `execution`
+-- in CC-65 — all removed from this exclusion list.)
 select is(
   (select count(*)::int from information_schema.schemata
-    where schema_name in ('payment','signature','invoice','negotiation','execution')),
+    where schema_name in ('payment','signature','invoice','negotiation')),
   0,
-  'ready_for_contract does NOT create any payment/signature/invoice/negotiation/execution schema'
+  'ready_for_contract does NOT create any payment/signature/invoice/negotiation schema'
 );
 
 select * from finish();

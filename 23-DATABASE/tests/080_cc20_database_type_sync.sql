@@ -116,6 +116,8 @@ select is(
       'dispatch',
       -- CC-45 added telematics.
       'telematics',
+      -- CC-65 added execution.
+      'execution',
       'tests'
     )),
   0,

@@ -120,6 +120,8 @@ select is(
       'execution',
       -- CC-66 added workflow.
       'workflow',
+      -- CC-67 added rules.
+      'rules',
       'tests'
     )),
   0,

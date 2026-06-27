@@ -118,6 +118,8 @@ select is(
       'telematics',
       -- CC-65 added execution.
       'execution',
+      -- CC-66 added workflow.
+      'workflow',
       'tests'
     )),
   0,

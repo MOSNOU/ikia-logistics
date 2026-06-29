@@ -1,6 +1,83 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind v4 entry. The old `@tailwind base/components/utilities` directives
+   are NOT processed by @tailwindcss/postcss v4 — they emit no utilities, which
+   left the marketing pages unstyled. Scope source scanning to this app only so
+   the separate product app under 22-SOURCE-CODE is never pulled in. */
+@import "tailwindcss" source(none);
+@source ".";
+@source "../components";
+@source "../content";
+
+/* Brand design tokens — generate semantic utilities (bg-navy-900, text-brand-600,
+   bg-surface, text-accent-600, …). */
+@theme {
+  --color-navy-950: #03101d;
+  --color-navy-900: #071a2d;
+  --color-navy-800: #0b2540;
+  --color-navy-700: #103355;
+  --color-brand-700: #094a8c;
+  --color-brand-600: #0b5cad;
+  --color-brand-500: #1a72c8;
+  --color-brand-100: #e3eefb;
+  --color-brand-50: #f2f7fd;
+  --color-accent-600: #e21b2d;
+  --color-accent-500: #f0354a;
+  --color-surface: #f6f8fb;
+  --font-sans: "Vazirmatn", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* ---------------------------------------------------------------------------
+   Self-hosted fonts (no CDN). Files live in /public/fonts.
+   Vazirmatn = Persian-first UI font. Orbitron = latin brand wordmark only.
+--------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Vazirmatn";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/Vazirmatn-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Vazirmatn";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/Vazirmatn-Medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Vazirmatn";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/Vazirmatn-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Vazirmatn";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("/fonts/Vazirmatn-Black.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Orbitron";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/Orbitron-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Orbitron";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/Orbitron-800.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Orbitron";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("/fonts/Orbitron-900.woff2") format("woff2");
+}
 
 :root {
   --bg: #f4f6f9; --bg2: #ffffff; --bg3: #f8fafc; --text: #1e3a5f; --text2: #444; --text3: #888;
@@ -14,7 +91,12 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { color: var(--text2); background: var(--bg); -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
+/* Global horizontal-overflow protection. `overflow-x: clip` clips a stray wide
+   child (no horizontal scrollbar) WITHOUT creating a scroll container, so it
+   does not force overflow-y to auto and therefore does not break the
+   position:sticky navbar (unlike overflow-x: hidden, which would). */
+html { font-family: "Vazirmatn", system-ui, -apple-system, "Segoe UI", sans-serif; width: 100%; max-width: 100%; overflow-x: clip; }
+body { font-family: "Vazirmatn", system-ui, -apple-system, "Segoe UI", sans-serif; width: 100%; max-width: 100%; overflow-x: clip; color: var(--text2); background: var(--bg); -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
 a { color: inherit; text-decoration: none; }
 button { cursor: pointer; font-family: inherit; }
 button:disabled { opacity: 0.6; cursor: not-allowed; }

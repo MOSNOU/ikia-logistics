@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The product app is a separate, self-contained Next.js project with its
+    // own lint/build pipeline; the marketing app must not lint its sources or
+    // build artifacts.
+    "22-SOURCE-CODE/**",
+    "public/**",
   ]),
 ]);
 

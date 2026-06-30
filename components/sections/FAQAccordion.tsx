@@ -8,7 +8,7 @@ export function FAQAccordion({ items }: { items: FAQItem[] }) {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <div className="mx-auto max-w-3xl divide-y divide-slate-200 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+    <div className="mx-auto max-w-3xl divide-y divide-line overflow-hidden rounded-2xl border border-line bg-white shadow-[0_1px_2px_rgba(6,26,47,0.04)]">
       {items.map((item, i) => {
         const isOpen = open === i;
         return (
@@ -17,17 +17,17 @@ export function FAQAccordion({ items }: { items: FAQItem[] }) {
               type="button"
               aria-expanded={isOpen}
               onClick={() => setOpen(isOpen ? null : i)}
-              className="flex w-full items-center justify-between gap-3 px-5 py-4 text-start transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#06b6d4]"
+              className="flex w-full items-center justify-between gap-3 px-5 py-4 text-start transition hover:bg-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue/40"
             >
-              <span className="text-sm font-extrabold text-[#1e3a5f]">{item.q}</span>
+              <span className="text-[15px] font-bold text-ink">{item.q}</span>
               <ChevronDown
                 size={18}
-                className={`shrink-0 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                className={`shrink-0 text-blue transition-transform ${isOpen ? "rotate-180" : ""}`}
                 aria-hidden
               />
             </button>
             {isOpen ? (
-              <div className="px-5 pb-5 text-sm leading-8 text-slate-600">{item.a}</div>
+              <div className="px-5 pb-5 text-[14px] leading-8 text-muted">{item.a}</div>
             ) : null}
           </div>
         );

@@ -13,13 +13,13 @@ export function FinalCTA({
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ background: "radial-gradient(50% 80% at 80% 0%, rgba(31,156,224,0.22) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(50% 80% at 80% 0%, rgba(22,163,74,0.22) 0%, transparent 70%)" }}
       />
       <div className="relative mx-auto w-full max-w-6xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-24">
         <h2 className="mx-auto max-w-3xl text-3xl font-bold leading-tight md:text-[2.6rem]">{title}</h2>
         <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-ondark-muted md:text-lg">{subtitle}</p>
         <div className="mt-9 flex flex-wrap justify-center gap-3">
-          <Button href={PRODUCT_URLS.start} variant="primary" size="lg">
+          <Button href={PRODUCT_URLS.start} variant="green" size="lg">
             شروع همکاری
           </Button>
           <Button href={PRODUCT_URLS.platform} variant="outlineLight" size="lg">

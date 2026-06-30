@@ -65,10 +65,10 @@ export function Navbar() {
           scrolled ? "border-line shadow-sm" : "border-transparent"
         }`}
       >
-        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          {/* Right (RTL start): brand wordmark */}
-          <Link href="/" aria-label="iKIA Logistic — خانه" className="shrink-0">
-            <LogoNav />
+        <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+          {/* Right (RTL start): official signature logo */}
+          <Link href="/" aria-label="iKIA Logistics — خانه" className="shrink-0">
+            <LogoNav variant="header" />
           </Link>
 
           {/* Center: desktop mega-menu (click-to-open) */}

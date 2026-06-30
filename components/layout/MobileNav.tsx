@@ -29,7 +29,7 @@ export function MobileNav({
       <div className="fixed inset-0 z-50 bg-ink/50 backdrop-blur-sm" onClick={onClose} aria-hidden />
       <div className="fixed inset-y-0 end-0 z-50 flex w-[88%] max-w-sm flex-col overflow-y-auto bg-white shadow-2xl">
         <div className="flex items-center justify-between border-b border-line px-5 py-4">
-          <LogoNav />
+          <LogoNav variant="header" />
           <button
             type="button"
             onClick={onClose}

@@ -1,5 +1,6 @@
 "use client";
 import { useMemo } from "react";
+import Image from "next/image";
 
 function project3D(x: number, y: number, z: number, tiltX: number, tiltY: number) {
   const y1 = y * Math.cos(tiltX) - z * Math.sin(tiltX);
@@ -81,13 +82,38 @@ export function LogoHero({ onDark = false }: { onDark?: boolean }) {
   );
 }
 
-// Main platform logo for navbar / footer — clean iKIA Logistics wordmark
-// (no globe). The globe/network version (LogoSphere) is reserved for the
-// premium brand visual on the About trust section.
-export function LogoNav({ onDark = false }: { onDark?: boolean }) {
+// Official iKIA Logistic signature logo — the source of truth for brand
+// identity on the marketing site (navbar + footer). Pass `variant` to render
+// the official image. The globe/network version (LogoSphere) is reserved for
+// the premium brand visual on the About trust section.
+//
+// The signature PNG ships on a solid white background (no alpha): on the white
+// navbar it blends seamlessly; in the dark footer it is placed on a white
+// rounded plate by the Footer so it stays crisp without recoloring the asset.
+//
+// Backward compatibility: the product dashboard (out of scope here) imports
+// LogoNav and passes `onDark`. When no `variant` is given we keep the legacy
+// text wordmark so that surface is left untouched.
+export function LogoNav({ variant, onDark = false }: { variant?: "header" | "footer"; onDark?: boolean }) {
+  if (!variant) {
+    return (
+      <div dir="ltr" style={{ display: "flex", alignItems: "center" }}>
+        <LogoText size="small" onDark={onDark} />
+      </div>
+    );
+  }
+  // Intrinsic asset ratio is 1877×838 (~2.24:1); width-only sizing keeps it
+  // proportional with height auto. Responsive: mobile narrower than desktop.
+  const sizeClass = variant === "footer" ? "w-[190px]" : "w-[136px] sm:w-[160px]";
   return (
-    <div dir="ltr" style={{ display: "flex", alignItems: "center" }}>
-      <LogoText size="small" onDark={onDark} />
-    </div>
+    <Image
+      src="/brand/ikia-logo-signature.png"
+      alt="iKIA Logistics"
+      width={1877}
+      height={838}
+      priority={variant === "header"}
+      sizes={variant === "footer" ? "190px" : "(min-width: 640px) 160px, 136px"}
+      className={`${sizeClass} h-auto select-none`}
+    />
   );
 }

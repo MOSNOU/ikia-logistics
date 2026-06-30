@@ -49,6 +49,8 @@ export const adminNav: NavItem[] = [
   { labelFa: "کاربران", labelEn: "Users", href: "/admin/users", icon: Users },
   { labelFa: "احراز هویت سازمانی", labelEn: "KYC / KYB", href: "/admin/kyc", icon: Shield },
   { labelFa: "برج کنترل", labelEn: "Control Tower", href: "/admin/control-tower", icon: BarChart3 },
+  // CC-D5 — operations visibility over driver-executed trips (status / issues / POD).
+  { labelFa: "سفرهای رانندگان", labelEn: "Driver Trips", href: "/admin/driver-trips", icon: Truck },
   { labelFa: "اعلان‌ها", labelEn: "Notifications", href: "/admin/notifications", icon: Bell },
   { labelFa: "ممیزی", labelEn: "Audit", href: "/admin/audit", icon: FileBadge },
 ];

@@ -11,18 +11,16 @@ import {
 import { TripActionPanel } from "@/components/driver/trip-action-panel";
 import { DriverLocationPanel } from "@/components/driver/driver-location-panel";
 import { PodUploadPanel } from "@/components/driver/pod-upload-panel";
+import { DriverIssuePanel } from "@/components/driver/driver-issue-panel";
 import { cn } from "@/lib/utils";
 
-// Phase D4 — driver trip detail. Workflow transition actions are LIVE via
-// TripActionPanel (D1 RPCs). Manual GPS send (DriverLocationPanel) and POD
-// upload (PodUploadPanel) are LIVE. Issue reporting remains a disabled
-// placeholder (later phase).
+// Phase D5 — driver trip detail. Workflow transition actions are LIVE via
+// TripActionPanel (D1 RPCs). Manual GPS send (DriverLocationPanel), POD upload
+// (PodUploadPanel) and issue reporting (DriverIssuePanel) are LIVE.
 
 interface PageProps {
   params: Promise<{ dispatchId: string }>;
 }
-
-const LATER_HINT = "در فاز بعدی فعال می‌شود";
 
 export default async function DriverTripDetailPage({ params }: PageProps) {
   const { dispatchId } = await params;
@@ -143,16 +141,11 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
         </CardContent>
       </Card>
 
-      {/* گزارش مشکل — placeholder. */}
+      {/* گزارش مشکل — issue reporting (D5). */}
       <Card className="border-border-soft shadow-card">
         <CardContent className="space-y-3 p-4">
           <h2 className="text-sm font-semibold tracking-tight">گزارش مشکل</h2>
-          <p className="text-xs leading-6 text-muted-foreground">
-            گزارش مشکل در فاز بعدی فعال می‌شود.
-          </p>
-          <Button disabled variant="outline" size="sm" className="h-11 w-full">
-            گزارش مشکل — {LATER_HINT}
-          </Button>
+          <DriverIssuePanel dispatchId={trip.dispatchId} />
         </CardContent>
       </Card>
 

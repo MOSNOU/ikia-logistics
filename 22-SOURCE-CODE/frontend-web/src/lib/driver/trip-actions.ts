@@ -268,3 +268,67 @@ export async function finalizeAndAttachPod(
   revalidatePath(`/driver/trips/${dispatchId}`);
   return { ok: true, message: "سند تحویل با موفقیت ثبت شد." };
 }
+
+// ---------------------------------------------------------------------------
+// Phase D5 — driver issue reporting.
+//
+// Thin wrapper over dispatch.driver_report_issue. The RPC asserts driver
+// ownership + "dispatch released", inserts the issue, appends a ledger marker
+// and returns the new issue id (the issue does NOT change execution_status).
+// Photo upload is intentionally out of scope for D5 (future task); no
+// photo_file_id is sent.
+// ---------------------------------------------------------------------------
+
+const ISSUE_CATEGORIES = new Set([
+  "delay",
+  "vehicle",
+  "loading",
+  "border",
+  "accident",
+  "other",
+]);
+
+export interface ReportIssueInput {
+  category: string;
+  severity: number;
+  description?: string | null;
+}
+
+export async function reportDriverIssue(
+  dispatchId: string,
+  payload: ReportIssueInput,
+): Promise<TripActionResult> {
+  if (!dispatchId) return { ok: false, message: "شناسه سفر نامعتبر است." };
+  if (!ISSUE_CATEGORIES.has(payload.category)) {
+    return { ok: false, message: "دسته مشکل نامعتبر است." };
+  }
+  const severity =
+    Number.isFinite(payload.severity) &&
+    payload.severity >= 1 &&
+    payload.severity <= 5
+      ? Math.trunc(payload.severity)
+      : 1;
+  const description = (payload.description ?? "").trim();
+
+  const supabase = await createClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase.schema("dispatch") as any).rpc(
+    "driver_report_issue", // TODO(D-later): typed once Supabase types regenerated
+    {
+      p_dispatch_id: dispatchId,
+      p_category: payload.category,
+      p_severity: severity,
+      p_description: description.length > 0 ? description : null,
+      // p_photo_file_id omitted — photo upload is a future task (not in D5).
+    },
+  );
+
+  if (error) {
+    console.error("driver.driver_report_issue", error);
+    return { ok: false, message: friendlyError(error) };
+  }
+
+  revalidatePath("/driver");
+  revalidatePath(`/driver/trips/${dispatchId}`);
+  return { ok: true, message: "گزارش مشکل با موفقیت ثبت شد." };
+}

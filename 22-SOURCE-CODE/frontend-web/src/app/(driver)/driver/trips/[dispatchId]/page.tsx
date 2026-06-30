@@ -8,16 +8,18 @@ import {
   driverTripStatusIndex,
   driverTripStatusLabel,
 } from "@/lib/driver/trip-status";
+import { TripActionPanel } from "@/components/driver/trip-action-panel";
 import { cn } from "@/lib/utils";
 
-// Phase D2 — driver trip detail (READ-ONLY skeleton).
-// Action buttons are VISIBLE but DISABLED. No mutations, POD upload or GPS.
+// Phase D3 — driver trip detail. Workflow transition actions are LIVE via
+// TripActionPanel (D1 RPCs). GPS / POD / issue sections remain D4+ placeholders.
 
 interface PageProps {
   params: Promise<{ dispatchId: string }>;
 }
 
-const DISABLED_HINT = "در فاز بعد فعال می‌شود";
+const D4_HINT = "در فاز D4 فعال می‌شود";
+const LATER_HINT = "در فاز بعدی فعال می‌شود";
 
 export default async function DriverTripDetailPage({ params }: PageProps) {
   const { dispatchId } = await params;
@@ -131,7 +133,7 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
             انجام نمی‌شود.
           </p>
           <Button disabled size="sm" className="h-11 w-full">
-            ارسال موقعیت — {DISABLED_HINT}
+            ارسال موقعیت — {D4_HINT}
           </Button>
         </CardContent>
       </Card>
@@ -144,7 +146,7 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
             بارگذاری مدارک تحویل (POD) در فاز بعد اضافه می‌شود.
           </p>
           <Button disabled variant="outline" size="sm" className="h-11 w-full">
-            بارگذاری سند تحویل — {DISABLED_HINT}
+            بارگذاری سند تحویل — {D4_HINT}
           </Button>
         </CardContent>
       </Card>
@@ -157,26 +159,19 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
             ثبت مشکل یا تأخیر در فاز بعد فعال می‌شود.
           </p>
           <Button disabled variant="outline" size="sm" className="h-11 w-full">
-            گزارش مشکل — {DISABLED_HINT}
+            گزارش مشکل — {LATER_HINT}
           </Button>
         </CardContent>
       </Card>
 
-      {/* Read-only trip actions, all disabled. */}
-      <Card className="bg-surface-muted border-border-soft shadow-none">
-        <CardContent className="space-y-2 p-4">
-          <h2 className="text-sm font-semibold tracking-tight">اقدامات سفر</h2>
-          <div className="grid grid-cols-1 gap-2">
-            <Button disabled size="sm" className="h-11 w-full">
-              پذیرش سفر — {DISABLED_HINT}
-            </Button>
-            <Button disabled size="sm" className="h-11 w-full">
-              شروع سفر — {DISABLED_HINT}
-            </Button>
-            <Button disabled size="sm" className="h-11 w-full">
-              ثبت تحویل — {DISABLED_HINT}
-            </Button>
-          </div>
+      {/* Live workflow action — only the next legal transition is shown. */}
+      <Card className="border-border-soft shadow-card">
+        <CardContent className="space-y-3 p-4">
+          <h2 className="text-sm font-semibold tracking-tight">اقدام بعدی سفر</h2>
+          <TripActionPanel dispatchId={trip.dispatchId} executionStatus={trip.executionStatus} />
+          <p className="text-[11px] leading-6 text-muted-foreground">
+            فقط اقدام مجاز برای وضعیت فعلی نمایش داده می‌شود.
+          </p>
         </CardContent>
       </Card>
 

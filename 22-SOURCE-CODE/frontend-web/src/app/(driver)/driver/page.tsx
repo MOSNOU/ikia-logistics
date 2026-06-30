@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { listMyTrips } from "@/lib/driver/list-my-trips";
-import { driverTripStatusLabel } from "@/lib/driver/trip-status";
+import { driverTripStatusLabel, driverNextAction } from "@/lib/driver/trip-status";
 
 // Phase D2 — driver dashboard (READ-ONLY). Active trip + assigned trips list.
 // No mutations: every action either navigates to detail or is a disabled
@@ -75,6 +75,20 @@ export default async function DriverDashboardPage() {
                       {activeTrip.dispatchId}
                     </span>
                   </div>
+                  {(() => {
+                    const next = driverNextAction(activeTrip.status);
+                    const label =
+                      next === "complete-gated"
+                        ? "تکمیل سفر (پس از سند تحویل)"
+                        : next && next !== null
+                          ? next.label
+                          : null;
+                    return label ? (
+                      <div className="text-xs font-medium text-primary">
+                        اقدام بعدی: {label}
+                      </div>
+                    ) : null;
+                  })()}
                 </div>
                 <Button asChild size="sm" className="h-11 w-full">
                   <Link href={`/driver/trips/${activeTrip.dispatchId}`}>
@@ -159,7 +173,7 @@ export default async function DriverDashboardPage() {
       )}
 
       <p className="text-[11px] leading-6 text-muted-foreground">
-        داده‌ها فقط‌خواندنی هستند. اقدامات روی سفر در فاز بعد فعال می‌شود.
+        برای ثبت اقدام روی هر سفر، صفحه جزئیات آن را باز کنید.
       </p>
     </div>
   );

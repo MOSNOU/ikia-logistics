@@ -31,3 +31,37 @@ export function driverTripStatusIndex(status: string | null | undefined): number
   if (!status) return -1;
   return DRIVER_TRIP_STATUSES.findIndex((s) => s.status === status);
 }
+
+// ---------------------------------------------------------------------------
+// Phase D3 — next legal workflow action per execution status.
+//
+// `key` maps to a named server action in `@/lib/driver/trip-actions`.
+// `"complete-gated"` = the delivered→completed step, which is intentionally
+// disabled in D3 (driver_complete_trip requires a POD that D4 will add).
+// `null` = no action (completed, or unknown status).
+// ---------------------------------------------------------------------------
+export interface DriverNextAction {
+  key: string;
+  label: string;
+}
+
+const DRIVER_NEXT_ACTION: Record<string, DriverNextAction | "complete-gated" | null> = {
+  assigned: { key: "accept", label: "پذیرش سفر" },
+  accepted: { key: "arrivePickup", label: "رسیدم به محل بارگیری" },
+  arrived_at_pickup: { key: "startLoading", label: "شروع بارگیری" },
+  loading_started: { key: "confirmLoaded", label: "بارگیری انجام شد" },
+  loaded: { key: "startTransit", label: "شروع حرکت" },
+  in_transit: { key: "arriveDelivery", label: "رسیدم به محل تخلیه" },
+  arrived_at_delivery: { key: "startUnloading", label: "شروع تخلیه" },
+  unloading_started: { key: "confirmDelivered", label: "تحویل انجام شد" },
+  delivered: "complete-gated",
+  completed: null,
+};
+
+export function driverNextAction(
+  status: string | null | undefined,
+): DriverNextAction | "complete-gated" | null {
+  // A null/absent execution status means the trip is freshly assigned.
+  const s = status ?? "assigned";
+  return DRIVER_NEXT_ACTION[s] ?? null;
+}

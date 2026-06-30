@@ -11,7 +11,11 @@ import { createClient } from "@/lib/supabase/server";
 
 export interface DriverTripDetail {
   dispatchId: string;
-  shipmentId: string | null;
+  /** D1 trip execution status (assigned…completed); null until the driver acts. */
+  executionStatus: string | null;
+  /** Carrier dispatch lifecycle status (draft…released…cancelled). */
+  dispatchStatus: string | null;
+  /** Back-compat alias of executionStatus for the existing stepper UI. */
   status: string | null;
   routeSummary: string | null;
   vehicleReference: string | null;
@@ -22,8 +26,9 @@ export interface DriverTripDetail {
 interface RawDriverTripDetail {
   dispatch_id?: string | null;
   id?: string | null;
-  shipment_id?: string | null;
-  status?: string | null;
+  // driver_get_trip returns dispatch_status + execution_status (not "status").
+  dispatch_status?: string | null;
+  execution_status?: string | null;
   route_summary?: string | null;
   vehicle_reference?: string | null;
   driver_name?: string | null;
@@ -56,10 +61,12 @@ export async function getTrip(dispatchId: string): Promise<DriverTripDetail | nu
   const id = String(raw.dispatch_id ?? raw.id ?? "");
   if (!id) return null;
 
+  const executionStatus = raw.execution_status ?? null;
   return {
     dispatchId: id,
-    shipmentId: raw.shipment_id ?? null,
-    status: raw.status ?? null,
+    executionStatus,
+    dispatchStatus: raw.dispatch_status ?? null,
+    status: executionStatus,
     routeSummary: raw.route_summary ?? null,
     vehicleReference: raw.vehicle_reference ?? null,
     driverName: raw.driver_name ?? null,

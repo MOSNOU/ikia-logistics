@@ -14,7 +14,10 @@ import { createClient } from "@/lib/supabase/server";
 
 export interface DriverTripRow {
   dispatchId: string;
-  shipmentId: string | null;
+  /** D1 trip execution status; null until the driver acts. */
+  executionStatus: string | null;
+  dispatchStatus: string | null;
+  /** Back-compat alias of executionStatus for existing list UI. */
   status: string | null;
   routeSummary: string | null;
   vehicleReference: string | null;
@@ -24,8 +27,8 @@ export interface DriverTripRow {
 interface RawDriverTripRow {
   dispatch_id?: string | null;
   id?: string | null;
-  shipment_id?: string | null;
-  status?: string | null;
+  dispatch_status?: string | null;
+  execution_status?: string | null;
   route_summary?: string | null;
   vehicle_reference?: string | null;
   planned_pickup_at?: string | null;
@@ -53,12 +56,16 @@ export async function listMyTrips({
   }
 
   const rows = (Array.isArray(data) ? data : []) as RawDriverTripRow[];
-  return rows.map((r): DriverTripRow => ({
-    dispatchId: String(r.dispatch_id ?? r.id ?? ""),
-    shipmentId: r.shipment_id ?? null,
-    status: r.status ?? null,
-    routeSummary: r.route_summary ?? null,
-    vehicleReference: r.vehicle_reference ?? null,
-    plannedPickupAt: r.planned_pickup_at ?? null,
-  }));
+  return rows.map((r): DriverTripRow => {
+    const executionStatus = r.execution_status ?? null;
+    return {
+      dispatchId: String(r.dispatch_id ?? r.id ?? ""),
+      executionStatus,
+      dispatchStatus: r.dispatch_status ?? null,
+      status: executionStatus,
+      routeSummary: r.route_summary ?? null,
+      vehicleReference: r.vehicle_reference ?? null,
+      plannedPickupAt: r.planned_pickup_at ?? null,
+    };
+  });
 }

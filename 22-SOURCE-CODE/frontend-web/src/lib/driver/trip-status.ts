@@ -1,0 +1,33 @@
+// Phase D2 — Driver portal UI skeleton.
+//
+// The 10 D1 execution statuses in canonical order, with Persian labels.
+// Shared by the trip detail status stepper and any future driver views.
+// READ-ONLY: this drives display only; no status is mutated in this phase.
+
+export interface DriverTripStatusStep {
+  status: string;
+  label: string;
+}
+
+export const DRIVER_TRIP_STATUSES: readonly DriverTripStatusStep[] = [
+  { status: "assigned", label: "اختصاص داده‌شده" },
+  { status: "accepted", label: "پذیرفته‌شده" },
+  { status: "arrived_at_pickup", label: "رسیدن به بارگیری" },
+  { status: "loading_started", label: "شروع بارگیری" },
+  { status: "loaded", label: "بارگیری‌شده" },
+  { status: "in_transit", label: "در مسیر" },
+  { status: "arrived_at_delivery", label: "رسیدن به تحویل" },
+  { status: "unloading_started", label: "شروع تخلیه" },
+  { status: "delivered", label: "تحویل‌شده" },
+  { status: "completed", label: "تکمیل‌شده" },
+] as const;
+
+export function driverTripStatusLabel(status: string | null | undefined): string {
+  if (!status) return "نامشخص";
+  return DRIVER_TRIP_STATUSES.find((s) => s.status === status)?.label ?? status;
+}
+
+export function driverTripStatusIndex(status: string | null | undefined): number {
+  if (!status) return -1;
+  return DRIVER_TRIP_STATUSES.findIndex((s) => s.status === status);
+}

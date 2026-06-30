@@ -8,6 +8,7 @@ export const ROLES = {
   FINANCE_OFFICER: "finance_officer",
   OPERATIONS_USER: "operations_user",
   READONLY_USER: "readonly_user",
+  DRIVER: "driver",
 } as const;
 
 export type Role = (typeof ROLES)[keyof typeof ROLES];
@@ -24,6 +25,7 @@ export const ROLE_LABELS_FA: Record<Role, string> = {
   finance_officer: "افسر مالی",
   operations_user: "کاربر عملیات",
   readonly_user: "کاربر فقط‌خواندنی",
+  driver: "راننده",
 };
 
 export const ROLE_LABELS_EN: Record<Role, string> = {
@@ -36,4 +38,5 @@ export const ROLE_LABELS_EN: Record<Role, string> = {
   finance_officer: "Finance Officer",
   operations_user: "Operations User",
   readonly_user: "Readonly User",
+  driver: "Driver",
 };

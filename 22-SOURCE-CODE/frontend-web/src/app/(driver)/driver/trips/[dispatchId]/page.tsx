@@ -1,0 +1,188 @@
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { getTrip } from "@/lib/driver/get-trip";
+import {
+  DRIVER_TRIP_STATUSES,
+  driverTripStatusIndex,
+  driverTripStatusLabel,
+} from "@/lib/driver/trip-status";
+import { cn } from "@/lib/utils";
+
+// Phase D2 — driver trip detail (READ-ONLY skeleton).
+// Action buttons are VISIBLE but DISABLED. No mutations, POD upload or GPS.
+
+interface PageProps {
+  params: Promise<{ dispatchId: string }>;
+}
+
+const DISABLED_HINT = "در فاز بعد فعال می‌شود";
+
+export default async function DriverTripDetailPage({ params }: PageProps) {
+  const { dispatchId } = await params;
+  const trip = await getTrip(dispatchId);
+
+  // Graceful "not found / no access" — never crash on an invalid id.
+  if (!trip) {
+    return (
+      <div className="space-y-4">
+        <Card className="border-border-soft">
+          <CardContent className="space-y-3 p-5">
+            <h1 className="text-lg font-semibold tracking-tight">سفر یافت نشد</h1>
+            <p className="text-sm leading-7 text-muted-foreground">
+              این سفر وجود ندارد یا به شما اختصاص داده نشده است.
+            </p>
+            <Button asChild variant="outline" size="sm" className="h-11">
+              <Link href="/driver">بازگشت به داشبورد</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Placeholder current status when the loader has none yet.
+  const currentStatus = trip.status ?? "assigned";
+  const currentIndex = driverTripStatusIndex(currentStatus);
+
+  return (
+    <div className="space-y-5">
+      {/* Trip header. */}
+      <Card className="border-border-soft shadow-elevated">
+        <CardContent className="space-y-2 p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h1 className="text-lg font-semibold tracking-tight">جزئیات سفر</h1>
+            <Badge variant="info">{driverTripStatusLabel(currentStatus)}</Badge>
+          </div>
+          {trip.routeSummary ? (
+            <div className="text-sm font-medium">{trip.routeSummary}</div>
+          ) : (
+            <div className="text-xs text-muted-foreground">
+              خلاصه مسیر در دسترس نیست.
+            </div>
+          )}
+          <div className="text-xs leading-6 text-muted-foreground">
+            <div>
+              اعزام:{" "}
+              <span className="font-mono text-foreground">{trip.dispatchId}</span>
+            </div>
+            {trip.vehicleReference ? (
+              <div>
+                خودرو:{" "}
+                <span className="font-mono text-foreground">
+                  {trip.vehicleReference}
+                </span>
+              </div>
+            ) : null}
+            {trip.driverName ? <div>راننده: {trip.driverName}</div> : null}
+            {trip.plannedPickupAt ? (
+              <div>برداشت برنامه‌ریزی‌شده: {trip.plannedPickupAt}</div>
+            ) : null}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Status stepper — 10 D1 execution statuses in order. */}
+      <Card className="border-border-soft shadow-card">
+        <CardContent className="space-y-3 p-4">
+          <h2 className="text-sm font-semibold tracking-tight">وضعیت سفر</h2>
+          <ol className="space-y-2">
+            {DRIVER_TRIP_STATUSES.map((step, idx) => {
+              const isCurrent = idx === currentIndex;
+              const isDone = currentIndex > -1 && idx < currentIndex;
+              return (
+                <li key={step.status} className="flex items-center gap-3">
+                  <span
+                    className={cn(
+                      "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold",
+                      isCurrent
+                        ? "bg-primary text-primary-foreground"
+                        : isDone
+                          ? "bg-sky-100 text-sky-900 dark:bg-sky-900/30 dark:text-sky-200"
+                          : "bg-muted text-muted-foreground",
+                    )}
+                  >
+                    {(idx + 1).toLocaleString("fa-IR")}
+                  </span>
+                  <span
+                    className={cn(
+                      "text-sm",
+                      isCurrent
+                        ? "font-semibold text-foreground"
+                        : "text-muted-foreground",
+                    )}
+                  >
+                    {step.label}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+        </CardContent>
+      </Card>
+
+      {/* موقعیت مکانی — placeholder. */}
+      <Card className="border-border-soft shadow-card">
+        <CardContent className="space-y-3 p-4">
+          <h2 className="text-sm font-semibold tracking-tight">موقعیت مکانی</h2>
+          <p className="text-xs leading-6 text-muted-foreground">
+            ارسال موقعیت در این نسخه فعال نیست. هیچ ارسال خودکار یا پس‌زمینه‌ای
+            انجام نمی‌شود.
+          </p>
+          <Button disabled size="sm" className="h-11 w-full">
+            ارسال موقعیت — {DISABLED_HINT}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* اسناد تحویل — placeholder. */}
+      <Card className="border-border-soft shadow-card">
+        <CardContent className="space-y-3 p-4">
+          <h2 className="text-sm font-semibold tracking-tight">اسناد تحویل</h2>
+          <p className="text-xs leading-6 text-muted-foreground">
+            بارگذاری مدارک تحویل (POD) در فاز بعد اضافه می‌شود.
+          </p>
+          <Button disabled variant="outline" size="sm" className="h-11 w-full">
+            بارگذاری سند تحویل — {DISABLED_HINT}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* گزارش مشکل — placeholder. */}
+      <Card className="border-border-soft shadow-card">
+        <CardContent className="space-y-3 p-4">
+          <h2 className="text-sm font-semibold tracking-tight">گزارش مشکل</h2>
+          <p className="text-xs leading-6 text-muted-foreground">
+            ثبت مشکل یا تأخیر در فاز بعد فعال می‌شود.
+          </p>
+          <Button disabled variant="outline" size="sm" className="h-11 w-full">
+            گزارش مشکل — {DISABLED_HINT}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Read-only trip actions, all disabled. */}
+      <Card className="bg-surface-muted border-border-soft shadow-none">
+        <CardContent className="space-y-2 p-4">
+          <h2 className="text-sm font-semibold tracking-tight">اقدامات سفر</h2>
+          <div className="grid grid-cols-1 gap-2">
+            <Button disabled size="sm" className="h-11 w-full">
+              پذیرش سفر — {DISABLED_HINT}
+            </Button>
+            <Button disabled size="sm" className="h-11 w-full">
+              شروع سفر — {DISABLED_HINT}
+            </Button>
+            <Button disabled size="sm" className="h-11 w-full">
+              ثبت تحویل — {DISABLED_HINT}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Button asChild variant="outline" size="sm" className="h-11 w-full">
+        <Link href="/driver">بازگشت به داشبورد</Link>
+      </Button>
+    </div>
+  );
+}

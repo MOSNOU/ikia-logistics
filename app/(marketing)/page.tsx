@@ -1,50 +1,41 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/sections/Hero";
-import { PersonaCTA } from "@/components/sections/PersonaCTA";
-import { FeatureGrid } from "@/components/sections/FeatureGrid";
-import { HowItWorks } from "@/components/sections/HowItWorks";
-import { StatsBand } from "@/components/sections/StatsBand";
+import { ProofStrip } from "@/components/sections/ProofStrip";
+import { LogisticsOS } from "@/components/sections/LogisticsOS";
+import { ControlTower } from "@/components/sections/ControlTower";
+import { CorridorNetwork } from "@/components/sections/CorridorNetwork";
+import { Industries } from "@/components/sections/Industries";
+import { FinalCTA } from "@/components/sections/FinalCTA";
+import { ModuleGrid } from "@/components/sections/ModuleGrid";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
-import { PLATFORM_OVERVIEW } from "@/content/platform";
-import { PRODUCT_URLS } from "@/content/navigation";
+import { HOME_PLATFORM, HOME_FREIGHT } from "@/content/siteArchitecture";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "iKIA Logistics | سیستم‌عامل دیجیتال لجستیک",
+  title: "iKIA Logistic | سیستم‌عامل دیجیتال لجستیک",
   description:
-    "iKIA صاحبان بار، فورواردرها و کریرها را در یک زیرساخت واحد به هم وصل می‌کند: تخصیص هوشمند بار، ردیابی لحظه‌ای، اسناد و آمادگی تسویه مالی.",
+    "iKIA صاحبان بار، حمل‌کننده‌ها، مراکز لجستیک و سازمان‌ها را در یک زیرساخت واحد به هم وصل می‌کند: مدیریت سفارش، رهگیری لحظه‌ای، اسناد و انطباق، کریدورها و تسویه.",
   path: "/",
 });
-
-const STATS = [
-  { value: "۹۰۰+", label: "کیلومتر کریدور پایلوت" },
-  { value: "۳۰٪", label: "هدف کاهش هزینه" },
-  { value: "۴۰٪", label: "هدف کاهش خالی‌برگشت" },
-  { value: "۲۴h", label: "آماده‌سازی تسویه" },
-];
 
 export default function HomePage() {
   return (
     <>
       <Hero />
 
-      <Section tone="surface" id="personas">
-        <SectionHeading
-          eyebrow="راهکارها"
-          title="iKIA برای چه کسانی ساخته شده است؟"
-          subtitle="مسیر خود را انتخاب کنید و راهکار متناسب با نقش‌تان را ببینید."
-        />
-        <PersonaCTA />
-      </Section>
+      <ProofStrip />
 
+      <LogisticsOS />
+
+      {/* Platform modules */}
       <Section tone="light">
         <SectionHeading
-          eyebrow="پلتفرم"
-          title="قابلیت‌های کلیدی پلتفرم"
-          subtitle="زیرساختی که گام‌به‌گام در حال توسعه است و امروز پایه‌های عملیاتی آن آماده شده."
+          eyebrow="Platform"
+          title="پلتفرمی که عملیات را یکپارچه می‌کند"
+          subtitle="ماژول‌های iKIA روی یک هسته مشترک کار می‌کنند؛ از مدیریت سفارش و رهگیری تا اسناد، انطباق و اتصال سامانه‌ها."
         />
-        <FeatureGrid items={PLATFORM_OVERVIEW.capabilities} />
+        <ModuleGrid modules={HOME_PLATFORM} featuredCount={1} />
         <div className="mt-12 text-center">
           <Button href="/platform" variant="outline" size="md">
             مشاهده کامل پلتفرم
@@ -52,53 +43,28 @@ export default function HomePage() {
         </div>
       </Section>
 
-      <Section tone="surface">
-        <SectionHeading
-          eyebrow="فرایند"
-          title="چطور کار می‌کند"
-          subtitle="از ثبت نیاز حمل تا تحویل و تسویه، در چهار گام روشن."
-        />
-        <HowItWorks
-          steps={[
-            { title: "ثبت نیاز حمل", desc: "مشخصات بار و مسیر را وارد کنید." },
-            { title: "دریافت پیشنهاد", desc: "پیشنهادهای شفاف را مقایسه کنید." },
-            { title: "تخصیص و شروع سفر", desc: "بار تخصیص می‌یابد و سفر آغاز می‌شود." },
-            { title: "رهگیری، تحویل و تسویه", desc: "وضعیت را تا تحویل و تسویه دنبال کنید." },
-          ]}
-        />
-      </Section>
+      <ControlTower />
 
-      <Section tone="dark">
+      {/* Freight modes */}
+      <Section tone="soft">
         <SectionHeading
-          invert
-          eyebrow="مقیاس و اعتماد"
-          title="ساخته‌شده برای رشد"
-          subtitle="اعداد زیر اهداف مرحله پایلوت هستند و در مسیر توسعه قرار دارند."
+          eyebrow="Freight"
+          title="چهار شیوه حمل، یک جریان عملیاتی"
+          subtitle="حمل جاده‌ای، ریلی، دریایی و هوایی به‌صورت چندوجهی و یکپارچه روی شبکه کریدورها."
         />
-        <StatsBand stats={STATS} />
-      </Section>
-
-      <section className="relative overflow-hidden bg-gradient-to-b from-navy-900 to-navy-950 text-white">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{ background: "radial-gradient(50% 80% at 75% 0%, rgba(11,92,173,0.30) 0%, transparent 70%)" }}
-        />
-        <div className="relative mx-auto w-full max-w-7xl px-4 py-20 text-center sm:px-6 lg:px-8 md:py-24">
-          <h2 className="text-3xl font-black md:text-5xl">آماده‌اید شروع کنید؟</h2>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-8 text-slate-300 md:text-lg">
-            ثبت‌نام رایگان — بدون نیاز به قرارداد. همین حالا iKIA را امتحان کنید.
-          </p>
-          <div className="mt-9 flex flex-wrap justify-center gap-3">
-            <Button href={PRODUCT_URLS.register} variant="primary" size="lg">
-              شروع کنید — رایگان
-            </Button>
-            <Button href="/contact" variant="outlineLight" size="lg">
-              تماس با ما
-            </Button>
-          </div>
+        <ModuleGrid modules={HOME_FREIGHT} />
+        <div className="mt-12 text-center">
+          <Button href="/freight" variant="outline" size="md">
+            خدمات حمل
+          </Button>
         </div>
-      </section>
+      </Section>
+
+      <CorridorNetwork />
+
+      <Industries />
+
+      <FinalCTA />
     </>
   );
 }

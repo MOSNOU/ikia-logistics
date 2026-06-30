@@ -12,8 +12,8 @@ export function Card({
 }) {
   return (
     <div
-      className={`rounded-2xl border border-slate-200/80 bg-white p-7 shadow-[0_1px_3px_rgba(7,26,45,0.04)] ${
-        hover ? "transition-all duration-200 hover:-translate-y-1 hover:border-brand-200 hover:shadow-[0_12px_40px_-12px_rgba(11,92,173,0.25)]" : ""
+      className={`rounded-3xl border border-line bg-white p-7 shadow-[0_1px_2px_rgba(6,26,47,0.04)] ${
+        hover ? "transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-20px_rgba(6,26,47,0.22)]" : ""
       } ${className}`}
     >
       {children}
@@ -21,15 +21,15 @@ export function Card({
   );
 }
 
-// SaaS-style feature card: icon tile + title + description.
+// Refined, centered benefit/feature card: icon + title (17px) + body (14px).
 export function FeatureCard({ icon, title, desc }: { icon: string; title: string; desc: string }) {
   return (
-    <Card className="group h-full">
-      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-100 transition-colors group-hover:bg-brand-600 group-hover:text-white">
+    <Card className="group flex h-full flex-col items-center text-center">
+      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-soft text-blue ring-1 ring-line transition-colors group-hover:bg-blue group-hover:text-white">
         <Icon name={icon} className="h-6 w-6" />
       </div>
-      <h3 className="mb-2 text-lg font-extrabold text-navy-900">{title}</h3>
-      <p className="text-sm leading-7 text-slate-500">{desc}</p>
+      <h3 className="text-[17px] font-bold leading-snug text-ink">{title}</h3>
+      <p className="mt-2.5 text-[14px] leading-7 text-muted">{desc}</p>
     </Card>
   );
 }

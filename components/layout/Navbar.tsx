@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, ArrowLeft } from "lucide-react";
 import { LogoNav } from "@/components/Logo";
 import { Button } from "@/components/ui/Button";
 import { MegaMenu } from "./MegaMenu";
 import { MobileNav } from "./MobileNav";
-import { MEGA_MENU, SIMPLE_NAV, PRODUCT_URLS } from "@/content/navigation";
+import { MEGA_MENU, SIMPLE_NAV, PRODUCT_URLS } from "@/content/siteArchitecture";
 
 export function Navbar() {
   const [openKey, setOpenKey] = useState<string | null>(null);
@@ -43,40 +43,64 @@ export function Navbar() {
 
   return (
     <>
+      {/* Announcement bar */}
+      <Link
+        href="/platform/control-tower"
+        className="group block bg-ink text-center text-white"
+      >
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-center gap-2 px-4 py-2 text-[12px] font-medium text-ondark">
+          <span className="inline-flex h-1.5 w-1.5 rounded-full bg-green" aria-hidden />
+          <span>برج کنترل iKIA؛ دید زنده بر کل جریان لجستیک</span>
+          <ArrowLeft
+            size={13}
+            className="transition-transform group-hover:-translate-x-0.5"
+            aria-hidden
+          />
+        </div>
+      </Link>
+
       <header
         ref={headerRef}
         className={`sticky top-0 z-40 border-b bg-white/90 backdrop-blur-md transition-shadow ${
-          scrolled ? "border-slate-200 shadow-sm" : "border-transparent"
+          scrolled ? "border-line shadow-sm" : "border-transparent"
         }`}
       >
-        <div className="mx-auto flex h-18 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          {/* Right (RTL start): brand */}
+        <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+          {/* Right (RTL start): official signature logo */}
           <Link href="/" aria-label="iKIA Logistics — خانه" className="shrink-0">
-            <LogoNav />
+            <LogoNav variant="header" />
           </Link>
 
-          {/* Center: desktop mega-menu */}
+          {/* Center: desktop mega-menu (click-to-open) */}
           <MegaMenu
             groups={MEGA_MENU}
             simpleNav={SIMPLE_NAV}
             openKey={openKey}
-            onOpen={setOpenKey}
+            onToggle={(key) => setOpenKey((prev) => (prev === key ? null : key))}
             onClose={() => setOpenKey(null)}
           />
 
-          {/* Left (RTL end): CTAs + mobile trigger */}
+          {/* Left (RTL end): CTAs + mobile trigger.
+              Desktop CTAs are wrapped in spans that own the responsive
+              visibility — a span has no base `inline-flex`, so `hidden`
+              applies cleanly (passing `hidden` onto the Button itself loses
+              to the Button base `inline-flex`). */}
           <div className="flex shrink-0 items-center gap-2">
-            <Button href={PRODUCT_URLS.login} variant="ghost" size="sm" className="hidden sm:inline-flex">
-              ورود
-            </Button>
-            <Button href={PRODUCT_URLS.register} variant="primary" size="sm" className="hidden sm:inline-flex">
-              شروع کنید
-            </Button>
+            <span className="hidden md:inline-flex">
+              <Button href={PRODUCT_URLS.platform} variant="ghost" size="sm">
+                مشاهده پلتفرم
+              </Button>
+            </span>
+            <span className="hidden sm:inline-flex">
+              <Button href={PRODUCT_URLS.start} variant="primary" size="sm">
+                شروع همکاری
+              </Button>
+            </span>
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
               aria-label="باز کردن منو"
-              className="rounded-lg p-2 text-navy-900 transition hover:bg-slate-100 lg:hidden"
+              className="rounded-lg p-2 text-ink transition hover:bg-soft lg:hidden"
             >
               <Menu size={22} aria-hidden />
             </button>

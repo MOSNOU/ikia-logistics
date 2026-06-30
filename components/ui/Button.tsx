@@ -1,25 +1,26 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-type Variant = "primary" | "accent" | "light" | "outline" | "outlineLight" | "ghost";
+type Variant = "primary" | "green" | "light" | "outline" | "outlineLight" | "ghost" | "subtle";
 type Size = "sm" | "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-xl font-bold whitespace-nowrap transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2";
+  "inline-flex items-center justify-center gap-2 rounded-xl font-semibold whitespace-nowrap transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/40 focus-visible:ring-offset-2";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-brand-600 text-white shadow-sm hover:bg-brand-700 hover:shadow-md hover:-translate-y-0.5",
-  accent: "bg-accent-600 text-white shadow-sm hover:bg-accent-500 hover:shadow-md hover:-translate-y-0.5",
-  light: "bg-white text-navy-900 shadow-sm hover:bg-slate-100 hover:-translate-y-0.5",
-  outline: "border border-navy-900/15 text-navy-900 hover:border-navy-900/30 hover:bg-slate-50",
-  outlineLight: "border border-white/30 text-white hover:bg-white hover:text-navy-900",
-  ghost: "text-navy-800 hover:bg-slate-100",
+  primary: "bg-blue text-white shadow-[0_8px_20px_-12px_rgba(11,92,173,0.65)] hover:bg-blue-hover",
+  green: "bg-[#16a34a] text-white shadow-[0_8px_20px_-12px_rgba(22,163,74,0.6)] hover:bg-[#15803d]",
+  light: "bg-white text-ink shadow-sm ring-1 ring-line hover:bg-soft",
+  outline: "border border-line text-ink hover:border-blue/40 hover:text-blue",
+  outlineLight: "border border-white/30 text-white hover:bg-white/10",
+  ghost: "text-ink hover:bg-soft",
+  subtle: "bg-soft text-ink ring-1 ring-line hover:bg-soft-2",
 };
 
 const sizes: Record<Size, string> = {
-  sm: "px-4 py-2 text-sm",
-  md: "px-5 py-2.5 text-sm",
-  lg: "px-7 py-3.5 text-base",
+  sm: "h-11 px-5 text-sm",
+  md: "h-11 px-5 text-[15px]",
+  lg: "h-12 px-6 text-[15px]",
 };
 
 export function Button({

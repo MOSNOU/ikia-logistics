@@ -1,16 +1,16 @@
 import type { ReactNode } from "react";
 
-type Tone = "light" | "surface" | "dark" | "brand";
+type Tone = "light" | "soft" | "ink" | "brand";
 
 const toneClasses: Record<Tone, string> = {
-  light: "bg-white text-slate-700",
-  surface: "bg-surface text-slate-700",
-  dark: "bg-navy-900 text-slate-100",
-  brand: "bg-gradient-to-b from-navy-950 via-navy-900 to-navy-800 text-white",
+  light: "bg-white text-muted",
+  soft: "bg-soft text-muted",
+  ink: "bg-ink text-ondark",
+  brand: "bg-gradient-to-b from-ink via-ink-2 to-steel text-ondark",
 };
 
 export function Container({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <div className={`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>{children}</div>;
+  return <div className={`mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8 ${className}`}>{children}</div>;
 }
 
 export function Section({
@@ -26,8 +26,16 @@ export function Section({
 }) {
   return (
     <section id={id} className={`${toneClasses[tone]} ${className}`}>
-      <Container className="py-20 md:py-28">{children}</Container>
+      <Container className="py-16 sm:py-20 lg:py-24">{children}</Container>
     </section>
+  );
+}
+
+export function Eyebrow({ children, invert = false }: { children: ReactNode; invert?: boolean }) {
+  return (
+    <p className={`text-[11px] font-bold uppercase tracking-[0.2em] ${invert ? "text-blue-bright" : "text-blue"}`}>
+      {children}
+    </p>
   );
 }
 
@@ -45,25 +53,17 @@ export function SectionHeading({
   invert?: boolean;
 }) {
   return (
-    <div className={`mb-14 ${center ? "mx-auto max-w-3xl text-center" : "text-start"}`}>
-      {eyebrow ? (
-        <span
-          className={`mb-4 inline-block rounded-full px-3.5 py-1.5 text-xs font-bold tracking-wide ${
-            invert ? "bg-white/10 text-brand-100" : "bg-brand-50 text-brand-600 ring-1 ring-brand-100"
-          }`}
-        >
-          {eyebrow}
-        </span>
-      ) : null}
+    <div className={`mb-10 sm:mb-12 ${center ? "mx-auto max-w-2xl text-center" : "max-w-2xl text-start"}`}>
+      {eyebrow ? <Eyebrow invert={invert}>{eyebrow}</Eyebrow> : null}
       <h2
-        className={`text-3xl font-black leading-tight tracking-tight md:text-5xl ${
-          invert ? "text-white" : "text-navy-900"
+        className={`mt-3 text-[clamp(1.6rem,3vw,2.4rem)] font-bold leading-[1.2] tracking-tight ${
+          invert ? "text-white" : "text-ink"
         }`}
       >
         {title}
       </h2>
       {subtitle ? (
-        <p className={`mt-5 text-base leading-8 md:text-lg ${invert ? "text-slate-300" : "text-slate-500"}`}>
+        <p className={`mt-3.5 text-[15px] leading-7 sm:text-base sm:leading-8 ${invert ? "text-ondark-muted" : "text-muted"}`}>
           {subtitle}
         </p>
       ) : null}

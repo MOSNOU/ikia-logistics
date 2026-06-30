@@ -1,11 +1,12 @@
 "use client";
 import { useMemo } from "react";
+import Image from "next/image";
 
 function project3D(x: number, y: number, z: number, tiltX: number, tiltY: number) {
-  let y1 = y * Math.cos(tiltX) - z * Math.sin(tiltX);
-  let z1 = y * Math.sin(tiltX) + z * Math.cos(tiltX);
-  let x2 = x * Math.cos(tiltY) + z1 * Math.sin(tiltY);
-  let z2 = -x * Math.sin(tiltY) + z1 * Math.cos(tiltY);
+  const y1 = y * Math.cos(tiltX) - z * Math.sin(tiltX);
+  const z1 = y * Math.sin(tiltX) + z * Math.cos(tiltX);
+  const x2 = x * Math.cos(tiltY) + z1 * Math.sin(tiltY);
+  const z2 = -x * Math.sin(tiltY) + z1 * Math.cos(tiltY);
   return { x: Math.round(x2 * 100) / 100, y: Math.round(y1 * 100) / 100, z: Math.round(z2 * 100) / 100 };
 }
 
@@ -17,17 +18,17 @@ export function LogoSphere({ size = 200 }: { size?: number }) {
     const result: { d: string; grad: string; dash: string; w: number; op: number }[] = [];
     for (let i = 0; i < 12; i++) {
       let a = (i / 12) * Math.PI, d = "M ";
-      for (let j = 0; j <= 80; j++) { let t = (j/80)*2*Math.PI; let p = project3D(R*Math.cos(t)*Math.cos(a),R*Math.cos(t)*Math.sin(a),R*Math.sin(t),tiltX,tiltY); d += (j===0?"":"L ")+`${p.x},${p.y} `; }
-      let di = i % pi.length; result.push({d,grad:i%3===0?"url(#g1)":i%3===1?"url(#g2)":"url(#g3)",dash:`${pi[di]*3} ${pi[(di+1)%pi.length]*2}`,w:1.5,op:0.65});
+      for (let j = 0; j <= 80; j++) { const t = (j/80)*2*Math.PI; const p = project3D(R*Math.cos(t)*Math.cos(a),R*Math.cos(t)*Math.sin(a),R*Math.sin(t),tiltX,tiltY); d += (j===0?"":"L ")+`${p.x},${p.y} `; }
+      const di = i % pi.length; result.push({d,grad:i%3===0?"url(#g1)":i%3===1?"url(#g2)":"url(#g3)",dash:`${pi[di]*3} ${pi[(di+1)%pi.length]*2}`,w:1.5,op:0.65});
     }
     for (let i = 0; i < 12; i++) {
       let a = (i/12)*Math.PI, d = "M ";
-      for (let j = 0; j <= 80; j++) { let t=(j/80)*2*Math.PI; let p=project3D(R*Math.sin(t),R*Math.cos(t)*Math.sin(a),R*Math.cos(t)*Math.cos(a),tiltX,tiltY); d+=(j===0?"":"L ")+`${p.x},${p.y} `; }
-      let di=(i+12)%pi.length; result.push({d,grad:i%3===0?"url(#g2)":i%3===1?"url(#g3)":"url(#g4)",dash:`${pi[di]*3} ${pi[(di+1)%pi.length]*2}`,w:1.5,op:0.65});
+      for (let j = 0; j <= 80; j++) { const t=(j/80)*2*Math.PI; const p=project3D(R*Math.sin(t),R*Math.cos(t)*Math.sin(a),R*Math.cos(t)*Math.cos(a),tiltX,tiltY); d+=(j===0?"":"L ")+`${p.x},${p.y} `; }
+      const di=(i+12)%pi.length; result.push({d,grad:i%3===0?"url(#g2)":i%3===1?"url(#g3)":"url(#g4)",dash:`${pi[di]*3} ${pi[(di+1)%pi.length]*2}`,w:1.5,op:0.65});
     }
     for (let i=-3;i<=3;i++) {
       let lat=(i/4)*Math.PI/2,r=R*Math.cos(lat),z=R*Math.sin(lat),d="M ";
-      for (let j=0;j<=80;j++) { let th=(j/80)*2*Math.PI; let p=project3D(r*Math.cos(th),r*Math.sin(th),z,tiltX,tiltY); d+=(j===0?"":"L ")+`${p.x},${p.y} `; }
+      for (let j=0;j<=80;j++) { const th=(j/80)*2*Math.PI; const p=project3D(r*Math.cos(th),r*Math.sin(th),z,tiltX,tiltY); d+=(j===0?"":"L ")+`${p.x},${p.y} `; }
       result.push({d,grad:i===0?"url(#g4)":"url(#g1)",dash:i===0?"31 16":`${pi[Math.abs(i)]*3} ${pi[Math.abs(i)+1]*2}`,w:i===0?2:1.5,op:i===0?0.75:0.6});
     }
     return result;
@@ -37,9 +38,9 @@ export function LogoSphere({ size = 200 }: { size?: number }) {
     const lats=[-.942,-.898,-.524,0,.524,.898,.942];
     const counts=[4,8,14,18,14,8,4];
     const colors=["#06b6d4","#0ea5e9","#f59e0b","#10b981","#3b82f6","#8b5cf6","#06b6d4"];
-    lats.forEach((lat,li)=>{let r=R*Math.cos(lat),z=R*Math.sin(lat);for(let i=0;i<counts[li];i++){let a=(i/counts[li])*2*Math.PI;let p=project3D(r*Math.cos(a),r*Math.sin(a),z,tiltX,tiltY);if(p.z>-R*0.4)result.push({x:p.x,y:p.y,color:colors[li],size:li===3?4:3});}});
-    let np=project3D(0,0,R,tiltX,tiltY); if(np.z>-R*0.4) result.push({x:np.x,y:np.y,color:"#f59e0b",size:4.5});
-    let sp=project3D(0,0,-R,tiltX,tiltY); if(sp.z>-R*0.4) result.push({x:sp.x,y:sp.y,color:"#06b6d4",size:4.5});
+    lats.forEach((lat,li)=>{const r=R*Math.cos(lat),z=R*Math.sin(lat);for(let i=0;i<counts[li];i++){const a=(i/counts[li])*2*Math.PI;const p=project3D(r*Math.cos(a),r*Math.sin(a),z,tiltX,tiltY);if(p.z>-R*0.4)result.push({x:p.x,y:p.y,color:colors[li],size:li===3?4:3});}});
+    const np=project3D(0,0,R,tiltX,tiltY); if(np.z>-R*0.4) result.push({x:np.x,y:np.y,color:"#f59e0b",size:4.5});
+    const sp=project3D(0,0,-R,tiltX,tiltY); if(sp.z>-R*0.4) result.push({x:sp.x,y:sp.y,color:"#06b6d4",size:4.5});
     return result;
   }, [R]);
   const half = size/2;
@@ -81,11 +82,38 @@ export function LogoHero({ onDark = false }: { onDark?: boolean }) {
   );
 }
 
-export function LogoNav({ onDark = false }: { onDark?: boolean }) {
+// Official iKIA Logistic signature logo — the source of truth for brand
+// identity on the marketing site (navbar + footer). Pass `variant` to render
+// the official image. The globe/network version (LogoSphere) is reserved for
+// the premium brand visual on the About trust section.
+//
+// The signature PNG ships on a solid white background (no alpha): on the white
+// navbar it blends seamlessly; in the dark footer it is placed on a white
+// rounded plate by the Footer so it stays crisp without recoloring the asset.
+//
+// Backward compatibility: the product dashboard (out of scope here) imports
+// LogoNav and passes `onDark`. When no `variant` is given we keep the legacy
+// text wordmark so that surface is left untouched.
+export function LogoNav({ variant, onDark = false }: { variant?: "header" | "footer"; onDark?: boolean }) {
+  if (!variant) {
+    return (
+      <div dir="ltr" style={{ display: "flex", alignItems: "center" }}>
+        <LogoText size="small" onDark={onDark} />
+      </div>
+    );
+  }
+  // Intrinsic asset ratio is 1877×838 (~2.24:1); width-only sizing keeps it
+  // proportional with height auto. Responsive: mobile narrower than desktop.
+  const sizeClass = variant === "footer" ? "w-[190px]" : "w-[136px] sm:w-[160px]";
   return (
-    <div dir="ltr" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-      <LogoSphere size={36} />
-      <LogoText size="small" onDark={onDark} />
-    </div>
+    <Image
+      src="/brand/ikia-logo-signature.png"
+      alt="iKIA Logistics"
+      width={1877}
+      height={838}
+      priority={variant === "header"}
+      sizes={variant === "footer" ? "190px" : "(min-width: 640px) 160px, 136px"}
+      className={`${sizeClass} h-auto select-none`}
+    />
   );
 }

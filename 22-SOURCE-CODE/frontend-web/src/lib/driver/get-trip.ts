@@ -21,6 +21,10 @@ export interface DriverTripDetail {
   vehicleReference: string | null;
   driverName: string | null;
   plannedPickupAt: string | null;
+  /** Phase D4 — number of PODs attached to this dispatch (driver-RLS scoped). */
+  podCount: number;
+  /** Convenience flag: at least one POD exists → trip can be completed. */
+  hasPod: boolean;
 }
 
 interface RawDriverTripDetail {
@@ -61,6 +65,21 @@ export async function getTrip(dispatchId: string): Promise<DriverTripDetail | nu
   const id = String(raw.dispatch_id ?? raw.id ?? "");
   if (!id) return null;
 
+  // Phase D4 — POD count via the driver's own SELECT RLS policy. Any error
+  // (missing view, RLS, types) defaults to 0/false; never throw.
+  let podCount = 0;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { count } = await (supabase.schema("dispatch") as any)
+      .from("driver_trip_pods")
+      .select("id", { count: "exact", head: true })
+      .eq("dispatch_id", id);
+    podCount = count ?? 0;
+  } catch (podError) {
+    console.error("driver.driver_trip_pods count", podError);
+    podCount = 0;
+  }
+
   const executionStatus = raw.execution_status ?? null;
   return {
     dispatchId: id,
@@ -71,5 +90,7 @@ export async function getTrip(dispatchId: string): Promise<DriverTripDetail | nu
     vehicleReference: raw.vehicle_reference ?? null,
     driverName: raw.driver_name ?? null,
     plannedPickupAt: raw.planned_pickup_at ?? null,
+    podCount,
+    hasPod: podCount > 0,
   };
 }

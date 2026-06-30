@@ -9,16 +9,19 @@ import {
   driverTripStatusLabel,
 } from "@/lib/driver/trip-status";
 import { TripActionPanel } from "@/components/driver/trip-action-panel";
+import { DriverLocationPanel } from "@/components/driver/driver-location-panel";
+import { PodUploadPanel } from "@/components/driver/pod-upload-panel";
 import { cn } from "@/lib/utils";
 
-// Phase D3 — driver trip detail. Workflow transition actions are LIVE via
-// TripActionPanel (D1 RPCs). GPS / POD / issue sections remain D4+ placeholders.
+// Phase D4 — driver trip detail. Workflow transition actions are LIVE via
+// TripActionPanel (D1 RPCs). Manual GPS send (DriverLocationPanel) and POD
+// upload (PodUploadPanel) are LIVE. Issue reporting remains a disabled
+// placeholder (later phase).
 
 interface PageProps {
   params: Promise<{ dispatchId: string }>;
 }
 
-const D4_HINT = "در فاز D4 فعال می‌شود";
 const LATER_HINT = "در فاز بعدی فعال می‌شود";
 
 export default async function DriverTripDetailPage({ params }: PageProps) {
@@ -124,30 +127,19 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
         </CardContent>
       </Card>
 
-      {/* موقعیت مکانی — placeholder. */}
+      {/* موقعیت مکانی — manual one-shot GPS send (D4). */}
       <Card className="border-border-soft shadow-card">
         <CardContent className="space-y-3 p-4">
           <h2 className="text-sm font-semibold tracking-tight">موقعیت مکانی</h2>
-          <p className="text-xs leading-6 text-muted-foreground">
-            ارسال موقعیت در این نسخه فعال نیست. هیچ ارسال خودکار یا پس‌زمینه‌ای
-            انجام نمی‌شود.
-          </p>
-          <Button disabled size="sm" className="h-11 w-full">
-            ارسال موقعیت — {D4_HINT}
-          </Button>
+          <DriverLocationPanel dispatchId={trip.dispatchId} />
         </CardContent>
       </Card>
 
-      {/* اسناد تحویل — placeholder. */}
+      {/* اسناد تحویل — POD upload (D4). */}
       <Card className="border-border-soft shadow-card">
         <CardContent className="space-y-3 p-4">
           <h2 className="text-sm font-semibold tracking-tight">اسناد تحویل</h2>
-          <p className="text-xs leading-6 text-muted-foreground">
-            بارگذاری مدارک تحویل (POD) در فاز بعد اضافه می‌شود.
-          </p>
-          <Button disabled variant="outline" size="sm" className="h-11 w-full">
-            بارگذاری سند تحویل — {D4_HINT}
-          </Button>
+          <PodUploadPanel dispatchId={trip.dispatchId} />
         </CardContent>
       </Card>
 
@@ -156,7 +148,7 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
         <CardContent className="space-y-3 p-4">
           <h2 className="text-sm font-semibold tracking-tight">گزارش مشکل</h2>
           <p className="text-xs leading-6 text-muted-foreground">
-            ثبت مشکل یا تأخیر در فاز بعد فعال می‌شود.
+            گزارش مشکل در فاز بعدی فعال می‌شود.
           </p>
           <Button disabled variant="outline" size="sm" className="h-11 w-full">
             گزارش مشکل — {LATER_HINT}
@@ -168,7 +160,11 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
       <Card className="border-border-soft shadow-card">
         <CardContent className="space-y-3 p-4">
           <h2 className="text-sm font-semibold tracking-tight">اقدام بعدی سفر</h2>
-          <TripActionPanel dispatchId={trip.dispatchId} executionStatus={trip.executionStatus} />
+          <TripActionPanel
+            dispatchId={trip.dispatchId}
+            executionStatus={trip.executionStatus}
+            hasPod={trip.hasPod}
+          />
           <p className="text-[11px] leading-6 text-muted-foreground">
             فقط اقدام مجاز برای وضعیت فعلی نمایش داده می‌شود.
           </p>

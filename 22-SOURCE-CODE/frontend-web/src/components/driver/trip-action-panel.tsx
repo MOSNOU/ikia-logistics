@@ -14,6 +14,7 @@ import {
   arriveDelivery,
   startUnloading,
   confirmDelivered,
+  completeTrip,
   type TripActionResult,
 } from "@/lib/driver/trip-actions";
 
@@ -37,15 +38,38 @@ const ACTION_FN: Record<string, ActionFn> = {
 export function TripActionPanel({
   dispatchId,
   executionStatus,
+  hasPod,
 }: {
   dispatchId: string;
   executionStatus: string | null;
+  hasPod?: boolean;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [feedback, setFeedback] = useState<TripActionResult | null>(null);
 
   const next = driverNextAction(executionStatus);
+
+  const runAction = (fn: ActionFn) => {
+    setFeedback(null);
+    startTransition(async () => {
+      const res = await fn(dispatchId);
+      setFeedback(res);
+      if (res.ok) router.refresh();
+    });
+  };
+
+  const feedbackEl = feedback ? (
+    <p
+      role="status"
+      className={cn(
+        "text-center text-xs leading-6",
+        feedback.ok ? "text-emerald-600 dark:text-emerald-400" : "text-destructive",
+      )}
+    >
+      {feedback.message}
+    </p>
+  ) : null;
 
   // Completed (or unknown terminal state) — nothing to do.
   if (next === null) {
@@ -56,8 +80,25 @@ export function TripActionPanel({
     );
   }
 
-  // delivered → completed: gated behind POD upload (D4). Disabled in D3.
+  // delivered → completed: gated behind POD upload (D4). Active once a POD
+  // exists; otherwise disabled. The server still POD-gates as the source of
+  // truth (the POD-required error is mapped to Persian by friendlyError).
   if (next === "complete-gated") {
+    if (hasPod === true) {
+      return (
+        <div className="space-y-2">
+          <Button
+            type="button"
+            onClick={() => runAction(completeTrip)}
+            disabled={pending}
+            className="h-12 w-full text-base font-semibold"
+          >
+            {pending ? "در حال ثبت…" : "تکمیل سفر"}
+          </Button>
+          {feedbackEl}
+        </div>
+      );
+    }
     return (
       <Button disabled className="h-12 w-full text-sm">
         تکمیل سفر پس از بارگذاری سند تحویل فعال می‌شود
@@ -68,12 +109,7 @@ export function TripActionPanel({
   const run = () => {
     const fn = ACTION_FN[next.key];
     if (!fn) return;
-    setFeedback(null);
-    startTransition(async () => {
-      const res = await fn(dispatchId);
-      setFeedback(res);
-      if (res.ok) router.refresh();
-    });
+    runAction(fn);
   };
 
   return (

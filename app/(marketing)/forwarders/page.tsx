@@ -1,10 +1,5 @@
-import type { Metadata } from "next";
-import { PersonaLanding } from "@/components/sections/PersonaLanding";
-import { FORWARDERS } from "@/content/personas";
-import { buildMetadata } from "@/lib/seo";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = buildMetadata({ ...FORWARDERS.seo, path: "/forwarders" });
-
-export default function Page() {
-  return <PersonaLanding persona={FORWARDERS} />;
+export default function ForwardersRedirect() {
+  redirect("/solutions/forwarders");
 }

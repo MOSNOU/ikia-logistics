@@ -22,6 +22,25 @@
   --color-accent-600: #e21b2d;
   --color-accent-500: #f0354a;
   --color-surface: #f6f8fb;
+
+  /* CC-69 enterprise logistics palette — coherent ink/blue/green + trust green. */
+  --color-ink: #061a2f;
+  --color-ink-2: #0a2238;
+  --color-steel: #103a5e;
+  --color-blue: #0b5cad;
+  --color-blue-hover: #084c91;
+  --color-blue-bright: #1f9ce0;
+  --color-cerulean: #0093bf;
+  --color-green: #15c26b;
+  --color-orange: #f5a623;
+  --color-ikia: #d8202a;
+  --color-soft: #f7f9fc;
+  --color-soft-2: #eef3f8;
+  --color-line: #e4eaf1;
+  --color-muted: #5b6b7d;
+  --color-ondark: #e8f0f8;
+  --color-ondark-muted: #9fb4c9;
+
   --font-sans: "Vazirmatn", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
@@ -90,17 +109,20 @@
   --success: #34d399; --warning: #fbbf24; --danger: #f87171; --shadow: rgba(0,0,0,0.3);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-/* Global horizontal-overflow protection. `overflow-x: clip` clips a stray wide
-   child (no horizontal scrollbar) WITHOUT creating a scroll container, so it
-   does not force overflow-y to auto and therefore does not break the
-   position:sticky navbar (unlike overflow-x: hidden, which would). */
-html { font-family: "Vazirmatn", system-ui, -apple-system, "Segoe UI", sans-serif; width: 100%; max-width: 100%; overflow-x: clip; }
-body { font-family: "Vazirmatn", system-ui, -apple-system, "Segoe UI", sans-serif; width: 100%; max-width: 100%; overflow-x: clip; color: var(--text2); background: var(--bg); -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
-a { color: inherit; text-decoration: none; }
-button { cursor: pointer; font-family: inherit; }
-button:disabled { opacity: 0.6; cursor: not-allowed; }
-input, select, textarea { font-family: inherit; }
+/* Resets stay inside @layer base so Tailwind utilities (mx-auto, px-*, text-white,
+   text-ink …) win — unlayered, `* { margin }` and `a { color: inherit }` override
+   the utility layer and broke container centering + button text contrast.
+   `overflow-x: clip` clips stray wide children without creating a scroll
+   container (so it does not break the sticky navbar). */
+@layer base {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-family: "Vazirmatn", system-ui, -apple-system, "Segoe UI", sans-serif; width: 100%; max-width: 100%; overflow-x: clip; }
+  body { font-family: "Vazirmatn", system-ui, -apple-system, "Segoe UI", sans-serif; width: 100%; max-width: 100%; overflow-x: clip; color: var(--text2); background: var(--bg); -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: pointer; font-family: inherit; }
+  button:disabled { opacity: 0.6; cursor: not-allowed; }
+  input, select, textarea { font-family: inherit; }
+}
 ::selection { background: var(--accent); color: white; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -178,4 +200,18 @@ input, select, textarea { font-family: inherit; }
   .stat-grid { grid-template-columns: 1fr 1fr !important; }
   .detail-grid { grid-template-columns: 1fr !important; }
   .form-grid { grid-template-columns: 1fr !important; }
+}
+
+/* Subtle, professional brand motion — premium globe/network visual (About). */
+@keyframes brandFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes brandGlow { 0%, 100% { opacity: 0.45; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.06); } }
+.brand-float { animation: brandFloat 6s ease-in-out infinite; }
+.brand-glow { animation: brandGlow 5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }

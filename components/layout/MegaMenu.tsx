@@ -2,25 +2,33 @@
 
 import Link from "next/link";
 import { ChevronDown, ArrowLeft } from "lucide-react";
-import type { NavGroup, NavLink } from "@/content/navigation";
+import type { NavGroup, NavLink } from "@/content/siteArchitecture";
+
+const STATUS_LABEL: Record<string, string> = {
+  current: "فعال",
+  "near-future": "به‌زودی",
+  "strategic-future": "نقشه راه",
+};
 
 // Desktop menubar + mega panel. Stateless: Navbar owns openKey and handlers.
+// Click-to-open (toggle); the open panel closes on outside click / Escape,
+// both handled in Navbar.
 export function MegaMenu({
   groups,
   simpleNav,
   openKey,
-  onOpen,
+  onToggle,
   onClose,
 }: {
   groups: NavGroup[];
   simpleNav: NavLink[];
   openKey: string | null;
-  onOpen: (key: string) => void;
+  onToggle: (key: string) => void;
   onClose: () => void;
 }) {
   return (
-    <nav aria-label="منوی اصلی" className="hidden lg:block" onMouseLeave={onClose}>
-      <ul className="flex items-center gap-1">
+    <nav aria-label="منوی اصلی" className="hidden lg:block">
+      <ul className="flex items-center gap-0.5">
         {groups.map((group) => {
           const isOpen = openKey === group.key;
           return (
@@ -29,11 +37,9 @@ export function MegaMenu({
                 type="button"
                 aria-haspopup="true"
                 aria-expanded={isOpen}
-                onMouseEnter={() => onOpen(group.key)}
-                onFocus={() => onOpen(group.key)}
-                onClick={() => onOpen(group.key)}
-                className={`flex items-center gap-1 rounded-lg px-3.5 py-2 text-sm font-bold transition ${
-                  isOpen ? "bg-slate-100 text-navy-900" : "text-slate-600 hover:bg-slate-50 hover:text-navy-900"
+                onClick={() => onToggle(group.key)}
+                className={`flex items-center gap-1 rounded-lg px-3 py-2 text-[14px] font-semibold transition-colors ${
+                  isOpen ? "bg-soft text-ink" : "text-muted hover:bg-soft hover:text-ink"
                 }`}
               >
                 {group.label}
@@ -45,35 +51,39 @@ export function MegaMenu({
               </button>
 
               {isOpen ? (
-                <div
-                  className="absolute inset-x-0 top-full z-40"
-                  onMouseEnter={() => onOpen(group.key)}
-                >
-                  <div className="border-t border-slate-100 bg-white shadow-[0_24px_48px_-24px_rgba(7,26,45,0.25)]">
+                <div className="absolute inset-x-0 top-full z-40">
+                  <div className="border-t border-line bg-white shadow-[0_24px_48px_-24px_rgba(6,26,47,0.22)]">
                     <div className="mx-auto w-full max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
-                      {group.href ? (
+                      {group.overviewHref ? (
                         <Link
-                          href={group.href}
+                          href={group.overviewHref}
                           onClick={onClose}
-                          className="mb-5 inline-flex items-center gap-1.5 text-xs font-bold text-brand-600 hover:gap-2.5 transition-all"
+                          className="mb-5 inline-flex items-center gap-1.5 text-[12px] font-bold text-blue transition-all hover:gap-2.5"
                         >
-                          نمای کلی {group.label}
+                          {group.overviewLabel ?? `نمای کلی ${group.label}`}
                           <ArrowLeft size={13} aria-hidden />
                         </Link>
                       ) : null}
-                      <ul className="grid grid-cols-2 gap-2 lg:grid-cols-3">
+                      <ul className="grid grid-cols-2 gap-1.5 lg:grid-cols-3">
                         {group.links.map((link) => (
                           <li key={link.href}>
                             <Link
                               href={link.href}
                               onClick={onClose}
-                              className="group block rounded-xl border border-transparent p-3.5 transition hover:border-slate-100 hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                              className="group block rounded-xl border border-transparent p-3.5 transition hover:border-line hover:bg-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/40"
                             >
-                              <span className="block text-sm font-extrabold text-navy-900 transition-colors group-hover:text-brand-600">
-                                {link.label}
+                              <span className="flex items-center gap-2">
+                                <span className="text-[14px] font-bold text-ink transition-colors group-hover:text-blue">
+                                  {link.label}
+                                </span>
+                                {link.status && link.status !== "current" ? (
+                                  <span className="rounded-full bg-soft-2 px-1.5 py-0.5 text-[10px] font-semibold text-muted">
+                                    {STATUS_LABEL[link.status]}
+                                  </span>
+                                ) : null}
                               </span>
                               {link.desc ? (
-                                <span className="mt-1 block text-xs leading-6 text-slate-500">{link.desc}</span>
+                                <span className="mt-1 block text-[12px] leading-6 text-muted">{link.desc}</span>
                               ) : null}
                             </Link>
                           </li>
@@ -91,8 +101,8 @@ export function MegaMenu({
           <li key={link.href}>
             <Link
               href={link.href}
-              onMouseEnter={onClose}
-              className="rounded-lg px-3.5 py-2 text-sm font-bold text-slate-600 transition hover:bg-slate-50 hover:text-navy-900"
+              onClick={onClose}
+              className="rounded-lg px-3 py-2 text-[14px] font-semibold text-muted transition-colors hover:bg-soft hover:text-ink"
             >
               {link.label}
             </Link>

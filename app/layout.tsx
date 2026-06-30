@@ -23,10 +23,42 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fa_IR",
     siteName: "iKIA Logistics",
+    url: "https://www.ikialogistic.com",
     title: "iKIA Logistics | سیستم‌عامل دیجیتال لجستیک",
     description:
       "زیرساخت هوشمند حمل‌ونقل بار: تخصیص هوشمند، ردیابی لحظه‌ای، اسناد و آمادگی تسویه مالی.",
+    images: [{ url: "/brand/ikia-logo-signature.png", alt: "iKIA Logistics" }],
   },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/brand/ikia-logo-signature.png"],
+  },
+};
+
+// Organization + WebSite structured data for the marketing site. sameAs is
+// intentionally empty until official social profiles exist.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.ikialogistic.com/#organization",
+      name: "iKIA Logistic",
+      alternateName: "iKIA Logistics",
+      url: "https://www.ikialogistic.com",
+      logo: "https://www.ikialogistic.com/brand/ikia-logo-signature.png",
+      sameAs: [],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.ikialogistic.com/#website",
+      name: "iKIA Logistic",
+      alternateName: "iKIA Logistics",
+      url: "https://www.ikialogistic.com",
+      inLanguage: "fa-IR",
+      publisher: { "@id": "https://www.ikialogistic.com/#organization" },
+    },
+  ],
 };
 
 export const viewport: Viewport = {
@@ -38,7 +70,13 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fa" dir="rtl">
-      <body>{children}</body>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

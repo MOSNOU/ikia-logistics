@@ -11,20 +11,20 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key",
   },
   // Block stale legacy product/dashboard routes from the marketing deployment.
-  // Temporary redirects (permanent: false → 307) while domains are still being
-  // validated; flip to permanent once the marketing domain layout is final.
+  // Domain migration is complete, so these are permanent (308) — crawlers may
+  // cache them and the legacy paths now live only on app.ikialogistic.com.
   async redirects() {
     return [
-      { source: "/login", destination: "/", permanent: false },
-      { source: "/admin", destination: "/", permanent: false },
-      { source: "/admin/:path*", destination: "/", permanent: false },
-      { source: "/shipper", destination: "/", permanent: false },
-      { source: "/cargo", destination: "/", permanent: false },
-      { source: "/cargo/:path*", destination: "/", permanent: false },
-      { source: "/carrier", destination: "/", permanent: false },
-      { source: "/profile", destination: "/", permanent: false },
-      { source: "/bookings", destination: "/", permanent: false },
-      { source: "/bookings/:path*", destination: "/", permanent: false },
+      { source: "/login", destination: "/", permanent: true },
+      { source: "/admin", destination: "/", permanent: true },
+      { source: "/admin/:path*", destination: "/", permanent: true },
+      { source: "/shipper", destination: "/", permanent: true },
+      { source: "/cargo", destination: "/", permanent: true },
+      { source: "/cargo/:path*", destination: "/", permanent: true },
+      { source: "/carrier", destination: "/", permanent: true },
+      { source: "/profile", destination: "/", permanent: true },
+      { source: "/bookings", destination: "/", permanent: true },
+      { source: "/bookings/:path*", destination: "/", permanent: true },
     ];
   },
 };

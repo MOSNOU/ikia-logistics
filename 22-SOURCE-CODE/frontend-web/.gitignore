@@ -22,3 +22,9 @@ next-env.d.ts
 
 .idea
 .vscode
+
+# Playwright E2E (Phase F) — local artifacts, never committed
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

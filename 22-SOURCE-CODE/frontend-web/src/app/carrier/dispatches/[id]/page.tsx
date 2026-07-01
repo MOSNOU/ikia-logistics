@@ -5,8 +5,10 @@ import { DispatchSummaryCard } from "@/components/dispatch/dispatch-summary-card
 import { DispatchEventTimeline } from "@/components/dispatch/dispatch-event-timeline";
 import { DispatchActionButtons } from "@/components/dispatch/dispatch-action-buttons";
 import { AssignDriverPanel } from "@/components/driver/assign-driver-panel";
+import { CarrierTripProgressCard } from "@/components/driver/carrier-trip-progress-card";
 import { getDispatch } from "@/lib/dispatch/dispatches";
 import { listAssignableDrivers } from "@/lib/driver/list-assignable-drivers";
+import { getCarrierTripProgress } from "@/lib/driver/carrier-trip-progress";
 import { resolveShipmentForDispatch } from "@/lib/telematics/resolve-shipment";
 
 interface PageProps {
@@ -33,6 +35,11 @@ export default async function CarrierDispatchDetailPage({ params }: PageProps) {
     (detail.dispatch.driver_user_id as string | null | undefined) ?? null;
   const executionStatus =
     (detail.dispatch.execution_status as string | null | undefined) ?? null;
+
+  // Compact driver-progress read-back once a driver is assigned (Phase H, Q5).
+  const progress = currentDriverUserId
+    ? await getCarrierTripProgress(id)
+    : null;
 
   return (
     <div className="space-y-6">
@@ -68,6 +75,20 @@ export default async function CarrierDispatchDetailPage({ params }: PageProps) {
       </div>
 
       <DispatchSummaryCard detail={detail} />
+      {progress ? (
+        <CarrierTripProgressCard
+          executionStatus={executionStatus}
+          driverName={
+            (detail.dispatch.driver_name as string | null | undefined) ?? null
+          }
+          driverUserId={currentDriverUserId}
+          vehicleReference={
+            (detail.dispatch.vehicle_reference as string | null | undefined) ??
+            null
+          }
+          progress={progress}
+        />
+      ) : null}
       <DispatchActionButtons detail={detail} audience="carrier" />
       {canAssignDriver ? (
         <AssignDriverPanel

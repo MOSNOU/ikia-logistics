@@ -4,6 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getDriverTripDetailAdmin } from "@/lib/driver/admin-get-driver-trip-detail";
 import { driverTripStatusLabel } from "@/lib/driver/trip-status";
+import { faRelativeTime } from "@/lib/driver/relative-time";
+import {
+  deriveStall,
+  stallLabel,
+  stallBadgeVariant,
+} from "@/lib/driver/trip-progress";
 import {
   issueCategoryLabel,
   issueSeverityLabel,
@@ -53,6 +59,13 @@ export default async function AdminDriverTripDetailPage({ params }: PageProps) {
   }
 
   const hasLocation = trip.lastLatitude != null && trip.lastLongitude != null;
+  const stall = deriveStall({
+    executionStatus: trip.executionStatus,
+    dispatchStatus: trip.dispatchStatus,
+    lastReportedAt: trip.lastReportedAt,
+    updatedAt: trip.updatedAt,
+    createdAt: trip.createdAt,
+  });
 
   return (
     <div className="space-y-6">
@@ -67,6 +80,54 @@ export default async function AdminDriverTripDetailPage({ params }: PageProps) {
           <Link href="/admin/driver-trips">بازگشت به فهرست</Link>
         </Button>
       </div>
+
+      {/* Progress read-back (Phase H). */}
+      <Card>
+        <CardContent className="grid gap-4 p-5 sm:grid-cols-3">
+          <div className="space-y-1">
+            <span className="text-xs text-muted-foreground">وضعیت اجرا</span>
+            <div>
+              <Badge variant="info">
+                {driverTripStatusLabel(trip.executionStatus)}
+              </Badge>
+            </div>
+          </div>
+          <div className="space-y-1">
+            <span className="text-xs text-muted-foreground">خودرو</span>
+            <div className="text-sm">{trip.vehicleReference ?? "—"}</div>
+          </div>
+          <div className="space-y-1">
+            <span className="text-xs text-muted-foreground">آخرین موقعیت</span>
+            <div className="text-sm">
+              {trip.lastReportedAt ? faRelativeTime(trip.lastReportedAt) : "ثبت نشده"}
+            </div>
+          </div>
+          <div className="space-y-1">
+            <span className="text-xs text-muted-foreground">سند تحویل</span>
+            <div>
+              {trip.podCount > 0 ? (
+                <Badge variant="success">
+                  ثبت‌شده ({trip.podCount.toLocaleString("fa-IR")})
+                </Badge>
+              ) : (
+                <Badge variant="warning">ثبت نشده</Badge>
+              )}
+            </div>
+          </div>
+          <div className="space-y-1">
+            <span className="text-xs text-muted-foreground">مشکلات باز</span>
+            <div className="text-sm">
+              {trip.openIssueCount.toLocaleString("fa-IR")}
+            </div>
+          </div>
+          <div className="space-y-1">
+            <span className="text-xs text-muted-foreground">پایش</span>
+            <div>
+              <Badge variant={stallBadgeVariant(stall)}>{stallLabel(stall)}</Badge>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Summary. */}
       <Card>

@@ -54,6 +54,9 @@ export interface DriverTripDetailAdmin {
   acceptedAt: string | null;
   completedAt: string | null;
   createdAt: string | null;
+  /** Phase H — vehicle + last status-progress time (for the progress block). */
+  vehicleReference: string | null;
+  updatedAt: string | null;
   issues: DriverTripIssue[];
   pods: DriverTripPod[];
   events: DriverTripEvent[];
@@ -106,13 +109,13 @@ export async function getDriverTripDetailAdmin(
   const id = String(raw.dispatch_id ?? "");
   if (!id) return null;
 
-  // Issue / POD / event lists via the admin's own SELECT RLS. Each read is
-  // isolated — any failure degrades to an empty list rather than failing the
-  // page.
-  const [issues, pods, events] = await Promise.all([
+  // Issue / POD / event lists + vehicle/updated_at via the admin's own SELECT
+  // RLS. Each read is isolated — any failure degrades rather than failing.
+  const [issues, pods, events, meta] = await Promise.all([
     loadIssues(supabase, id),
     loadPods(supabase, id),
     loadEvents(supabase, id),
+    loadMeta(supabase, id),
   ]);
 
   return {
@@ -130,10 +133,38 @@ export async function getDriverTripDetailAdmin(
     acceptedAt: raw.accepted_at ?? null,
     completedAt: raw.completed_at ?? null,
     createdAt: raw.created_at ?? null,
+    vehicleReference: meta.vehicleReference,
+    updatedAt: meta.updatedAt,
     issues,
     pods,
     events,
   };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function loadMeta(
+  supabase: any,
+  dispatchId: string,
+): Promise<{ vehicleReference: string | null; updatedAt: string | null }> {
+  try {
+    const { data, error } = await supabase
+      .schema("dispatch")
+      .from("dispatch_assignments")
+      .select("vehicle_reference, updated_at")
+      .eq("id", dispatchId)
+      .maybeSingle();
+    if (error) {
+      console.error("dispatch.dispatch_assignments meta", error);
+      return { vehicleReference: null, updatedAt: null };
+    }
+    return {
+      vehicleReference: data?.vehicle_reference ?? null,
+      updatedAt: data?.updated_at ?? null,
+    };
+  } catch (e) {
+    console.error("dispatch.dispatch_assignments meta (threw)", e);
+    return { vehicleReference: null, updatedAt: null };
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

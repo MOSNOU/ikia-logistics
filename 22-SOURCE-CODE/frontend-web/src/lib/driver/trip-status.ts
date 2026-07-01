@@ -43,6 +43,12 @@ export function driverTripStatusIndex(status: string | null | undefined): number
 export interface DriverNextAction {
   key: string;
   label: string;
+  /**
+   * Phase G (v1.2, Q1) — when present, the action is high-risk / irreversible
+   * and the UI must require an explicit confirmation before running it. Normal
+   * forward steps stay one-tap (no `confirm`).
+   */
+  confirm?: string;
 }
 
 const DRIVER_NEXT_ACTION: Record<string, DriverNextAction | "complete-gated" | null> = {
@@ -53,10 +59,20 @@ const DRIVER_NEXT_ACTION: Record<string, DriverNextAction | "complete-gated" | n
   loaded: { key: "startTransit", label: "شروع حرکت" },
   in_transit: { key: "arriveDelivery", label: "رسیدم به محل تخلیه" },
   arrived_at_delivery: { key: "startUnloading", label: "شروع تخلیه" },
-  unloading_started: { key: "confirmDelivered", label: "تحویل انجام شد" },
+  // "delivered" is irreversible → confirm (Q1).
+  unloading_started: {
+    key: "confirmDelivered",
+    label: "تحویل انجام شد",
+    confirm: "تحویل بار را تأیید می‌کنید؟ این عملیات قابل بازگشت نیست.",
+  },
   delivered: "complete-gated",
   completed: null,
 };
+
+// "completed" is irreversible → the complete step also confirms (Q1). Surfaced
+// separately because delivered→completed is the special POD-gated action.
+export const DRIVER_COMPLETE_CONFIRM =
+  "تکمیل نهایی سفر را تأیید می‌کنید؟ این عملیات قابل بازگشت نیست.";
 
 export function driverNextAction(
   status: string | null | undefined,
@@ -64,4 +80,22 @@ export function driverNextAction(
   // A null/absent execution status means the trip is freshly assigned.
   const s = status ?? "assigned";
   return DRIVER_NEXT_ACTION[s] ?? null;
+}
+
+// ---------------------------------------------------------------------------
+// Phase G (v1.2) — stepper milestone timestamps derived from the event ledger.
+// Returns an ISO timestamp for when a given execution status was reached, or
+// null when there is no matching event (Q7: event ledger first).
+// ---------------------------------------------------------------------------
+export function stepTimestampFromEvents(
+  events: { toStatus: string | null; createdAt: string | null }[],
+  status: string,
+): string | null {
+  // The last event that transitioned INTO this status marks when it was reached.
+  for (let i = events.length - 1; i >= 0; i--) {
+    if (events[i]?.toStatus === status && events[i]?.createdAt) {
+      return events[i]!.createdAt;
+    }
+  }
+  return null;
 }

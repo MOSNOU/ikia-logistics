@@ -1,13 +1,25 @@
 import { createClient } from "@/lib/supabase/server";
 
 // Phase D2 — Driver portal UI skeleton (READ-ONLY data wiring).
+// Phase G (v1.2) — enriched with last-ping, milestone timestamps, POD kinds,
+// and the driver-visible event timeline. All reads are driver-RLS scoped; any
+// error degrades gracefully (null trip, or empty lists) — never throws.
 //
-// Loads a single driver-owned trip via the D1 RPC `dispatch.driver_get_trip`.
+// Loads a single driver-owned trip via the D1 RPC `dispatch.driver_get_trip`
+// plus RLS-scoped SELECTs on dispatch.driver_trip_events / driver_trip_pods
+// (both grant SELECT to authenticated and carry a driver-owns RLS policy —
+// no migration required for the timeline / POD readiness surfaces).
 //
-// TODO(D-later): replace `as any` once Supabase types are regenerated for the
-// dispatch.driver_* RPCs. Until then we call the RPC loosely so the generated
-// type set never blocks the build. Any error (including an invalid / foreign
-// dispatch id) returns null so the page renders a graceful "not found" card.
+// TODO(v1.x-later): drop the `as any` once Supabase types are regenerated for
+// the dispatch.driver_* RPCs and tables.
+
+export interface DriverTripEvent {
+  id: string;
+  fromStatus: string | null;
+  toStatus: string | null;
+  reason: string | null;
+  createdAt: string | null;
+}
 
 export interface DriverTripDetail {
   dispatchId: string;
@@ -21,22 +33,45 @@ export interface DriverTripDetail {
   vehicleReference: string | null;
   driverName: string | null;
   plannedPickupAt: string | null;
-  /** Phase D4 — number of PODs attached to this dispatch (driver-RLS scoped). */
+  /** Phase G — last reported position (from telematics via driver_get_trip). */
+  lastLatitude: number | null;
+  lastLongitude: number | null;
+  lastReportedAt: string | null;
+  /** Phase G — milestone timestamps for the status stepper (row-level). */
+  acceptedAt: string | null;
+  completedAt: string | null;
+  createdAt: string | null;
+  /** Phase D4 — number of PODs attached (driver-RLS scoped). */
   podCount: number;
   /** Convenience flag: at least one POD exists → trip can be completed. */
   hasPod: boolean;
+  /** Phase G — POD kinds present (read-only readiness; no upload changes). */
+  podKinds: string[];
+  /** Phase G — append-only driver trip event ledger (oldest → newest). */
+  events: DriverTripEvent[];
 }
 
 interface RawDriverTripDetail {
   dispatch_id?: string | null;
   id?: string | null;
-  // driver_get_trip returns dispatch_status + execution_status (not "status").
   dispatch_status?: string | null;
   execution_status?: string | null;
   route_summary?: string | null;
   vehicle_reference?: string | null;
   driver_name?: string | null;
   planned_pickup_at?: string | null;
+  last_latitude?: number | string | null;
+  last_longitude?: number | string | null;
+  last_reported_at?: string | null;
+  accepted_at?: string | null;
+  completed_at?: string | null;
+  created_at?: string | null;
+}
+
+function toNum(v: number | string | null | undefined): number | null {
+  if (v == null) return null;
+  const n = typeof v === "number" ? v : Number(v);
+  return Number.isFinite(n) ? n : null;
 }
 
 export async function getTrip(dispatchId: string): Promise<DriverTripDetail | null> {
@@ -54,8 +89,7 @@ export async function getTrip(dispatchId: string): Promise<DriverTripDetail | nu
     return null;
   }
 
-  // The RPC may return a single row or a one-element set depending on its
-  // definition; normalise both shapes.
+  // The RPC may return a single row or a one-element set; normalise both.
   const raw = (Array.isArray(data) ? data[0] : data) as
     | RawDriverTripDetail
     | null
@@ -65,20 +99,11 @@ export async function getTrip(dispatchId: string): Promise<DriverTripDetail | nu
   const id = String(raw.dispatch_id ?? raw.id ?? "");
   if (!id) return null;
 
-  // Phase D4 — POD count via the driver's own SELECT RLS policy. Any error
-  // (missing view, RLS, types) defaults to 0/false; never throw.
-  let podCount = 0;
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { count } = await (supabase.schema("dispatch") as any)
-      .from("driver_trip_pods")
-      .select("id", { count: "exact", head: true })
-      .eq("dispatch_id", id);
-    podCount = count ?? 0;
-  } catch (podError) {
-    console.error("driver.driver_trip_pods count", podError);
-    podCount = 0;
-  }
+  // POD rows (kinds + count) and the event ledger, both driver-RLS scoped.
+  const [pods, events] = await Promise.all([
+    loadPods(supabase, id),
+    loadEvents(supabase, id),
+  ]);
 
   const executionStatus = raw.execution_status ?? null;
   return {
@@ -90,7 +115,66 @@ export async function getTrip(dispatchId: string): Promise<DriverTripDetail | nu
     vehicleReference: raw.vehicle_reference ?? null,
     driverName: raw.driver_name ?? null,
     plannedPickupAt: raw.planned_pickup_at ?? null,
-    podCount,
-    hasPod: podCount > 0,
+    lastLatitude: toNum(raw.last_latitude),
+    lastLongitude: toNum(raw.last_longitude),
+    lastReportedAt: raw.last_reported_at ?? null,
+    acceptedAt: raw.accepted_at ?? null,
+    completedAt: raw.completed_at ?? null,
+    createdAt: raw.created_at ?? null,
+    podCount: pods.length,
+    hasPod: pods.length > 0,
+    podKinds: pods,
+    events,
   };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function loadPods(supabase: any, dispatchId: string): Promise<string[]> {
+  try {
+    const { data, error } = await supabase
+      .schema("dispatch")
+      .from("driver_trip_pods")
+      .select("kind")
+      .eq("dispatch_id", dispatchId)
+      .order("created_at", { ascending: true });
+    if (error) {
+      console.error("driver.driver_trip_pods select", error);
+      return [];
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return ((data ?? []) as any[])
+      .map((r) => (r.kind == null ? null : String(r.kind)))
+      .filter((k): k is string => k !== null);
+  } catch (e) {
+    console.error("driver.driver_trip_pods select (threw)", e);
+    return [];
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function loadEvents(supabase: any, dispatchId: string): Promise<DriverTripEvent[]> {
+  try {
+    const { data, error } = await supabase
+      .schema("dispatch")
+      .from("driver_trip_events")
+      .select("id, from_status, to_status, reason, created_at")
+      .eq("dispatch_id", dispatchId)
+      .order("created_at", { ascending: true })
+      .limit(200);
+    if (error) {
+      console.error("driver.driver_trip_events select", error);
+      return [];
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return ((data ?? []) as any[]).map((r) => ({
+      id: String(r.id),
+      fromStatus: r.from_status ?? null,
+      toStatus: r.to_status ?? null,
+      reason: r.reason ?? null,
+      createdAt: r.created_at ?? null,
+    }));
+  } catch (e) {
+    console.error("driver.driver_trip_events select (threw)", e);
+    return [];
+  }
 }

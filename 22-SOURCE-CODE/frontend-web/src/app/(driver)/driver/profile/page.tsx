@@ -5,6 +5,12 @@ import { ROLES } from "@/lib/permissions/roles";
 
 // Phase D2 — driver profile (READ-ONLY placeholder). Persian RTL.
 
+// D7 — this page is auth-gated and renders the signed-in driver's own PII
+// (name/email). Force dynamic rendering so it is never statically prerendered
+// or cached, regardless of build-time auth-env presence. Matches the
+// convention already used by the admin/driver-trips pages.
+export const dynamic = "force-dynamic";
+
 export default async function DriverProfilePage() {
   const profile = await requireRole([ROLES.DRIVER, ROLES.PLATFORM_ADMIN]);
 

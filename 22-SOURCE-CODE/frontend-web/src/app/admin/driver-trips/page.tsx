@@ -9,7 +9,6 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  TableEmpty,
 } from "@/components/ui/table";
 import { listDriverTripStatuses } from "@/lib/driver/admin-list-driver-trip-statuses";
 import { driverTripStatusLabel } from "@/lib/driver/trip-status";
@@ -115,9 +114,6 @@ export default async function AdminDriverTripsPage() {
                 ))}
               </TableBody>
             </Table>
-            {trips.length === 0 ? (
-              <TableEmpty>موردی برای نمایش وجود ندارد.</TableEmpty>
-            ) : null}
           </CardContent>
         </Card>
       )}

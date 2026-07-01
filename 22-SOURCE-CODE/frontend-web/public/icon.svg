@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="iKIA Driver">
+  <!-- Phase D6 — self-contained PWA app icon for the driver portal. Full-bleed
+       navy background (matches the product dark primary) with an emerald accent
+       (matches the app's "success/green" system). Glyph kept inside the central
+       ~80% safe zone so it survives maskable cropping. No external references. -->
+  <rect width="512" height="512" fill="#0f172a"/>
+  <g fill="none" stroke="#10b981" stroke-width="24" stroke-linecap="round">
+    <path d="M150 360 L362 360"/>
+  </g>
+  <g fill="#ffffff" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-weight="700">
+    <text x="256" y="300" text-anchor="middle" font-size="200" letter-spacing="-6">iK</text>
+  </g>
+</svg>

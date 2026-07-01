@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { listMyTrips } from "@/lib/driver/list-my-trips";
 import { driverTripStatusLabel, driverNextAction } from "@/lib/driver/trip-status";
+import { DriverInstallHint } from "@/components/driver/driver-install-hint";
 
 // Phase D2 — driver dashboard (READ-ONLY). Active trip + assigned trips list.
 // No mutations: every action either navigates to detail or is a disabled
@@ -41,6 +42,9 @@ export default async function DriverDashboardPage() {
         </CardContent>
       </Card>
 
+      {/* Non-blocking "add to home screen" hint (hidden once installed). */}
+      <DriverInstallHint />
+
       {trips.length === 0 ? (
         <Card className="border-border-soft">
           <CardContent className="p-4 text-sm text-muted-foreground">
@@ -71,7 +75,7 @@ export default async function DriverDashboardPage() {
                   )}
                   <div className="text-xs leading-6 text-muted-foreground">
                     اعزام:{" "}
-                    <span className="font-mono text-foreground">
+                    <span className="break-all font-mono text-foreground">
                       {activeTrip.dispatchId}
                     </span>
                   </div>
@@ -140,13 +144,13 @@ export default async function DriverDashboardPage() {
                         )}
                         <div className="text-xs leading-6 text-muted-foreground">
                           اعزام:{" "}
-                          <span className="font-mono text-foreground">
+                          <span className="break-all font-mono text-foreground">
                             {t.dispatchId}
                           </span>
                           {t.vehicleReference ? (
                             <div>
                               خودرو:{" "}
-                              <span className="font-mono text-foreground">
+                              <span className="break-all font-mono text-foreground">
                                 {t.vehicleReference}
                               </span>
                             </div>

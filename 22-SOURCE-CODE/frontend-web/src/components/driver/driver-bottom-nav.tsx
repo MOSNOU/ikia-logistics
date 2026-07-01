@@ -25,7 +25,7 @@ export function DriverBottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border-soft bg-card/95 backdrop-blur"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border-soft bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur"
       aria-label="ناوبری راننده"
     >
       <ul className="mx-auto flex max-w-md items-stretch">

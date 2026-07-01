@@ -68,12 +68,14 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
           <div className="text-xs leading-6 text-muted-foreground">
             <div>
               اعزام:{" "}
-              <span className="font-mono text-foreground">{trip.dispatchId}</span>
+              <span className="break-all font-mono text-foreground">
+                {trip.dispatchId}
+              </span>
             </div>
             {trip.vehicleReference ? (
               <div>
                 خودرو:{" "}
-                <span className="font-mono text-foreground">
+                <span className="break-all font-mono text-foreground">
                   {trip.vehicleReference}
                 </span>
               </div>

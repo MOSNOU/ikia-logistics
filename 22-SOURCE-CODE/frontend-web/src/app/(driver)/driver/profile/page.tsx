@@ -30,7 +30,7 @@ export default async function DriverProfilePage() {
             </div>
             <div className="flex items-center justify-between gap-3">
               <dt className="text-muted-foreground">ایمیل</dt>
-              <dd className="font-mono text-xs">{profile?.email ?? "—"}</dd>
+              <dd className="break-all font-mono text-xs">{profile?.email ?? "—"}</dd>
             </div>
           </dl>
         </CardContent>

@@ -4,12 +4,18 @@ import { Button } from "@/components/ui/button";
 import { DispatchSummaryCard } from "@/components/dispatch/dispatch-summary-card";
 import { DispatchEventTimeline } from "@/components/dispatch/dispatch-event-timeline";
 import { DispatchActionButtons } from "@/components/dispatch/dispatch-action-buttons";
+import { AssignDriverPanel } from "@/components/driver/assign-driver-panel";
 import { getDispatch } from "@/lib/dispatch/dispatches";
+import { listAssignableDrivers } from "@/lib/driver/list-assignable-drivers";
 import { resolveShipmentForDispatch } from "@/lib/telematics/resolve-shipment";
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
+
+// Driver assignment (v1.1) is offered while the dispatch is in a pre-execution
+// lifecycle state — matching the dispatch.carrier_assign_driver RPC gate.
+const ASSIGNABLE_STATUSES = new Set(["assigned", "ready", "released"]);
 
 export default async function CarrierDispatchDetailPage({ params }: PageProps) {
   const { id } = await params;
@@ -18,6 +24,15 @@ export default async function CarrierDispatchDetailPage({ params }: PageProps) {
     resolveShipmentForDispatch(id),
   ]);
   if (!detail) notFound();
+
+  // Real driver assignment (v1.1). detail.dispatch is to_jsonb(dispatch_assignments),
+  // so driver_user_id / execution_status are present at runtime (typed loosely).
+  const canAssignDriver = ASSIGNABLE_STATUSES.has(detail.dispatch.status);
+  const assignableDrivers = canAssignDriver ? await listAssignableDrivers(id) : [];
+  const currentDriverUserId =
+    (detail.dispatch.driver_user_id as string | null | undefined) ?? null;
+  const executionStatus =
+    (detail.dispatch.execution_status as string | null | undefined) ?? null;
 
   return (
     <div className="space-y-6">
@@ -54,6 +69,14 @@ export default async function CarrierDispatchDetailPage({ params }: PageProps) {
 
       <DispatchSummaryCard detail={detail} />
       <DispatchActionButtons detail={detail} audience="carrier" />
+      {canAssignDriver ? (
+        <AssignDriverPanel
+          dispatchId={detail.dispatch.id}
+          drivers={assignableDrivers}
+          currentDriverUserId={currentDriverUserId}
+          executionStatus={executionStatus}
+        />
+      ) : null}
       <DispatchEventTimeline events={detail.events} />
     </div>
   );

@@ -21,6 +21,17 @@ export interface DriverTripEvent {
   createdAt: string | null;
 }
 
+// Phase M2 — driver-visible issue row (RLS-scoped), fed to the issue
+// intelligence engine on the trip detail page.
+export interface DriverTripIssueLite {
+  id: string;
+  status: string | null;
+  category: string | null;
+  severity: number | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+}
+
 export interface DriverTripDetail {
   dispatchId: string;
   /** D1 trip execution status (assigned…completed); null until the driver acts. */
@@ -49,6 +60,8 @@ export interface DriverTripDetail {
   podKinds: string[];
   /** Phase G — append-only driver trip event ledger (oldest → newest). */
   events: DriverTripEvent[];
+  /** Phase M2 — driver-visible issues (RLS-scoped) for the intelligence panel. */
+  issues: DriverTripIssueLite[];
 }
 
 interface RawDriverTripDetail {
@@ -99,10 +112,12 @@ export async function getTrip(dispatchId: string): Promise<DriverTripDetail | nu
   const id = String(raw.dispatch_id ?? raw.id ?? "");
   if (!id) return null;
 
-  // POD rows (kinds + count) and the event ledger, both driver-RLS scoped.
-  const [pods, events] = await Promise.all([
+  // POD rows (kinds + count), the event ledger, and issues — all driver-RLS
+  // scoped. Each degrades to an empty list on error.
+  const [pods, events, issues] = await Promise.all([
     loadPods(supabase, id),
     loadEvents(supabase, id),
+    loadIssues(supabase, id),
   ]);
 
   const executionStatus = raw.execution_status ?? null;
@@ -125,6 +140,7 @@ export async function getTrip(dispatchId: string): Promise<DriverTripDetail | nu
     hasPod: pods.length > 0,
     podKinds: pods,
     events,
+    issues,
   };
 }
 
@@ -175,6 +191,36 @@ async function loadEvents(supabase: any, dispatchId: string): Promise<DriverTrip
     }));
   } catch (e) {
     console.error("driver.driver_trip_events select (threw)", e);
+    return [];
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function loadIssues(supabase: any, dispatchId: string): Promise<DriverTripIssueLite[]> {
+  try {
+    const { data, error } = await supabase
+      .schema("dispatch")
+      .from("driver_trip_issues")
+      .select("id, status, category, severity, reported_at, created_at")
+      .eq("dispatch_id", dispatchId)
+      .order("reported_at", { ascending: true })
+      .limit(200);
+    if (error) {
+      console.error("driver.driver_trip_issues select", error);
+      return [];
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return ((data ?? []) as any[]).map((r) => ({
+      id: String(r.id),
+      status: r.status ?? null,
+      category: r.category ?? null,
+      severity: r.severity == null ? null : Number(r.severity),
+      // driver_trip_issues uses reported_at as the creation time.
+      createdAt: r.reported_at ?? r.created_at ?? null,
+      updatedAt: r.created_at ?? null,
+    }));
+  } catch (e) {
+    console.error("driver.driver_trip_issues select (threw)", e);
     return [];
   }
 }

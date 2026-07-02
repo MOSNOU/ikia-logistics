@@ -16,6 +16,7 @@ import { DriverLocationPanel } from "@/components/driver/driver-location-panel";
 import { PodUploadPanel } from "@/components/driver/pod-upload-panel";
 import { PodReadinessPanel } from "@/components/driver/pod-readiness-panel";
 import { DriverIssuePanel } from "@/components/driver/driver-issue-panel";
+import { DriverIssueIntelligencePanel } from "@/components/driver/driver-issue-intelligence-panel";
 import { TripTimeline } from "@/components/driver/trip-timeline";
 import { TrackingReadinessDebugPanel } from "@/components/driver/tracking-readiness-debug-panel";
 import { cn } from "@/lib/utils";
@@ -214,6 +215,20 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
             hasPod={trip.hasPod}
           />
           <PodUploadPanel dispatchId={trip.dispatchId} />
+        </CardContent>
+      </Card>
+
+      {/* هوش عملیاتی مشکلات — read-only issue intelligence (M2). */}
+      <Card className="border-border-soft shadow-card">
+        <CardContent className="space-y-3 p-4">
+          <h2 className="text-sm font-semibold tracking-tight">
+            هوش عملیاتی مشکلات
+          </h2>
+          <DriverIssueIntelligencePanel
+            issues={trip.issues}
+            podCount={trip.podCount}
+            executionStatus={trip.executionStatus}
+          />
         </CardContent>
       </Card>
 

@@ -16,6 +16,7 @@ import { PodUploadPanel } from "@/components/driver/pod-upload-panel";
 import { PodReadinessPanel } from "@/components/driver/pod-readiness-panel";
 import { DriverIssuePanel } from "@/components/driver/driver-issue-panel";
 import { TripTimeline } from "@/components/driver/trip-timeline";
+import { TrackingReadinessDebugPanel } from "@/components/driver/tracking-readiness-debug-panel";
 import { cn } from "@/lib/utils";
 
 // Phase G (v1.2) — driver trip detail. Primary next-action surfaced first for
@@ -210,6 +211,11 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
           <DriverIssuePanel dispatchId={trip.dispatchId} />
         </CardContent>
       </Card>
+
+      {/* Phase K — background tracking readiness (development builds only). */}
+      {process.env.NODE_ENV !== "production" ? (
+        <TrackingReadinessDebugPanel />
+      ) : null}
 
       <Button asChild variant="outline" size="sm" className="h-11 w-full">
         <Link href="/driver">بازگشت به داشبورد</Link>

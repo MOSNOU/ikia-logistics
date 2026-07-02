@@ -11,6 +11,12 @@ import {
   stallBadgeVariant,
 } from "@/lib/driver/trip-progress";
 import {
+  tripProgressPercent,
+  tripHealth,
+  TRIP_HEALTH_LABEL,
+  tripHealthBadgeVariant,
+} from "@/lib/driver/trip-intelligence";
+import {
   issueCategoryLabel,
   issueSeverityLabel,
   issueStatusLabel,
@@ -66,6 +72,14 @@ export default async function AdminDriverTripDetailPage({ params }: PageProps) {
     updatedAt: trip.updatedAt,
     createdAt: trip.createdAt,
   });
+  const health = tripHealth({
+    executionStatus: trip.executionStatus,
+    dispatchStatus: trip.dispatchStatus,
+    stall,
+    openIssueCount: trip.openIssueCount,
+    hasPod: trip.podCount > 0,
+  });
+  const progress = tripProgressPercent(trip.executionStatus);
 
   return (
     <div className="space-y-6">
@@ -80,6 +94,36 @@ export default async function AdminDriverTripDetailPage({ params }: PageProps) {
           <Link href="/admin/driver-trips">بازگشت به فهرست</Link>
         </Button>
       </div>
+
+      {/* Operational trip intelligence (Phase L) — read-only, derived. */}
+      <Card>
+        <CardContent className="grid gap-4 p-5 sm:grid-cols-3">
+          <div className="space-y-1">
+            <span className="text-xs text-muted-foreground">سلامت سفر</span>
+            <div>
+              <Badge variant={tripHealthBadgeVariant(health)}>
+                {TRIP_HEALTH_LABEL[health]}
+              </Badge>
+            </div>
+          </div>
+          <div className="space-y-1">
+            <span className="text-xs text-muted-foreground">پیشرفت</span>
+            <div className="space-y-1">
+              <div className="text-sm">{progress.toLocaleString("fa-IR")}٪</div>
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full bg-primary"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="space-y-1">
+            <span className="text-xs text-muted-foreground">آخرین تغییر وضعیت</span>
+            <div className="text-sm">{faRelativeTime(trip.updatedAt)}</div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Progress read-back (Phase H). */}
       <Card>

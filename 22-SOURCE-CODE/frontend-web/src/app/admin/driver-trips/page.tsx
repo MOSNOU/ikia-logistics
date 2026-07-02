@@ -17,6 +17,11 @@ import {
 } from "@/lib/driver/trip-status";
 import { faRelativeTime } from "@/lib/driver/relative-time";
 import { stallLabel, stallBadgeVariant } from "@/lib/driver/trip-progress";
+import {
+  tripHealth,
+  TRIP_HEALTH_LABEL,
+  tripHealthBadgeVariant,
+} from "@/lib/driver/trip-intelligence";
 
 // Phase D5 — operations/admin driver trip overview (READ-ONLY).
 // Phase H (v1.2) — progress columns (vehicle, last-ping age, POD readiness,
@@ -129,6 +134,7 @@ export default async function AdminDriverTripsPage({ searchParams }: PageProps) 
                   <TableHead>سند تحویل</TableHead>
                   <TableHead>مشکلات باز</TableHead>
                   <TableHead>پایش</TableHead>
+                  <TableHead>سلامت</TableHead>
                   <TableHead className="text-end">جزئیات</TableHead>
                 </TableRow>
               </TableHeader>
@@ -182,6 +188,22 @@ export default async function AdminDriverTripsPage({ searchParams }: PageProps) 
                           عادی
                         </span>
                       )}
+                    </TableCell>
+                    <TableCell>
+                      {(() => {
+                        const health = tripHealth({
+                          executionStatus: t.executionStatus,
+                          dispatchStatus: t.dispatchStatus,
+                          stall: t.stall,
+                          openIssueCount: t.openIssueCount,
+                          hasPod: t.hasPod,
+                        });
+                        return (
+                          <Badge variant={tripHealthBadgeVariant(health)}>
+                            {TRIP_HEALTH_LABEL[health]}
+                          </Badge>
+                        );
+                      })()}
                     </TableCell>
                     <TableCell className="text-end">
                       <Button asChild variant="outline" size="sm">

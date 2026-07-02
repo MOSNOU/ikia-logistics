@@ -10,6 +10,7 @@ import {
   stepTimestampFromEvents,
 } from "@/lib/driver/trip-status";
 import { faShortDateTime, faRelativeTime } from "@/lib/driver/relative-time";
+import { tripProgressPercent } from "@/lib/driver/trip-intelligence";
 import { TripActionPanel } from "@/components/driver/trip-action-panel";
 import { DriverLocationPanel } from "@/components/driver/driver-location-panel";
 import { PodUploadPanel } from "@/components/driver/pod-upload-panel";
@@ -125,7 +126,19 @@ export default async function DriverTripDetailPage({ params }: PageProps) {
       {/* Status stepper — 10 D1 execution statuses with milestone timestamps. */}
       <Card className="border-border-soft shadow-card">
         <CardContent className="space-y-3 p-4">
-          <h2 className="text-sm font-semibold tracking-tight">وضعیت سفر</h2>
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-sm font-semibold tracking-tight">وضعیت سفر</h2>
+            <span className="text-xs font-medium text-muted-foreground">
+              پیشرفت: {tripProgressPercent(currentStatus).toLocaleString("fa-IR")}٪
+            </span>
+          </div>
+          {/* Progress bar (read-only). */}
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-primary transition-all"
+              style={{ width: `${tripProgressPercent(currentStatus)}%` }}
+            />
+          </div>
           <ol className="space-y-2">
             {DRIVER_TRIP_STATUSES.map((step, idx) => {
               const isCurrent = idx === currentIndex;
